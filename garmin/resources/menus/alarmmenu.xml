@@ -1,0 +1,4 @@
+<menu id="AlarmMenu">
+    <menu-item id="item_alarm_1">@Strings.alarm_menu_label_1</menu-item>
+    <menu-item id="item_alarm_2">@Strings.alarm_menu_label_2</menu-item>
+</menu>

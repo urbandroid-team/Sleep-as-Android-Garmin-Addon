@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_layout"
+    android:background="@color/colorAccent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:padding="16dp"
+            android:background="@color/tint_dark"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/logo"
+                android:src="@mipmap/logo"
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/card"
+                android:id="@+id/card_install_saa"
+                android:paddingTop="16dp"
+                android:paddingLeft="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="@color/secondary"
+                    style="?android:attr/textAppearanceMedium"
+                    android:id="@+id/textView5"
+                    android:text="@string/install_saa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:textStyle="bold"
+                    android:layout_gravity="right"
+                    android:textColor="@color/primary"
+                    android:background="@drawable/button_flat"
+                    android:id="@+id/install_saa"
+                    android:text="@string/install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/card"
+                android:id="@+id/card_install_gcm"
+                android:paddingTop="16dp"
+                android:paddingLeft="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="@color/secondary"
+                    style="?android:attr/textAppearanceMedium"
+                    android:id="@+id/install_gcm_text"
+                    android:text="@string/install_gcm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:textStyle="bold"
+                    android:layout_gravity="right"
+                    android:textColor="@color/primary"
+                    android:background="@drawable/button_flat"
+                    android:id="@+id/install_gcm"
+                    android:text="@string/install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/card"
+                android:id="@+id/card_install_watchapp"
+                android:paddingTop="16dp"
+                android:paddingLeft="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:textColor="@color/secondary"
+                    style="?android:attr/textAppearanceMedium"
+                    android:id="@+id/textView6"
+                    android:text="@string/install_watchapp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:textStyle="bold"
+                    android:layout_gravity="right"
+                    android:textColor="@color/primary"
+                    android:background="@drawable/button_flat"
+                    android:id="@+id/install_watchapp"
+                    android:text="@string/install"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/card"
+                android:id="@+id/card_whitelist_GCM"
+                android:paddingTop="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="@color/secondary"
+                    style="?android:attr/textAppearanceMedium"
+                    android:id="@+id/textView7"
+                    android:text="@string/whitelist_GCM"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/card"
+                android:id="@+id/card_setup"
+                android:paddingTop="16dp"
+                android:paddingLeft="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="@color/secondary"
+                    style="?android:attr/textAppearanceMedium"
+                    android:id="@+id/setup_text"
+                    android:text="@string/setup_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:textStyle="bold"
+                    android:layout_gravity="right"
+                    android:textColor="@color/primary"
+                    android:background="@drawable/button_flat"
+                    android:id="@+id/setup"
+                    android:text="@string/setup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</FrameLayout>

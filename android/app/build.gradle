@@ -1,0 +1,72 @@
+//apply plugin: 'com.android.application'
+//
+//android {
+//    compileSdkVersion 19
+//    buildToolsVersion "23.0.2"
+//
+//    defaultConfig {
+//        applicationId "com.garmin.android.apps.connectiq.sample.comm"
+//        minSdkVersion 14
+//        targetSdkVersion 19
+//    }
+//
+//    buildTypes {
+//        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+//        }
+//    }
+//}
+//
+//dependencies {
+//    compile 'com.android.support:support-v4:19.1.0'
+//    compile files('libs/connectiq.jar')
+//}
+
+
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.1'
+    defaultConfig {
+        applicationId "com.urbandroid.sleep.garmin"
+        minSdkVersion 9
+        targetSdkVersion 25
+        versionCode 8
+        versionName "20170725"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            storeFile file(projectKeystoreFile)
+            storePassword projectKeystorePassword
+            keyAlias projectKeystoreAlias
+            keyPassword projectKeystorePassword
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.urbandroid:common:1.0@aar'
+    testCompile 'junit:junit:4.12'
+}
+

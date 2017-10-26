@@ -1,0 +1,5 @@
+<drawables>
+  <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+  <bitmap id="id_bkg_night" filename="bkg_night.png" />
+  <bitmap id="id_bkg_alarm" filename="bkg_alarm.png" />
+</drawables>

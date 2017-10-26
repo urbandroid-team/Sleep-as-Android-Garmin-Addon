@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorAccent">#7d9420</color>
+    <color name="primaryDark">#7d9420</color>
+    <color name="colorPrimary">#7d9420</color>
+    <color name="colorPrimaryDark">#7d9420</color>
+
+    <color name="primaryBright">#ffffffff</color>
+    <color name="primary">#ffffffff</color>
+    <color name="secondary">#b2ffffff</color>
+    <color name="tertiary">#54ffffff</color>
+    <color name="quaternary">#1effffff</color>
+
+    <color name="white">#ffffffff</color>
+    <color name="trans_white">#99ffffff</color>
+    <color name="transparent">#00000000</color>
+    <color name="tint">#ffa6d725</color>
+    <color name="tint_dark">#7d9420</color>
+    <color name="normal">#4DB6AC</color>
+    <color name="red">#ffdf4545</color>
+    <color name="red_widget">#ffd50000</color>
+    <color name="dred">#b93121</color>
+    <color name="ics">#ff0099cc</color>
+    <color name="grey">#ffaaaaaa</color>
+    <color name="pressed">#30FFFFFF</color>
+    <color name="pressed_solid">#FFa5a5a5</color>
+    <color name="pressed_graph">#D0C0C0C0</color>
+    <color name="bar">#37474f</color>
+    <color name="barDark">#37474f</color>
+    <color name="special">#e8c300</color>
+    <color name="controlBar">@color/bg_main</color>
+    <color name="bg_more">#263238</color>
+    <color name="bg_even_more">#333437</color>
+    <color name="bg_most">#444548</color>
+    <color name="disabled">#212121</color>
+    <color name="shadow">#80000000</color>
+    <color name="shadow2">#30000000</color>
+    <color name="bg_track">@color/black</color>
+    <color name="bg_track_semi_trans">#D0000000</color>
+    <color name="bg_main">#263238</color>
+    <color name="bg_main_trans">#00263238</color>
+    <color name="bg_main_semi_trans">#D0263238</color>
+    <color name="drawer">#263238</color>
+    <color name="drawer_dark">#1b2327</color>
+    <!--<color name="bg_main_trans">#DF121314</color>-->
+    <color name="black">#FF000000</color>
+    <color name="black_semi_trans">#65000000</color>
+    <color name="shade">#30000000</color>
+    <color name="bg_grey">#FF303030</color>
+    <color name="lightgray">#FF606060</color>
+    <color name="bg_divider">#1effffff</color>
+    <color name="separator">#1effffff</color>
+
+    <color name="t0">#388E3C</color>
+    <color name="t1a">#303F9F</color>
+    <color name="t1">#536DFE</color>
+    <color name="t2">#E91E63</color>
+    <color name="t2a">#03A9F4</color>
+    <color name="t3a">#FFC107</color>
+    <color name="t3">#FF9800</color>
+    <color name="t4">#009688</color>
+    <color name="t4a">#B2EBF2</color>
+
+    <!-- From waveform view -->
+    <drawable name="waveform_selected">#33b5e5</drawable>
+    <drawable name="waveform_unselected">#195a72</drawable>
+    <drawable name="waveform_unselected_bkgnd_overlay">#0a242d</drawable>
+    <drawable name="selection_border">#ffffff</drawable>
+    <drawable name="playback_indicator">#ffff66</drawable>
+    <drawable name="grid_line">#66ffffff</drawable>
+    <drawable name="timecode">#ddffffdd</drawable>
+    <drawable name="timecode_shadow">#aa000000</drawable>
+    <!-- End of waveform view -->
+
+    <color name="button">#757575</color>
+    <color name="bg_button">#424242</color>
+    <color name="bg_card">#374248</color>
+
+    <color name="showcast_mask">#ef7d9420</color>
+
+</resources>

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Sleep Garmin</string>
+    <string name="whitelist_GCM">Make sure to whitelist Garmin Connect Mobile from any battery optimization.</string>
+    <string name="install_saa">Please install Sleep as Android</string>
+    <string name="install_gcm">Please install Garmin Connect Mobile</string>
+    <string name="install_watchapp">Please install Sleep on your Garmin watch</string>
+    <string name="install">Install</string>
+    <string name="setup_text">Setup Garmin with Sleep as Android</string>
+    <string name="setup">Setup</string>
+    <string name="log">LOG appears below</string>
+</resources>

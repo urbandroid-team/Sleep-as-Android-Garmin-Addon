@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.urbandroid.sleep.garmin">
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.urbandroid.sleep.garmin.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
+
+
+        <service android:name=".SleepAsAndroidProviderService" />
+
+        <receiver android:name="com.urbandroid.sleep.garmin.SleepAsGarminReceiver"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="com.garmin.android.connectiq.INCOMING_MESSAGE" />
+                <action android:name="com.urbandroid.sleep.garmin.CHECK_CONNECTED" />
+                <action android:name="com.urbandroid.sleep.watch.START_TRACKING" />
+                <action android:name="com.urbandroid.sleep.watch.STOP_TRACKING" />
+                <action android:name="com.urbandroid.sleep.watch.SET_PAUSE" />
+                <action android:name="com.urbandroid.sleep.watch.SET_BATCH_SIZE" />
+                <action android:name="com.urbandroid.sleep.watch.SET_SUSPENDED" />
+                <action android:name="com.urbandroid.sleep.watch.START_ALARM" />
+                <action android:name="com.urbandroid.sleep.watch.STOP_ALARM" />
+                <action android:name="com.urbandroid.sleep.watch.UPDATE_ALARM" />
+                <action android:name="com.urbandroid.sleep.watch.HINT" />
+                <action android:name="com.urbandroid.sleep.watch.CHECK_CONNECTED" />
+                <action android:name="com.urbandroid.sleep.watch.REPORT" />
+            </intent-filter>
+
+        </receiver>
+
+    </application>
+
+</manifest>

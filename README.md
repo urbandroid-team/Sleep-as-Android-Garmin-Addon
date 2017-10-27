@@ -10,7 +10,7 @@ Android part (distributed on Play Store as [Sleep as Android Garmin Addon](https
 
 ## Garmin watch app
 
-The Garmin watch app (distributed on Garmin ConnectIQ store as [Sleep as Android](https://apps.garmin.com/cs-CZ/apps/e80a4793-f5a3-44c7-bd7f-52a97f5d8310)) can be found under /watch.
+The Garmin watch app (distributed on Garmin ConnectIQ store as [Sleep as Android](https://apps.garmin.com/cs-CZ/apps/e80a4793-f5a3-44c7-bd7f-52a97f5d8310)) can be found under /garmin.
 
 ## Responsible developer
 

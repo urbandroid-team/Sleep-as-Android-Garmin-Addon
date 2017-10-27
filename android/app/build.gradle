@@ -28,7 +28,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.1'
     defaultConfig {
         applicationId "com.urbandroid.sleep.garmin"
         minSdkVersion 9
@@ -52,6 +51,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    buildToolsVersion '26.0.2'
 }
 
 repositories {

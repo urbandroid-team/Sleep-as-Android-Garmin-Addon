@@ -35,6 +35,9 @@ using Toybox.Math as Math;
     var exitTapped = false;
     var alarmViewActive = false;
 
+
+    // Logs into the /GARMIN/APPS/LOGS/appname.TXT
+    // The file has to be created manually first. It is not possible to gather debug logs in production (after distribution in the ConnectIQ store)
     function log(a) {
         if (debug == true) {
             logtimestamp = Time.now().value();
@@ -42,6 +45,14 @@ using Toybox.Math as Math;
         }
     }
 
+    function betalog(a) {
+        if (beta == true) {
+            logtimestamp = Time.now().value();
+            Sys.println(logtimestamp + ": " + a);
+        }
+    }
+
+    // Puts message in the messageQueue, also attempts to do some memory checks so as not to overload the underlying watch's queue
     function enqueue(message) {
         var freeMemRatio = Sys.getSystemStats().freeMemory*100/Sys.getSystemStats().totalMemory;
         log("free: " + Sys.getSystemStats().freeMemory);
@@ -62,6 +73,7 @@ using Toybox.Math as Math;
         }
     }
 
+    // Convenience global functions to enqueue specific messages to be sent to phone
     function sendResumeTracking() {
         enqueue("RESUME");
     }
@@ -86,12 +98,6 @@ using Toybox.Math as Math;
         enqueue("CONFIRMCHECK");
     }
 
-    function betalog(a) {
-        if (beta == true) {
-            logtimestamp = Time.now().value();
-            Sys.println(logtimestamp + ": " + a);
-        }
-    }
 
 class SleepApp extends App.AppBase {
 
@@ -100,7 +106,6 @@ class SleepApp extends App.AppBase {
     const MAX_AGG_COUNT = AGG_PERIOD/SAMPLE_PERIOD;
 
     var phoneCommMethod;
-    var mailCommMethod;
 
     var info;
     var hrInfo;
@@ -141,12 +146,9 @@ class SleepApp extends App.AppBase {
     var max_sum_new = 0;
 
     function initialize() {
-        // log("Initialize");
         AppBase.initialize();
-        // log("Initialize2");
 
         phoneCommMethod = method(:onMsg);
-        mailCommMethod = method(:onMail);
         if(Comm has :registerForPhoneAppMessages) {
             Comm.registerForPhoneAppMessages(phoneCommMethod);
         } else {
@@ -155,9 +157,6 @@ class SleepApp extends App.AppBase {
     }
 
     function onMsg(msg) {
-        // log("msg " + msg);
-        // log("msg.toString " + msg.toString());
-        // log("msg.data.toString " + msg.data.toString());
         handleIncomingMessage(msg.data.toString());
     }
 
@@ -171,6 +170,8 @@ class SleepApp extends App.AppBase {
         timecurrent = now.hour + ":" + now.min.format("%02d");
         // current_heartrate = (Sensor.getInfo()).heartRate;
         Ui.requestUpdate();
+
+        // Just for emulator
         if (fakeTransmit == true) { notice = notice + "fakeTransmit";}
     }
 
@@ -205,6 +206,7 @@ class SleepApp extends App.AppBase {
         // }
     }
 
+    // Main timer loop - here we gather data from sensors, check for alarms and ring them, and send messages to phone
     function timerCallback() {
         now = Sys.getClockTime();
         timecurrent = now.hour + ":" + now.min.format("%02d");
@@ -252,11 +254,10 @@ class SleepApp extends App.AppBase {
     }
 
     // MESSAGES TO PHONE
-
+    // These messages are not needed globally
     function sendStartingTracking() {
         enqueue("STARTING");
     }
-
     function sendCurrentDataAndResetBatch() {
         var toSend = ["DATA", batch.toString()];
         var toSend_new = ["DATA_NEW", batch_new.toString()];
@@ -270,32 +271,12 @@ class SleepApp extends App.AppBase {
         }
         // log("transmitting: " + batch.toString());
     }
-
     function sendHRData(hrAvg) {
         var HRtoSend = ["HR", hrAvg];
         enqueue(HRtoSend);
     }
 
-// END MESSAGES TO PHONE
-
-    function onMail(mailIter) {
-        log("onMail");
-        var mail;
-        do {
-            mail = mailIter.next();
-            if (mail != null) {
-                log("onMail:" + mail.toString());
-                mail = mail.toString();
-                handleIncomingMessage(mail);
-            }
-        }
-        while ( mail != null );
-
-        log("onMail: before emptyMailbox");
-        Comm.emptyMailbox();
-        log("onMail: after emptyMailbox");
-    }
-
+    // Handling messages coming from the phone
     function handleIncomingMessage(mail) {
         var data;
         log("Incoming mail: " + mail);
@@ -307,6 +288,7 @@ class SleepApp extends App.AppBase {
         } else if ( mail.equals("Check") ) {
             sendConfirmConnection();
         } else if ( mail.find("Pause;") == 0 ) {
+            // Currently doing nothing when pause received from phone
             data = extractDataFromIncomingMessage(mail).toNumber();  // time
             // enqueue(data);
             // TODO extract value and pause tracking (start sending -0.01s) and show pause time
@@ -352,7 +334,7 @@ class SleepApp extends App.AppBase {
 
     function gatherData(info) {
         if ( info has :accel && info.accel != null ) {
-            store_max(info.accel); // saves to max_sum and max_sum_new
+            store_max(info.accel); // saves to both max_sum and max_sum_new
 
             if ( aggCount >= MAX_AGG_COUNT ) {
                 batch.add(max_sum);
@@ -405,6 +387,7 @@ class SleepApp extends App.AppBase {
         }
     }
 
+    // Batch can be any number but usually we set it either to 1 when the phone user is currently viewing the phone so he has data from watch sent to phone immediately for viewing, or to 12 when the phone is idle, to conserve battery (we don't have to send via bluetooth as often)
     function setBatchSize(newBatchSize) {
         log("Batch set to " + newBatchSize.toString());
         batchSize = newBatchSize;
@@ -441,6 +424,7 @@ class SleepApp extends App.AppBase {
         }
     }
 
+    // Hint is lucid dreaming or anti-snoring vibration
     function doHint(repeat) {
         log("Hint requested " + repeat.toString() + " times.");
         // Garmin only supports vibrating up to 8 VibeProfiles, so we have to cap repeating on 4
@@ -513,7 +497,6 @@ class SleepApp extends App.AppBase {
     //! onStop() is called when your application is exiting
     function onStop(state) {
     	phoneCommMethod = null;
-        mailCommMethod = null;
 		log("onStop");
         // messageQueue = null;
         betalog("usedMem" + Sys.getSystemStats().usedMemory + "freeMem" + Sys.getSystemStats().freeMemory + "totalMem" + Sys.getSystemStats().totalMemory);

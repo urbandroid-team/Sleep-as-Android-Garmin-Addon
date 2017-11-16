@@ -8,7 +8,7 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.garmin.android.connectiq.ConnectIQ;
-import com.urbandroid.common.logging.Logger;
+import com.urbandroid.sleep.garmin.logging.Logger;
 //import com.urbandroid.common.error.ErrorReporter;
 
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.CHECK_CONNECTED;

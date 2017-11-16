@@ -11,7 +11,7 @@ import com.garmin.android.connectiq.IQApp;
 import com.garmin.android.connectiq.IQDevice;
 import com.garmin.android.connectiq.exception.InvalidStateException;
 import com.garmin.android.connectiq.exception.ServiceUnavailableException;
-import com.urbandroid.common.logging.Logger;
+import com.urbandroid.sleep.garmin.logging.Logger;
 
 import java.util.List;
 

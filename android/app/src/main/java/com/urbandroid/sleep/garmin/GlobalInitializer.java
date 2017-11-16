@@ -5,7 +5,8 @@ import android.os.Handler;
 //import com.urbandroid.common.error.DefaultConfigurationBuilder;
 //import com.urbandroid.common.error.ErrorReporter;
 //import com.urbandroid.common.error.ErrorReporterConfiguration;
-import com.urbandroid.common.logging.Logger;
+
+import com.urbandroid.sleep.garmin.logging.Logger;
 
 public class GlobalInitializer {
     private static boolean isInitialized = false;

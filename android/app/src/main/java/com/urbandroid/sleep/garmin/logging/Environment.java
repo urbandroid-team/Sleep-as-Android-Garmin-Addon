@@ -11,7 +11,7 @@ import android.os.Process;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 
-import com.urbandroid.common.util.TimeZoneCountryMap;
+//import com.urbandroid.common.util.TimeZoneCountryMap;
 import com.urbandroid.sleep.garmin.logging.*;
 //import com.urbandroid.common.util.TimeZoneCountryMap;
 
@@ -314,27 +314,6 @@ public class Environment {
             isoCode = isoCode.toUpperCase();
         }
         return isoCode;
-    }
-
-    public static String getCountryCode(Context context) {
-        // Keep old defaul behaviour to take country from timezone.
-        String countryCode = TimeZoneCountryMap.getCountry(TimeZone.getDefault().getID());
-        if (countryCode == null) {
-            countryCode = getCountryCodeFromSim(context);
-        } else if (countryCode.equals("DE") || countryCode.equals("NL")) {
-            // We know DE and NL gets mixed in timezone based country. So for these 2 countries we make exception and we try to use SIM data if possible.
-            String candidateCode = getCountryCodeFromSim(context);
-            if (candidateCode != null && (candidateCode.equals("DE") || candidateCode.equals("NL"))) {
-                // But the result must be one of the 2 candidate countries.
-                countryCode = candidateCode;
-            }
-        }
-
-        if (countryCode == null) {
-            countryCode = Locale.getDefault().getCountry();
-        }
-
-        return countryCode;
     }
 
     public static boolean isUsingSwiftKey(Context context) {

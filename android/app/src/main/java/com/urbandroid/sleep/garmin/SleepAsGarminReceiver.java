@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.garmin.android.connectiq.ConnectIQ;
 import com.urbandroid.common.logging.Logger;
-import com.urbandroid.common.error.ErrorReporter;
+//import com.urbandroid.common.error.ErrorReporter;
 
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.CHECK_CONNECTED;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.HINT;
@@ -138,7 +138,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
         } else if (action.equals(REPORT)) {
             Logger.logInfo("Generating on demand report");
             Logger.logInfo(context.getPackageName());
-            ErrorReporter.getInstance().generateOnDemandReport(null, "Manual report", "No comment");
+//            ErrorReporter.getInstance().generateOnDemandReport(null, "Manual report", "No comment");
         }
     }
 }

@@ -312,13 +312,10 @@ class SleepApp extends App.AppBase {
         } else if ( mail.find("StopAlarm;") == 0 ) {
             stopAlarm();
         } else if ( mail.equals("StartHRTracking")) {
-            Sensor.enableSensorEvents( method(:onHr) );
-
-            // Do nothing for RADEK test
-            Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE] );
-            hrTracking = true;
-            hrCurrentlyReading = true;
-            // RADEK test END
+            // Sensor.enableSensorEvents( method(:onHr) );
+            // Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE] );
+            // hrTracking = true;
+            // hrCurrentlyReading = true;
 
         } else if ( mail.equals("StartTracking")) {
 

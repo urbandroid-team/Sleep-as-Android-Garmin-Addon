@@ -36,7 +36,7 @@ class SleepView extends Ui.View {
 
 		if(Sys.SCREEN_SHAPE_ROUND == shape) {
 	        // dc.drawBitmap(width/2-80, height/2-74, bkg_night);
-            dc.drawText(width/2-10, height/3+10, Gfx.FONT_NUMBER_HOT, timecurrent, Gfx.TEXT_JUSTIFY_LEFT);
+            dc.drawText(width/2, height/3+10, Gfx.FONT_NUMBER_HOT, timecurrent, Gfx.TEXT_JUSTIFY_CENTER);
             if (beta == true) {
             	dc.drawText(width/2, height/1.2, Gfx.FONT_MEDIUM, "HR>>" + current_heartrate, Gfx.TEXT_JUSTIFY_CENTER);
         	}

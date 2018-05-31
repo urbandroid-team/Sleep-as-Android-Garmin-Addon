@@ -32,8 +32,8 @@ android {
         applicationId "com.urbandroid.sleep.garmin"
         minSdkVersion 9
         targetSdkVersion 25
-        versionCode 8
-        versionName "20170725"
+        versionCode 9
+        versionName "20180531"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
@@ -51,7 +51,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 }
 
 repositories {

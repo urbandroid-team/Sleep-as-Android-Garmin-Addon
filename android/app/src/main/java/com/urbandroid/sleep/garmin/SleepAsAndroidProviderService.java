@@ -524,6 +524,8 @@ public class SleepAsAndroidProviderService extends Service {
             return true;
         } catch (PackageManager.NameNotFoundException e) {
             Logger.logDebug("Not installed: " + appPackageName.toString());
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }

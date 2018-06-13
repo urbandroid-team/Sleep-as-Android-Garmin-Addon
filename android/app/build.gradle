@@ -51,7 +51,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    buildToolsVersion '26.0.2'
 }
 
 repositories {
@@ -61,12 +60,12 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.0.1'
+    implementation 'com.android.support:appcompat-v7:25.0.1'
 //    compile 'com.urbandroid:common:1.0@aar'
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 

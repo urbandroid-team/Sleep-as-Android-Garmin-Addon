@@ -158,7 +158,7 @@ public class MainActivity extends Activity {
             gcmInstalled = false;
         }
 
-        mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.WIRELESS);
+        mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.TETHERED);
         mConnectIQ.initialize(this, true, mListener);
 
         findViewById(R.id.install_gcm).setOnClickListener(new View.OnClickListener() {

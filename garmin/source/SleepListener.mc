@@ -14,9 +14,9 @@ class SleepListener extends Comm.ConnectionListener
     {
         messageQueue.remove(message);
         deliveryInProgress = false;
-        //log("msgQ: " + messageQueue);
-        // log(message + "sent OK");
-        // betalog(message + "sent OK");
+        log("msgQ: " + messageQueue);
+        log(message + "sent OK");
+        betalog(message + "sent OK");
     }
 
     function onError()
@@ -24,6 +24,6 @@ class SleepListener extends Comm.ConnectionListener
         deliveryInProgress = false;
         deliveryErrorCount++;
         log(message + "failed to send");
-        // betalog(message + "failed to send");
+        betalog(message + "failed to send");
     }
 }

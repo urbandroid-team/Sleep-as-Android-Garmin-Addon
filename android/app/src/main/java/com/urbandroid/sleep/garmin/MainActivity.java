@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import com.garmin.android.connectiq.ConnectIQ;
 import com.garmin.android.connectiq.IQApp;
@@ -42,6 +43,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onInitializeError(ConnectIQ.IQSdkErrorStatus errStatus) {
+            Logger.logDebug( "onIntializeError: " + errStatus.toString() );
         }
 
         @Override
@@ -81,6 +83,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onSdkShutDown() {
+            Logger.logDebug("onSdkShutDown");
             try {
                 if (mConnectIQ != null) {
                     mConnectIQ.unregisterForDeviceEvents(mDevice);
@@ -158,7 +161,16 @@ public class MainActivity extends Activity {
             gcmInstalled = false;
         }
 
-        mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.TETHERED);
+        Logger.logDebug("Main Activity conectIQ intialiszation");
+
+        if (GlobalInitializer.debug){
+            mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.TETHERED);
+            Logger.logDebug("ConnectIQ instance set to TETHERED");
+        } else {
+            mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.WIRELESS);
+            Logger.logDebug("ConnectIQ instance set to WIRELESS");
+        }
+
         mConnectIQ.initialize(this, true, mListener);
 
         findViewById(R.id.install_gcm).setOnClickListener(new View.OnClickListener() {

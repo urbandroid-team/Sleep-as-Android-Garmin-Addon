@@ -69,7 +69,7 @@ using Toybox.Math as Math;
 
         if (messageQueue.indexOf(message) == -1) {
             messageQueue.add(message);
-            // log("Adding to q:" + message + " outQ: " + messageQueue);
+            log("Adding to q:" + message + " outQ: " + messageQueue);
         }
     }
 
@@ -148,9 +148,8 @@ class SleepApp extends App.AppBase {
     function initialize() {
         AppBase.initialize();
 
-        phoneCommMethod = method(:onMsg);
-        if(Comm has :registerForPhoneAppMessages) {
-            Comm.registerForPhoneAppMessages(phoneCommMethod);
+        if(Comm has :registerForPhoneAppMessages) {        
+            Comm.registerForPhoneAppMessages( method(:onMsg) );
         } else {
             notice = notice + "Err: Old CIQ version\n";
         }
@@ -164,7 +163,8 @@ class SleepApp extends App.AppBase {
     function onStart(state) {
         log("--onStart--");
         dataTimer = new Timer.Timer();
-        dataTimer.start( method(:timerCallback), SAMPLE_PERIOD, true);
+		dataTimer.start( method(:timerCallback), SAMPLE_PERIOD, true);
+
         sendStartingTracking();
         now = Sys.getClockTime();
         timecurrent = now.hour + ":" + now.min.format("%02d");
@@ -173,6 +173,7 @@ class SleepApp extends App.AppBase {
 
         // Just for emulator
         if (fakeTransmit == true) { notice = notice + "fakeTransmit";}
+        
     }
 
     function onHr(sensor_info) { // measurement á 5 s
@@ -208,6 +209,7 @@ class SleepApp extends App.AppBase {
 
     // Main timer loop - here we gather data from sensors, check for alarms and ring them, and send messages to phone
     function timerCallback() {
+    	//log("TimerCallback");
         now = Sys.getClockTime();
         timecurrent = now.hour + ":" + now.min.format("%02d");
         if (now.sec == 0) {
@@ -393,7 +395,7 @@ class SleepApp extends App.AppBase {
 
     function checkIfAlarmScheduledForNow() {
         if (now == scheduled_alarm_ts) {
-            StartAlarm();
+            startAlarm();
         }
     }
 
@@ -464,6 +466,7 @@ class SleepApp extends App.AppBase {
                 	log("FakeTransmit: " + message);
                 	new SleepListener(message).onComplete();
                 } else {
+              		log("Send next message " + message);
 	                Comm.transmit(message, null, new SleepListener(message));
                 }
         }

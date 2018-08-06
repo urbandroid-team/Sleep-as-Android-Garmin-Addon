@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.Toast;
 import com.garmin.android.connectiq.ConnectIQ;
 import com.garmin.android.connectiq.ConnectIQ.*;
@@ -94,7 +95,7 @@ public class SleepAsAndroidProviderService extends Service {
         @Override
         public void onSdkReady() {
             connectIqReady = true;
-            Logger.logInfo(TAG + "onSdkReady");
+            Logger.logInfo(TAG + " onSdkReady");
 
             registerWatchMessagesReceiver();
             checkAppIsAvailable();
@@ -114,7 +115,12 @@ public class SleepAsAndroidProviderService extends Service {
 
         // checking if Garmin Connect Mobile installed
         if (isAppInstalled("com.garmin.android.apps.connectmobile")) {
-            connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
+            if (GlobalInitializer.debug){
+                connectIQ = ConnectIQ.getInstance(this, IQConnectType.TETHERED);
+            }else{
+                connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
+            }
+
             //initialize SDK
             connectIQ.initialize(this, true, mListener);
         } else {
@@ -150,6 +156,7 @@ public class SleepAsAndroidProviderService extends Service {
         try {
             List<IQDevice> devices = connectIQ.getKnownDevices();
             if (devices != null && devices.size() > 0) {
+                Logger.logDebug( devices.get(0).toString() );
                 return devices.get(0);
             }
         } catch (InvalidStateException e) {
@@ -192,6 +199,7 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     private void registerWatchMessagesReceiver(){
+        Logger.logDebug(" registerWatchMessageRecived started");
         try {
             if (getDevice() != null) {
                 connectIQ.registerForAppEvents(getDevice(), getApp(), new ConnectIQ.IQApplicationEventListener() {
@@ -334,7 +342,6 @@ public class SleepAsAndroidProviderService extends Service {
             stopSelf();
         } else {
 //            Logger.logDebug("1");
-            try {
 //                Logger.logDebug("2");
                 if (messageQueue.size() < 1 || deliveryInProgress.get()) {
 
@@ -343,9 +350,9 @@ public class SleepAsAndroidProviderService extends Service {
                         if (deliveryInProgressCount > MAX_DELIVERY_IN_PROGRESS) {
                             deliveryInProgressCount = 0;
                             deliveryInProgress.set(false);
+                            handler.removeCallbacks(sendMessageRunnable);
+                            handler.postDelayed(sendMessageRunnable, MESSAGE_INTERVAL);
                         }
-                        handler.removeCallbacks(sendMessageRunnable);
-                        handler.postDelayed(sendMessageRunnable, MESSAGE_INTERVAL);
                     }
 
 //                    Logger.logDebug("3, msgQsize:" + messageQueue.size() + " " + deliveryInProgress.get());
@@ -363,38 +370,51 @@ public class SleepAsAndroidProviderService extends Service {
                 handler.removeCallbacks(sendMessageRunnable);
                 handler.postDelayed(sendMessageRunnable, MESSAGE_TIMEOUT);
 
-
-                connectIQ.sendMessage(getDevice(), getApp(), message, new IQSendMessageListener() {
-                    @Override
-                    public void onMessageStatus(IQDevice iqDevice, IQApp iqApp, IQMessageStatus status) {
-//                        Logger.logDebug("sendNextMessage Trying to send message to watch: " + message);
-                        if (status != IQMessageStatus.SUCCESS) {
-                            Logger.logDebug("sendNextMessage Message " + message + " failed to send to watch: " + status);
-                            deliveryErrorCount++;
-                        } else {
-                            Logger.logDebug("sendNextMessage Successfully sent to watch: " + message + " " + status);
-                            messageQueue.remove(message);
-                            if (message.equals("StopApp")) {
-//                            emptyQueue();
-                                stopSelf();
-                            }
-                            deliveryErrorCount = 0;
+                if (GlobalInitializer.debug){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            doSendMessage(message);
                         }
-                        deliveryInProgress.set(false);
+                    });
+                }else{
+                    doSendMessage(message);
+                }
 
-                        if (messageQueue.size() > 0) {
-//                            Logger.logDebug("delaying runnable post");
-                            handler.removeCallbacks(sendMessageRunnable);
-                            handler.postDelayed(sendMessageRunnable, messageQueue.size() > 10 ? MESSAGE_INTERVAL_ON_FAILURE : MESSAGE_INTERVAL);
+        }
+    }
+
+    private void doSendMessage(final String message){
+        try {
+            connectIQ.sendMessage(getDevice(), getApp(), message, new IQSendMessageListener() {
+                @Override
+                public void onMessageStatus(IQDevice iqDevice, IQApp iqApp, IQMessageStatus status) {
+    //                        Logger.logDebug("sendNextMessage Trying to send message to watch: " + message);
+                    if (status != IQMessageStatus.SUCCESS) {
+                        Logger.logDebug("sendNextMessage Message " + message + " failed to send to watch: " + status);
+                        deliveryErrorCount++;
+                    } else {
+                        Logger.logDebug("sendNextMessage Successfully sent to watch: " + message + " " + status);
+                        messageQueue.remove(message);
+                        if (message.equals("StopApp")) {
+    //                            emptyQueue();
+                            stopSelf();
                         }
+                        deliveryErrorCount = 0;
                     }
-                });
-            } catch (InvalidStateException e) {
-                Logger.logDebug(TAG, e);
-            } catch (ServiceUnavailableException e) {
-                Logger.logDebug(TAG, e);
-//            Toast.makeText(getApplicationContext(), "ConnectIQ service is unavailable. Is Garmin Connect Mobile installed and running?", Toast.LENGTH_LONG).show();
-            }
+                    deliveryInProgress.set(false);
+
+                    if (messageQueue.size() > 0) {
+    //                            Logger.logDebug("delaying runnable post");
+                        handler.removeCallbacks(sendMessageRunnable);
+                        handler.postDelayed(sendMessageRunnable, messageQueue.size() > 10 ? MESSAGE_INTERVAL_ON_FAILURE : MESSAGE_INTERVAL);
+                    }
+                }
+            });
+        } catch (InvalidStateException e) {
+            Logger.logDebug(TAG,e);
+        } catch (ServiceUnavailableException e) {
+            Logger.logDebug(TAG,e);
         }
     }
 

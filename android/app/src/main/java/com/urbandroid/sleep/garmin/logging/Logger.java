@@ -5,6 +5,8 @@ package com.urbandroid.sleep.garmin.logging;
  */
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.urbandroid.sleep.garmin.logging.EmulatorDetector;
@@ -237,6 +239,19 @@ public class Logger {
             Log.d(tag, formatMessage(DEFAULT_LOG, timestamp, message));
         }
     }
+
+    public static void logDebug(Intent data){
+        Bundle bundle = data.getExtras();
+        if (bundle != null) {
+            for (String key : bundle.keySet()) {
+                Object value = bundle.get(key);
+                Log.d(defaultTag, String.format("%s %s (%s)", key,
+                        value.toString(), value.getClass().getName()));
+            }
+        }
+    }
+
+
 
     public static void logDebug(String message, Throwable throwable) {
         logDebug(defaultTag, message, throwable);

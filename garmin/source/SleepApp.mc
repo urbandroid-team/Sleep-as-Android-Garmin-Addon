@@ -105,11 +105,10 @@ class SleepApp extends App.AppBase {
     const AGG_PERIOD = 10000; //ms
     const MAX_AGG_COUNT = AGG_PERIOD/SAMPLE_PERIOD;
 
-    var phoneCommMethod;
-
     var info;
     var hrInfo;
     var listener;
+    var connectIQVersion;
 
     var scheduled_alarm_ts = 0;
     var delay = 0; // For delayed alarm vibration
@@ -144,18 +143,23 @@ class SleepApp extends App.AppBase {
     // New actigraphy
     var batch_new = [];
     var max_sum_new = 0;
+    
 
     function initialize() {
         AppBase.initialize();
-
-        if(Comm has :registerForPhoneAppMessages) {        
+        
+        if(Comm has :registerForPhoneAppMessages) {       
+        	log("Registering for Phone Messages");
             Comm.registerForPhoneAppMessages( method(:onMsg) );
         } else {
             notice = notice + "Err: Old CIQ version\n";
         }
+        
+        connectIQVersion = Sys.getDeviceSettings().monkeyVersion[0];
     }
 
     function onMsg(msg) {
+    	//log("onMsg Called");
         handleIncomingMessage(msg.data.toString());
     }
 
@@ -175,38 +179,7 @@ class SleepApp extends App.AppBase {
         if (fakeTransmit == true) { notice = notice + "fakeTransmit";}
         
     }
-
-    function onHr(sensor_info) { // measurement á 5 s
-        // log("onHr: " + sensor_info.heartRate.toString());
-        if (sensor_info.heartRate != null ) {
-            current_heartrate = sensor_info.heartRate;
-            sendHRData(current_heartrate);
-        }
-
-        //     hrCount = hrCount + 1;
-        //     log("hrcount + 1");
-
-        //     if (hrCurrentlyReading == true) {
-        //         hrValue = hrValue + sensor_info.heartRate;
-        //         log("HR read, hrValue: " + hrValue);
-        //     }
-
-        //     if ( (hrCount >= HR_ON_COUNT) && (hrCurrentlyReading == true) ) {
-        //             log("switching off HR read");
-        //             hrCurrentlyReading = false;
-        //             sendHRData(hrValue/hrCount);
-        //             hrValue = 0;
-        //             log("sending HR data: " + hrValue);
-        //     }
-
-        //     if ( hrCount >= HR_MAX_COUNT ) {
-        //         log("hrloop restart");
-        //         hrCount = 0;
-        //         hrCurrentlyReading = true;
-        //     }
-        // }
-    }
-
+    
     // Main timer loop - here we gather data from sensors, check for alarms and ring them, and send messages to phone
     function timerCallback() {
     	//log("TimerCallback");
@@ -314,11 +287,9 @@ class SleepApp extends App.AppBase {
         } else if ( mail.find("StopAlarm;") == 0 ) {
             stopAlarm();
         } else if ( mail.equals("StartHRTracking")) {
-            // Sensor.enableSensorEvents( method(:onHr) );
-            // Sensor.setEnabledSensors( [Sensor.SENSOR_HEARTRATE] );
-            // hrTracking = true;
-            // hrCurrentlyReading = true;
-
+    		Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+    		hrTracking = true;
+        	hrCurrentlyReading = true;
         } else if ( mail.equals("StartTracking")) {
 
         } else {
@@ -496,7 +467,6 @@ class SleepApp extends App.AppBase {
 
     //! onStop() is called when your application is exiting
     function onStop(state) {
-    	phoneCommMethod = null;
 		log("onStop");
         // messageQueue = null;
         betalog("usedMem" + Sys.getSystemStats().usedMemory + "freeMem" + Sys.getSystemStats().freeMemory + "totalMem" + Sys.getSystemStats().totalMemory);

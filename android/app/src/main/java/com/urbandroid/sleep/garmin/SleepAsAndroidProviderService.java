@@ -376,7 +376,7 @@ public class SleepAsAndroidProviderService extends Service {
                         public void run() {
                             doSendMessage(message);
                         }
-                    });
+                    }).start();
                 }else{
                     doSendMessage(message);
                 }
@@ -385,6 +385,7 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     private void doSendMessage(final String message){
+        Logger.logDebug("doSendMessage");
         try {
             connectIQ.sendMessage(getDevice(), getApp(), message, new IQSendMessageListener() {
                 @Override

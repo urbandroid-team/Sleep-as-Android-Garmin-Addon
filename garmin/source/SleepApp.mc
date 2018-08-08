@@ -88,21 +88,29 @@ using Toybox.Math as Math;
 
     function sendDismissAlarm() {
         enqueue("DISMISS");
+        stopAlarm();
     }
 
     function sendSnoozeAlarm() {
         enqueue("SNOOZE");
+        stopAlarm();
     }
 
     function sendConfirmConnection() {
         enqueue("CONFIRMCHECK");
     }
 
+    function stopAlarm() {
+        alarm_currently_active = false;
+        Ui.switchToView(new SleepView(), new SleepDelegate(), Ui.SLIDE_IMMEDIATE);
+        alarmViewActive = false;
+    }
+
 
 class SleepApp extends App.AppBase {
 
     const SAMPLE_PERIOD = 100; //ms
-    const AGG_PERIOD = 10000; //ms
+    const AGG_PERIOD = 1000; //ms
     const MAX_AGG_COUNT = AGG_PERIOD/SAMPLE_PERIOD;
 
     var info;
@@ -138,7 +146,7 @@ class SleepApp extends App.AppBase {
     var max_sum = 0;
     var currentMax;
     var aggCount = 0;
-    var batchSize = 12;
+    var batchSize = 2;
     var batch = [];
     // New actigraphy
     var batch_new = [];
@@ -177,6 +185,8 @@ class SleepApp extends App.AppBase {
 
         // Just for emulator
         if (fakeTransmit == true) { notice = notice + "fakeTransmit";}
+        
+        //startAlarm();
         
     }
     
@@ -234,7 +244,9 @@ class SleepApp extends App.AppBase {
         enqueue("STARTING");
     }
     function sendCurrentDataAndResetBatch() {
-        var toSend = ["DATA", batch.toString()];
+        log("transmitting: " + batch.toString());
+        var toSend = ["DATA", batch];
+        log(toSend);
         var toSend_new = ["DATA_NEW", batch_new.toString()];
         if (batch.size() > 0) {
             enqueue(toSend);
@@ -417,11 +429,7 @@ class SleepApp extends App.AppBase {
         }
     }
 
-    function stopAlarm() {
-        alarm_currently_active = false;
-        Ui.switchToView(new SleepView(), new SleepDelegate(), Ui.SLIDE_IMMEDIATE);
-        alarmViewActive = false;
-    }
+
 
     function sendNextMessage() {
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
@@ -471,6 +479,7 @@ class SleepApp extends App.AppBase {
         // messageQueue = null;
         betalog("usedMem" + Sys.getSystemStats().usedMemory + "freeMem" + Sys.getSystemStats().freeMemory + "totalMem" + Sys.getSystemStats().totalMemory);
 		// messageQueue = null;
+		
     }
 
     //! Return the initial view of your application here

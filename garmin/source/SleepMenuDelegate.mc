@@ -18,7 +18,11 @@ class SleepMenuDelegate extends Ui.MenuInputDelegate {
             // secondTimer.stop();
             if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
                 Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
-            }
+                
+            } else if (!Sys.getDeviceSettings().phoneConnected){
+				Sys.Exit();
+			}
+				
             // if (exitTapped == true) {
             //     log("exiting via menu");
             //     Sys.exit();
@@ -32,4 +36,30 @@ class SleepMenuDelegate extends Ui.MenuInputDelegate {
             Sys.exit();
         }
     }
+    
+    function onMenu() {
+    	log("onMenu");
+    }
+    
+    function onNextPage(){
+    	log("onNextPage");
+    }
+
+	function onNextMode(){
+		log("onNextMode");
+	}
+
+	function onPreviousPage(){ // Up is pressed
+		log("onPreviousPage");
+	}
+
+	function onPreviousMode(){
+		log("onPreviousMode");
+	}
+
+	function onSelect(){ 
+		log("onSelect");
+	}
+    
+    
 }

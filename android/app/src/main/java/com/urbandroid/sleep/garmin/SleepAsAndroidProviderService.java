@@ -19,6 +19,7 @@ import com.garmin.android.connectiq.exception.InvalidStateException;
 import com.garmin.android.connectiq.exception.ServiceUnavailableException;
 import com.urbandroid.sleep.garmin.logging.Logger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
@@ -513,6 +514,25 @@ public class SleepAsAndroidProviderService extends Service {
         }
         return START_STICKY;
     }
+
+    public void startWatchApp(){
+        Logger.logDebug("Checking Garmin connection...");
+        messageQueue.remove("StopApp");
+        try {
+            if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
+                Logger.logDebug("Trying to open app on watch...");
+                watchAppOpenTime = System.currentTimeMillis();
+                connectIQ.openApplication(getDevice(), getApp(), new IQOpenApplicationListener() {
+                    @Override
+                    public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, IQOpenApplicationStatus iqOpenApplicationStatus) {
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Logger.logSevere(e);
+        }
+    }
+
 
     @Override
     public void onDestroy() {

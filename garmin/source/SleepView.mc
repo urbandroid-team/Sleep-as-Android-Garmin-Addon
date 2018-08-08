@@ -54,8 +54,17 @@ class SleepView extends Ui.View {
                 	dc.drawText(width/2, height/1.2, Gfx.FONT_MEDIUM, "HR>>" + current_heartrate, Gfx.TEXT_JUSTIFY_CENTER);
             	}			}
 		} else if (Sys.SCREEN_SHAPE_SEMI_ROUND == shape) {
-	        // dc.drawBitmap(width/2-80, height/2-74, bkg_night);
-            dc.drawText(width/2, height/3, Gfx.FONT_NUMBER_HOT, timecurrent, Gfx.TEXT_JUSTIFY_LEFT);
+	        // dc.drawBitmap(width/2-80, height/2-74, bkg_night);           
+            var timeText = new Ui.Text({
+            		:text=>timecurrent,
+            		:color=>Gfx.COLOR_WHITE,
+            		:font=>Gfx.FONT_NUMBER_HOT,
+            		:locX =>WatchUi.LAYOUT_HALIGN_CENTER,
+            		:locY=>WatchUi.LAYOUT_VALIGN_CENTER
+        	});
+        	timeText.draw(dc);
+        	
+            
             if (beta == true) {
             	dc.drawText(width/2, height/1.2, Gfx.FONT_MEDIUM, "HR>>" + current_heartrate, Gfx.TEXT_JUSTIFY_CENTER);
         	}

@@ -34,7 +34,17 @@ class SleepAlarmView extends Ui.View {
         dc.clear();
         dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
 
-        dc.drawText(width/2, height/2-15, Gfx.FONT_MEDIUM, "Alarm!!!\n" + timecurrent, Gfx.TEXT_JUSTIFY_CENTER);
+        //dc.drawText(width/2, height/2-15, Gfx.FONT_MEDIUM, "Alarm!!!\n" + timecurrent, Gfx.TEXT_JUSTIFY_CENTER);
+        var AlarmText = new Ui.Text({
+            :text=>"Alarm!!!\n" + timecurrent,
+            :color=>Gfx.COLOR_WHITE,
+            :font=>Gfx.FONT_MEDIUM,
+            :locX =>WatchUi.LAYOUT_HALIGN_CENTER,
+            :locY=>WatchUi.LAYOUT_VALIGN_CENTER
+        });
+        AlarmText.draw(dc);            
+
+
 
         // Call the parent onUpdate function to redraw (reset) the layout
         // View.onUpdate(dc);

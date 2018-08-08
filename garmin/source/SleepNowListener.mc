@@ -12,11 +12,11 @@ class SleepNowListener extends Comm.ConnectionListener
 
     function onComplete()
     {
-        log(message + "sent OK");
+        log(message + " sent OK");
     }
 
     function onError()
     {
-        log(message + "failed to send");
+        log(message + " failed to send");
     }
 }

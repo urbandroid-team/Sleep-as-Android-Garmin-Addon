@@ -110,7 +110,7 @@ using Toybox.Math as Math;
 class SleepApp extends App.AppBase {
 
     const SAMPLE_PERIOD = 100; //ms
-    const AGG_PERIOD = 1000; //ms
+    const AGG_PERIOD = 10000; //ms
     const MAX_AGG_COUNT = AGG_PERIOD/SAMPLE_PERIOD;
 
     var info;
@@ -146,23 +146,23 @@ class SleepApp extends App.AppBase {
     var max_sum = 0;
     var currentMax;
     var aggCount = 0;
-    var batchSize = 2;
+    var batchSize = 12;
     var batch = [];
     // New actigraphy
     var batch_new = [];
     var max_sum_new = 0;
-    
+
 
     function initialize() {
         AppBase.initialize();
-        
-        if(Comm has :registerForPhoneAppMessages) {       
+
+        if(Comm has :registerForPhoneAppMessages) {
         	log("Registering for Phone Messages");
             Comm.registerForPhoneAppMessages( method(:onMsg) );
         } else {
             notice = notice + "Err: Old CIQ version\n";
         }
-        
+
         connectIQVersion = Sys.getDeviceSettings().monkeyVersion[0];
     }
 
@@ -185,11 +185,9 @@ class SleepApp extends App.AppBase {
 
         // Just for emulator
         if (fakeTransmit == true) { notice = notice + "fakeTransmit";}
-        
-        //startAlarm();
-        
+
     }
-    
+
     // Main timer loop - here we gather data from sensors, check for alarms and ring them, and send messages to phone
     function timerCallback() {
     	//log("TimerCallback");
@@ -244,9 +242,7 @@ class SleepApp extends App.AppBase {
         enqueue("STARTING");
     }
     function sendCurrentDataAndResetBatch() {
-        log("transmitting: " + batch.toString());
-        var toSend = ["DATA", batch];
-        log(toSend);
+        var toSend = ["DATA", batch.toString()];
         var toSend_new = ["DATA_NEW", batch_new.toString()];
         if (batch.size() > 0) {
             enqueue(toSend);
@@ -476,14 +472,16 @@ class SleepApp extends App.AppBase {
     //! onStop() is called when your application is exiting
     function onStop(state) {
 		log("onStop");
+        dataTimer.stop();
         // messageQueue = null;
         betalog("usedMem" + Sys.getSystemStats().usedMemory + "freeMem" + Sys.getSystemStats().freeMemory + "totalMem" + Sys.getSystemStats().totalMemory);
 		// messageQueue = null;
-		
+
     }
 
     //! Return the initial view of your application here
     function getInitialView() {
+        log("getInitialView");
         return [ new SleepMainView(), new SleepMainDelegate() ];
     }
 }

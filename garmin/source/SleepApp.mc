@@ -484,6 +484,6 @@ class SleepApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-        return [ new SleepView(), new SleepDelegate() ];
+        return [ new SleepMainView(), new SleepMainDelegate() ];
     }
 }

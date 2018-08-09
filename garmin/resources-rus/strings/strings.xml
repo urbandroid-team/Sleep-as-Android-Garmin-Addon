@@ -1,9 +1,9 @@
 <strings>
     <string id="AppName">Трекер сна</string>
     <string id="menu_label_1">Пауза +5 мин</string>
-    <string id="menu_label_2">Продолжить отслеживание</string>
-    <string id="menu_label_3">Остановить отслеж. сон</string>
-    <string id="menu_label_4">Выход из приложения</string>
+    <string id="menu_label_2">Продолжить \n отслеживание</string>
+    <string id="menu_label_3">Остановить \n отслеж. сон</string>
+    <string id="menu_label_4">Выход \n из приложения</string>
     <string id="alarm_menu_label_1">Отложить</string>
     <string id="alarm_menu_label_2">Отменить</string>
 </strings>

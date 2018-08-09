@@ -20,7 +20,7 @@ class SleepMenuDelegate extends Ui.MenuInputDelegate {
                 Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
                 
             } else if (!Sys.getDeviceSettings().phoneConnected){
-				Sys.Exit();
+				Sys.exit();
 			}
 				
             // if (exitTapped == true) {

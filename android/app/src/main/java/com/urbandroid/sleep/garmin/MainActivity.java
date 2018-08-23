@@ -25,10 +25,12 @@ public class MainActivity extends Activity {
 
     private static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
     private static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
+    private static final String PACKAGE_SLEEP_WATCH_STARTER = "com.urbandroid.watchsleepstarter";
     private static final String IQ_APP_ID = SleepAsAndroidProviderService.IQ_APP_ID;
     private boolean sleepInstalled = true;
     private boolean gcmInstalled = true;
     private boolean watchappInstalled = true;
+    private boolean watchsleepstarterInstalled = true;
 
     private ConnectIQ mConnectIQ;
     private IQDevice mDevice;
@@ -149,17 +151,7 @@ public class MainActivity extends Activity {
         GlobalInitializer.initializeIfRequired(this);
         setContentView(R.layout.activity_main);
 
-        try {
-            this.getPackageManager().getApplicationInfo(PACKAGE_SLEEP, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            sleepInstalled = false;
-        }
 
-        try {
-            this.getPackageManager().getApplicationInfo(PACKAGE_GCM, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            gcmInstalled = false;
-        }
 
         Logger.logDebug("Main Activity conectIQ intialiszation");
 
@@ -200,9 +192,40 @@ public class MainActivity extends Activity {
                 setupSleep();
             }
         });
+        findViewById(R.id.install_watchsleepstarter).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                installSleepWatchStarter();
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        try {
+            this.getPackageManager().getApplicationInfo(PACKAGE_SLEEP, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            sleepInstalled = false;
+        }
+
+        try {
+            this.getPackageManager().getApplicationInfo(PACKAGE_GCM, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            gcmInstalled = false;
+        }
+
+        try {
+            this.getPackageManager().getApplicationInfo(PACKAGE_SLEEP_WATCH_STARTER, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            watchsleepstarterInstalled = false;
+        }
 
         findViewById(R.id.card_install_saa).setVisibility(!sleepInstalled ? View.VISIBLE : View.GONE);
         findViewById(R.id.card_install_gcm).setVisibility(!gcmInstalled ? View.VISIBLE : View.GONE);
+        findViewById(R.id.card_install_watchsleepstarter).setVisibility(!watchsleepstarterInstalled ? View.VISIBLE : View.GONE);
+
     }
 
     private void setupSleep() {
@@ -265,6 +288,15 @@ public class MainActivity extends Activity {
                 }
             });
 
+        } catch (Exception e) {
+            Logger.logSevere(e);
+        }
+    }
+
+    private void installSleepWatchStarter(){
+        try {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+PACKAGE_SLEEP_WATCH_STARTER));
+            startActivity(i);
         } catch (Exception e) {
             Logger.logSevere(e);
         }

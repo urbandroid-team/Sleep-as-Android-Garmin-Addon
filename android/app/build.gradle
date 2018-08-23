@@ -68,5 +68,6 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:25.0.1'
 //    compile 'com.urbandroid:common:1.0@aar'
     testImplementation 'junit:junit:4.12'
+    implementation 'org.jetbrains:annotations-java5:15.0'
 }
 

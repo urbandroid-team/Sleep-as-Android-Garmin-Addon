@@ -139,7 +139,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:background="@drawable/card"
-                android:id="@+id/card_setup"
+                android:id="@+id/card_install_watchsleepstarter"
                 android:paddingTop="16dp"
                 android:paddingLeft="16dp"
                 android:layout_marginBottom="8dp"
@@ -149,22 +149,54 @@
                 <TextView
                     android:textColor="@color/secondary"
                     style="?android:attr/textAppearanceMedium"
-                    android:id="@+id/setup_text"
-                    android:text="@string/setup_text"
+                    android:id="@+id/install_watchsleepstarter_text"
+                    android:text="@string/install_watchsleepstarter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
                 <Button
-                    android:textStyle="bold"
-                    android:layout_gravity="right"
-                    android:textColor="@color/primary"
-                    android:background="@drawable/button_flat"
-                    android:id="@+id/setup"
-                    android:text="@string/setup"
+                    android:id="@+id/install_watchsleepstarter"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@drawable/button_flat"
+                    android:text="@string/install"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold" />
+
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/card_setup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/card"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingTop="16dp">
+
+                <TextView
+                    android:id="@+id/setup_text"
+                    style="?android:attr/textAppearanceMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setup_text"
+                    android:textColor="@color/secondary" />
+
+                <Button
+                    android:id="@+id/setup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@drawable/button_flat"
+                    android:text="@string/setup"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
 
 
         </LinearLayout>

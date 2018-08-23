@@ -62,6 +62,15 @@ public class SleepAsAndroidProviderService extends Service {
     final static String HINT = "com.urbandroid.sleep.watch.HINT";
     final static String CHECK_CONNECTED = "com.urbandroid.sleep.watch.CHECK_CONNECTED";
     final static String REPORT = "com.urbandroid.sleep.watch.REPORT";
+    final static String ROMPT_NOT_SHOWN = "PROMPT_NOT_SHOWN_ON_DEVICE";
+
+    // App Names (app names/user friendly names)
+    private static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
+    private static final String PACKAGE_SLEEP_USERFRIENDLY = "Sleep As Android";
+    private static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
+    private static final String PACKAGE_GCM_USERFRIENDLY = "Garmin Connect Mobile";
+    private static final String PACKAGE_SLEEP_WATCH_STARTER = "com.urbandroid.watchsleepstarter";
+    private static final String PACKAGE_SLEEP_WATCH_STARTER_USERFRIENDLY = "Sleep Watch Starter For Sleep";
 
     //  Just for testing
     public static final String EXTRA_MESSAGE = "message";
@@ -115,7 +124,12 @@ public class SleepAsAndroidProviderService extends Service {
         handler = new Handler();
 
         // checking if Garmin Connect Mobile installed
-        if (isAppInstalled("com.garmin.android.apps.connectmobile")) {
+        if (!isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER)) {
+            launchPlayStore(PACKAGE_SLEEP_USERFRIENDLY,PACKAGE_SLEEP_WATCH_STARTER);
+        }
+
+        // checking if Garmin Connect Mobile installed
+        if (isAppInstalled(PACKAGE_GCM)) {
             if (GlobalInitializer.debug){
                 connectIQ = ConnectIQ.getInstance(this, IQConnectType.TETHERED);
             }else{
@@ -125,18 +139,23 @@ public class SleepAsAndroidProviderService extends Service {
             //initialize SDK
             connectIQ.initialize(this, true, mListener);
         } else {
-            final String appPackageName = "com.garmin.android.apps.connectmobile";
-            Toast.makeText(getApplicationContext(), "Garmin Connect Mobile not installed", Toast.LENGTH_LONG).show();
-            try {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
-            } catch (android.content.ActivityNotFoundException anfe) {
-                Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-            }
+            launchPlayStore(PACKAGE_GCM_USERFRIENDLY,PACKAGE_GCM);
             stopSelf();
+        }
+    }
+
+
+
+    private void launchPlayStore(String userFriendlyName,final String appPackageName){
+        Toast.makeText(getApplicationContext(),  userFriendlyName + " not installed", Toast.LENGTH_LONG).show();
+        try {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+        } catch (android.content.ActivityNotFoundException anfe) {
+            Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
         }
     }
 
@@ -183,13 +202,16 @@ public class SleepAsAndroidProviderService extends Service {
 
                 @Override
                 public void onApplicationInfoReceived(IQApp app) {
+
+
                 }
 
                 @Override
                 public void onApplicationNotInstalled(String applicationId) {
-                    Toast.makeText(getApplicationContext(), "Sleep not installed on watch", Toast.LENGTH_LONG).show();
-                    Logger.logDebug("Sleep watch app not installed.");
-                    stopSelf();
+                        Toast.makeText(getApplicationContext(), "Sleep not installed on watch", Toast.LENGTH_LONG).show();
+                        Logger.logDebug("Sleep watch app not installed.");
+                        stopSelf();
+
                 }
             });
         } catch (InvalidStateException e) {
@@ -505,6 +527,9 @@ public class SleepAsAndroidProviderService extends Service {
                     connectIQ.openApplication(getDevice(), getApp(), new IQOpenApplicationListener() {
                         @Override
                         public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, IQOpenApplicationStatus iqOpenApplicationStatus) {
+
+
+
                         }
                     });
                 }
@@ -525,6 +550,9 @@ public class SleepAsAndroidProviderService extends Service {
                 connectIQ.openApplication(getDevice(), getApp(), new IQOpenApplicationListener() {
                     @Override
                     public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, IQOpenApplicationStatus iqOpenApplicationStatus) {
+                        if (iqOpenApplicationStatus == IQOpenApplicationStatus.PROMPT_NOT_SHOWN_ON_DEVICE) {
+                            Toast.makeText(getApplicationContext(), "Failed to start Watch App. Please start manually.", Toast.LENGTH_LONG).show();
+                        }
                     }
                 });
             }

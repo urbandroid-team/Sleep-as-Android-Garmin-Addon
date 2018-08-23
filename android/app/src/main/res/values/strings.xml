@@ -7,5 +7,6 @@
     <string name="install">Install</string>
     <string name="setup_text">Setup Garmin with Sleep as Android</string>
     <string name="setup">Setup</string>
+    <string name="install_watchsleepstarter">Please Install Sleep Watch Starter for Sleep as Android</string>
     <string name="log">LOG appears below</string>
 </resources>

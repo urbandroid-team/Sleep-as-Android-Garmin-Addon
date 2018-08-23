@@ -2,4 +2,5 @@
   <bitmap id="LauncherIcon" filename="launcher_icon.png" />
   <bitmap id="id_bkg_night" filename="bkg_night.png" />
   <bitmap id="id_bkg_alarm" filename="bkg_alarm.png" />
+  <bitmap id="id_alarm_icon" filename="ic_action_sunrise3.png" />
 </drawables>

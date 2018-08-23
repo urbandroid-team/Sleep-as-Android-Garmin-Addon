@@ -6,6 +6,7 @@
     <string id="menu_label_4">Force stop app</string>
     <string id="alarm_menu_label_1">Snooze alarm</string>
     <string id="alarm_menu_label_2">Dismiss alarm</string>
+    
 </strings>
 
 <!--  If removing a menu label, check the getMenuArray Function -->

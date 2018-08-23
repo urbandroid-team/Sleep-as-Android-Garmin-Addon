@@ -1,6 +1,6 @@
-<menu id="MainMenu">
-    <menu-item id="item_1">@Strings.menu_label_1</menu-item>
-    <menu-item id="item_2">@Strings.menu_label_2</menu-item>
-    <menu-item id="item_3">@Strings.menu_label_3</menu-item>
-    <menu-item id="item_4">@Strings.menu_label_4</menu-item>
+<menu id="MainMenu">    
+    <menu-item id="item_1" label="@Strings.menu_label_1"></menu-item>
+    <menu-item id="item_2" label="@Strings.menu_label_2"></menu-item>
+    <menu-item id="item_3" label="@Strings.menu_label_3"></menu-item>
+    <menu-item id="item_4" label="@Strings.menu_label_4"></menu-item>
 </menu>

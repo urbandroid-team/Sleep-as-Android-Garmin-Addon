@@ -4,11 +4,11 @@ using Toybox.System as Sys;
 using Toybox.Graphics as Gfx;
 
 class SleepAlarmView extends Ui.View {
-
-    var bkg_alarm = Ui.loadResource( Rez.Drawables.id_bkg_alarm );
     var width;
     var height;
     var screenShape;
+    
+
 
     function initialize() {
         View.initialize();
@@ -30,18 +30,25 @@ class SleepAlarmView extends Ui.View {
     function onUpdate(dc) {
         width = dc.getWidth();
         height = dc.getHeight();
-        dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
+        dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_WHITE);
         dc.clear();
-        dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
+        dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_WHITE);
 
         //dc.drawText(width/2, height/2-15, Gfx.FONT_MEDIUM, "Alarm!!!\n" + timecurrent, Gfx.TEXT_JUSTIFY_CENTER);
+        var alarmIcon = new Ui.Bitmap({
+    		:rezId=>Rez.Drawables.id_alarm_icon,
+    		:locX=>Ui.LAYOUT_HALIGN_CENTER,
+    		:locY=>Ui.LAYOUT_VALIGN_CENTER*.75,
+			});
+			
         var AlarmText = new Ui.Text({
-            :text=>"Alarm!!!\n" + timecurrent,
-            :color=>Gfx.COLOR_WHITE,
-            :font=>Gfx.FONT_MEDIUM,
+            :text=>timecurrent,
+            :color=>Gfx.COLOR_BLACK,
+            :font=>Gfx.FONT_LARGE,
             :locX =>WatchUi.LAYOUT_HALIGN_CENTER,
             :locY=>WatchUi.LAYOUT_VALIGN_CENTER
         });
+        dc.drawBitmap(alarmIcon);
         AlarmText.draw(dc);            
 
 
@@ -54,9 +61,7 @@ class SleepAlarmView extends Ui.View {
     //! state of this View here. This includes freeing resources from
     //! memory.
     function onHide() {
-        if (bkg_alarm != null) {
-            bkg_alarm = null;
-        }
+
         if (width != null) {
             width = null;
         }

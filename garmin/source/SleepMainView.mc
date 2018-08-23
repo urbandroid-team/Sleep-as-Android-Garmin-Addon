@@ -102,8 +102,8 @@ class SleepMainView extends Ui.View {
         if (height != null) {
             height = null;
         }
-        if (screenShape != null) {
-            screenShape = null;
+        if (shape != null) {
+            shape = null;
         }
     }
 }

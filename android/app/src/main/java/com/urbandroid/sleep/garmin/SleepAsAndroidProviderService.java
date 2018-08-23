@@ -144,7 +144,8 @@ public class SleepAsAndroidProviderService extends Service {
             }
 
             //initialize SDK
-            initializeConnectIQ(this,connectIQ,true,mListener);
+            //initializeConnectIQ(this,connectIQ,true,mListener);
+            connectIQ.initialize(this,true,mListener);
         } else {
             launchPlayStore(PACKAGE_GCM_USERFRIENDLY,PACKAGE_GCM);
             stopSelf();
@@ -480,17 +481,19 @@ public class SleepAsAndroidProviderService extends Service {
             action = "";
         }
 
-        if (action.equals(START_WATCH_APP)) {
+        if (action.equals(START_WATCH_APP)){
             Logger.logDebug("Received Start tracking command from Sleep.");
             dumpIntent(intent);
+            enqueue("StartTracking");
+            Logger.logDebug("Sending StartTracking");
+
             if (intent.hasExtra(DO_HR_MONITORING)) {
                 enqueue("StartHRTracking");
-                Logger.logInfo("Sending do HR monitoring");
-            } else {
-                enqueue("StartTracking");
-                Logger.logInfo("Start tracking without HR monitoring");
+                Logger.logInfo("Using HR monitoring");
             }
+
         }
+
         if (action.equals(STOP_WATCH_APP)) {
             Logger.logDebug("Sending stop command to Garmin");
             emptyQueue();
@@ -614,6 +617,7 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
 
+    /* Possible fix for Long error (aaka SEND_MESSAGE_STATUS and EXTRA_OPEN_APPLICATION_DEVICE)
     private static class ConnectIQWrappedReceiver extends BroadcastReceiver {
         private final BroadcastReceiver receiver;
 
@@ -642,6 +646,7 @@ public class SleepAsAndroidProviderService extends Service {
 // It's already a long, i.e. on the simulator.
         }
     }
+
 
     private static void initializeConnectIQ(
             Context context, ConnectIQ connectIQ, boolean autoUI, ConnectIQ.ConnectIQListener listener) {
@@ -675,5 +680,6 @@ public class SleepAsAndroidProviderService extends Service {
         connectIQ.initialize(wrappedContext, autoUI, listener);
     }
 
+    */
 
 }

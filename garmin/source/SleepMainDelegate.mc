@@ -1,6 +1,7 @@
 using Toybox.Graphics as Gfx;
 using Toybox.WatchUi as Ui;
 using Toybox.System as Sys;
+using Toybox.Communications as Comm;
 
 class SleepMainDelegate extends Ui.InputDelegate  {
 
@@ -23,20 +24,12 @@ class SleepMainDelegate extends Ui.InputDelegate  {
     		case 2:
     			break;
     		case 3:
-    			if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
-                Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
-
-            	} else if (!Sys.getDeviceSettings().phoneConnected){
-						Sys.exit();
-					}
+    			if (trackingBool){
+    				normalExit();
+    			} else {
+    				forceExit();
+    			}
     			break;
-    		case 4:
-    			log("Force stopped via menu");
-            	if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
-            		Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
-            	}
-            	Sys.exit();
-            	break;
 		}
 		returnCentre();
     }

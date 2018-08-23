@@ -7,17 +7,13 @@ using Toybox.Graphics as Gfx;
 
 var globString;
 // var menuArray = [Ui.loadResource(Rez.Strings.menu_label_1),Ui.loadResource(Rez.Strings.menu_label_2),timecurrent,Ui.loadResource(Rez.Strings.menu_label_3),Ui.loadResource(Rez.Strings.menu_label_4)];
-var menuArray = [Ui.loadResource(Rez.Strings.menu_label_1),Ui.loadResource(Rez.Strings.menu_label_2),timecurrent,Ui.loadResource(Rez.Strings.menu_label_3),Ui.loadResource(Rez.Strings.menu_label_4)];
+var menuArray = [Ui.loadResource(Rez.Strings.menu_label_1),Ui.loadResource(Rez.Strings.menu_label_2),timecurrent,Ui.loadResource(Rez.Strings.menu_label_3)];
 var arrayIndex = 2;
 
 var width; var height; var shape;
 
 function moduloPosArith(i,m){
-	//log("i: " + i + "  m: " + m);
-	if (i < 0){
-		i = i+menuArray.size();
-	}
-	//log("i%m: " + i%m);
+	if (i < 0){i = i+menuArray.size();}
 	return i%m;
 }
 
@@ -44,7 +40,6 @@ class SleepMainView extends Ui.View {
     //! the state of this View and prepare it to be shown. This includes
     //! loading resources into memory.
     function onShow() {
-    	log("")
     	// bkg_night = Ui.loadResource( Rez.Drawables.id_bkg_night );
     	log(arrayIndex);
     }
@@ -100,6 +95,15 @@ class SleepMainView extends Ui.View {
     function onHide() {
         if (bkg_night != null) {
             bkg_night = null;
+        }
+		if (width != null) {
+            width = null;
+        }
+        if (height != null) {
+            height = null;
+        }
+        if (screenShape != null) {
+            screenShape = null;
         }
     }
 }

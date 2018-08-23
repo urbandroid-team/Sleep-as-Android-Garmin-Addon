@@ -34,7 +34,8 @@ using Toybox.Math as Math;
     var alarm_currently_active = false; // Is alarm currently ringing on phone?
     var exitTapped = false;
     var alarmViewActive = false;
-
+    
+    var trackingBool = false;
 
     // Logs into the /GARMIN/APPS/LOGS/appname.TXT
     // The file has to be created manually first. It is not possible to gather debug logs in production (after distribution in the ConnectIQ store)
@@ -88,7 +89,6 @@ using Toybox.Math as Math;
 
     function sendDismissAlarm() {
         enqueue("DISMISS");
-        stopAlarm();
     }
 
     function sendSnoozeAlarm() {
@@ -105,6 +105,25 @@ using Toybox.Math as Math;
         Ui.switchToView(new SleepMainView(), new SleepMainDelegate(), Ui.SLIDE_IMMEDIATE);
         alarmViewActive = false;
     }
+    
+    function normalExit(){
+    	log("Normal Exit");
+    	if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
+                Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
+
+		} else if (!Sys.getDeviceSettings().phoneConnected){
+				Sys.exit();
+		}
+    }
+    
+    function forceExit(){
+    	log("Force Exit");
+		if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
+        	Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
+		}
+        Sys.exit();
+    }
+    
 
 
 class SleepApp extends App.AppBase {
@@ -299,7 +318,8 @@ class SleepApp extends App.AppBase {
     		hrTracking = true;
         	hrCurrentlyReading = true;
         } else if ( mail.equals("StartTracking")) {
-
+        	trackingBool = true;
+        	
         } else {
             // mail = "Message not handled: " + mail;
             log("Message not handled" + mail.toString());

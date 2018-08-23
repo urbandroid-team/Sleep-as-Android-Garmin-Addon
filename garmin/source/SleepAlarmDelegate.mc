@@ -14,5 +14,9 @@ class SleepAlarmDelegate extends Ui.BehaviorDelegate {
     function onBack() {
       return true; //! disables back button
     }
+    
+    function onSelect() {
+    	return true;
+    }
 
 }

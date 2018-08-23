@@ -102,7 +102,7 @@ using Toybox.Math as Math;
 
     function stopAlarm() {
         alarm_currently_active = false;
-        Ui.switchToView(new SleepView(), new SleepDelegate(), Ui.SLIDE_IMMEDIATE);
+        Ui.switchToView(new SleepMainView(), new SleepMainDelegate(), Ui.SLIDE_IMMEDIATE);
         alarmViewActive = false;
     }
 

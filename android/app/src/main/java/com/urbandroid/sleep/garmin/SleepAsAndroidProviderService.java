@@ -174,7 +174,7 @@ public class SleepAsAndroidProviderService extends Service {
     @Nullable
     private IQDevice getDevice(ConnectIQ connectIQ) {
         try {
-            List<IQDevice> devices = connectIQ.getKnownDevices();
+            List<IQDevice> devices = connectIQ.getConnectedDevices();
             if (devices != null && devices.size() > 0) {
                 Logger.logDebug( devices.get(0).toString() );
                 return devices.get(0);
@@ -309,6 +309,7 @@ public class SleepAsAndroidProviderService extends Service {
         if (getDevice() != null) {
             try {
                 connectIQ.unregisterForApplicationEvents(getDevice(), getApp());
+                connectIQ.unregisterAllForEvents();
             } catch (InvalidStateException e) {
                 Logger.logSevere(e);
             } catch (IllegalArgumentException e) {
@@ -530,6 +531,12 @@ public class SleepAsAndroidProviderService extends Service {
 
 
 
+                            Logger.logDebug("onOpenApplication response: " + iqOpenApplicationStatus);
+
+                            if (iqOpenApplicationStatus.equals(IQOpenApplicationStatus.APP_IS_ALREADY_RUNNING)) {
+                                Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
+                                sendBroadcast(startIntent);
+                            }
                         }
                     });
                 }

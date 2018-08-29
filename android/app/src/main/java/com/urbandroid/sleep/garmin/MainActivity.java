@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
 
     public void registerDevice() {
         try {
-            List<IQDevice> devices = mConnectIQ.getKnownDevices();
+            List<IQDevice> devices = mConnectIQ.getConnectedDevices();
 
             if (devices != null && devices.size() > 0) {
 //              Take just the first device we find
@@ -153,7 +153,7 @@ public class MainActivity extends Activity {
 
 
 
-        Logger.logDebug("Main Activity conectIQ intialiszation");
+        Logger.logDebug("Main Activity connectIQ intialization");
 
         if (GlobalInitializer.debug){
             mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.TETHERED);

@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class SleepAsAndroidProviderService extends Service {
 
     public static final String IQ_APP_ID = "21CAD9617B914811B0B27EA6240DE29B";
-    private static final String TAG = SleepAsAndroidProviderService.class.getSimpleName();
+    private static final String TAG = "Garmin addon service: ";
     public static Boolean RUNNING = false;
 
     private Boolean connectIqReady = false;
@@ -127,7 +127,7 @@ public class SleepAsAndroidProviderService extends Service {
     public void onCreate() {
         super.onCreate();
         GlobalInitializer.initializeIfRequired(this);
-        Logger.logDebug(TAG + ": Garmin service onCreate");
+        Logger.logDebug(TAG + "Garmin service onCreate");
         handler = new Handler();
 
         // checking if Garmin Connect Mobile installed
@@ -184,7 +184,7 @@ public class SleepAsAndroidProviderService extends Service {
         try {
             List<IQDevice> devices = connectIQ.getConnectedDevices();
             if (devices != null && devices.size() > 0) {
-                Logger.logDebug( devices.get(0).toString() );
+                Logger.logDebug(TAG +  devices.get(0).toString() );
                 return devices.get(0);
             }
         } catch (InvalidStateException e) {
@@ -216,8 +216,8 @@ public class SleepAsAndroidProviderService extends Service {
 
                 @Override
                 public void onApplicationNotInstalled(String applicationId) {
-                        Toast.makeText(getApplicationContext(), "Sleep not installed on watch", Toast.LENGTH_LONG).show();
-                        Logger.logDebug("Sleep watch app not installed.");
+                        Toast.makeText(getApplicationContext(), "Sleep not installed on your Garmin watch", Toast.LENGTH_LONG).show();
+                        Logger.logDebug(TAG + "Sleep watch app not installed.");
                         stopSelf();
 
                 }
@@ -230,14 +230,14 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     private void registerWatchMessagesReceiver(){
-        Logger.logDebug(" registerWatchMessageRecived started");
+        Logger.logDebug(TAG + "registerWatchMessageRecived started");
         try {
             if (getDevice() != null) {
                 connectIQ.registerForAppEvents(getDevice(), getApp(), new ConnectIQ.IQApplicationEventListener() {
                     @Override
                     public void onMessageReceived(IQDevice device, IQApp app, List<Object> message, IQMessageStatus status) {
 //                 This is the place where we are intercepting messages from watch
-                        Logger.logDebug("From watch: " + message.toString() + " with status " +status.toString());
+                        Logger.logDebug(TAG + "From watch: " + message.toString() + " with status " +status.toString());
                         String[] msgArray = message.toArray()[0].toString().replaceAll("\\[","").replaceAll("\\]", "").split(",");
                         String receivedMsgType = msgArray[0];
 
@@ -261,7 +261,7 @@ public class SleepAsAndroidProviderService extends Service {
 
                                 try {
                                     maxRawFloatValues[i] = Float.valueOf(maxRawValue) * 9.806f / 1000f;
-                                    Logger.logDebug("New actigraphy [m/s2]: " + maxRawFloatValues[i]);
+                                    Logger.logDebug(TAG + "New actigraphy [m/s2]: " + maxRawFloatValues[i]);
                                 } catch (NumberFormatException e) {
                                     maxRawFloatValues[i] = 0;
                                 }
@@ -349,7 +349,7 @@ public class SleepAsAndroidProviderService extends Service {
     private Runnable sendMessageRunnable = new Runnable() {
         @Override
         public void run() {
-            Logger.logDebug("Runnable sending next message NOW. SDK initialized? " + connectIqReady);
+            Logger.logDebug(TAG + "Runnable sending next message NOW. SDK initialized? " + connectIqReady);
             sendNextMessage();
         }
     };
@@ -366,8 +366,8 @@ public class SleepAsAndroidProviderService extends Service {
             handler.postDelayed(sendMessageRunnable, MESSAGE_INTERVAL);
             return;
         }
-        Logger.logDebug("msgQueue: " + messageQueue);
-        Logger.logDebug("sendNextMessage, deliveryErrorCount: " + deliveryErrorCount + " delivery in progress " + deliveryInProgress.get());
+        Logger.logDebug(TAG + "msgQueue: " + messageQueue);
+        Logger.logDebug(TAG + "sendNextMessage, deliveryErrorCount: " + deliveryErrorCount + " delivery in progress " + deliveryInProgress.get());
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
             handler.removeCallbacks(sendMessageRunnable);
             emptyQueue();
@@ -390,13 +390,13 @@ public class SleepAsAndroidProviderService extends Service {
 //                    Logger.logDebug("3, msgQsize:" + messageQueue.size() + " " + deliveryInProgress.get());
                     return;
                 }
-//                Logger.logDebug("4");
+//                Logger.logDebug(TAG + "4");
 
                 final String message = messageQueue.get(0);
 
-                Logger.logDebug("ConnectIQ:" + connectIQ.toString());
-                Logger.logDebug("Garmin app: " + getApp().getApplicationId());
-                Logger.logDebug("sendNextMessage Sending message: " + message.toString());
+                Logger.logDebug(TAG + "ConnectIQ:" + connectIQ.toString());
+                Logger.logDebug(TAG + "Garmin app: " + getApp().getApplicationId());
+                Logger.logDebug(TAG + "sendNextMessage Sending message: " + message.toString());
                 deliveryInProgress.set(true);
 
                 handler.removeCallbacks(sendMessageRunnable);
@@ -417,17 +417,17 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     private void doSendMessage(final String message){
-        Logger.logDebug("doSendMessage");
+        Logger.logDebug(TAG + "doSendMessage");
         try {
             connectIQ.sendMessage(getDevice(), getApp(), message, new IQSendMessageListener() {
                 @Override
                 public void onMessageStatus(IQDevice iqDevice, IQApp iqApp, IQMessageStatus status) {
-    //                        Logger.logDebug("sendNextMessage Trying to send message to watch: " + message);
+    //                        Logger.logDebug(TAG + "sendNextMessage Trying to send message to watch: " + message);
                     if (status != IQMessageStatus.SUCCESS) {
-                        Logger.logDebug("sendNextMessage Message " + message + " failed to send to watch: " + status);
+                        Logger.logDebug(TAG + "sendNextMessage Message " + message + " failed to send to watch: " + status);
                         deliveryErrorCount++;
                     } else {
-                        Logger.logDebug("sendNextMessage Successfully sent to watch: " + message + " " + status);
+                        Logger.logDebug(TAG + "sendNextMessage Successfully sent to watch: " + message + " " + status);
                         messageQueue.remove(message);
                         if (message.equals("StopApp")) {
     //                            emptyQueue();
@@ -438,7 +438,7 @@ public class SleepAsAndroidProviderService extends Service {
                     deliveryInProgress.set(false);
 
                     if (messageQueue.size() > 0) {
-    //                            Logger.logDebug("delaying runnable post");
+    //                            Logger.logDebug(TAG + "delaying runnable post");
                         handler.removeCallbacks(sendMessageRunnable);
                         handler.postDelayed(sendMessageRunnable, messageQueue.size() > 10 ? MESSAGE_INTERVAL_ON_FAILURE : MESSAGE_INTERVAL);
                     }
@@ -458,17 +458,17 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     public static void dumpIntent(Intent i){
-//        Logger.logDebug("Dumping extras");
+//        Logger.logDebug(TAG + "Dumping extras");
         Bundle bundle = i.getExtras();
         if (bundle != null) {
             Set<String> keys = bundle.keySet();
             Iterator<String> it = keys.iterator();
-//            Logger.logDebug("Dumping Intent start");
+//            Logger.logDebug(TAG + "Dumping Intent start");
             while (it.hasNext()) {
                 String key = it.next();
-//                Logger.logDebug("[" + key + "=" + bundle.get(key)+"]");
+//                Logger.logDebug(TAG + "[" + key + "=" + bundle.get(key)+"]");
             }
-//            Logger.logDebug("Dumping Intent end");
+//            Logger.logDebug(TAG + "Dumping Intent end");
         }
     }
 
@@ -482,58 +482,58 @@ public class SleepAsAndroidProviderService extends Service {
         }
 
         if (action.equals(START_WATCH_APP)){
-            Logger.logDebug("Received Start tracking command from Sleep.");
+            Logger.logDebug(TAG + "Received Start tracking command from Sleep.");
             dumpIntent(intent);
-            enqueue("StartTracking");
-            Logger.logDebug("Sending StartTracking");
 
             if (intent.hasExtra(DO_HR_MONITORING)) {
                 enqueue("StartHRTracking");
-                Logger.logInfo("Using HR monitoring");
+                Logger.logInfo(TAG + "Using HR monitoring");
             }
 
+            enqueue("StartTracking");
+            Logger.logDebug(TAG + "Sending StartTracking");
         }
 
         if (action.equals(STOP_WATCH_APP)) {
-            Logger.logDebug("Sending stop command to Garmin");
+            Logger.logDebug(TAG + "Sending stop command to Garmin");
             emptyQueue();
             enqueue("StopApp");
         }
         if (action.equals(SET_PAUSE)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
-            Logger.logDebug("Sending pause command to Garmin for " + param);
+            Logger.logDebug(TAG + "Sending pause command to Garmin for " + param);
             enqueue("Pause;" + param);
         }
         if (action.equals(SET_BATCH_SIZE)) {
             long param = intent.getLongExtra("SIZE", 0);
-            Logger.logDebug("Setting batch on Garmin to " + param);
+            Logger.logDebug(TAG + "Setting batch on Garmin to " + param);
             enqueue("BatchSize;" + param);
         }
         if (action.equals(START_ALARM)) {
             long param = intent.getLongExtra("DELAY", 0);
-            Logger.logDebug("Sending start alarm to Garmin with delay " + param);
+            Logger.logDebug(TAG + "Sending start alarm to Garmin with delay " + param);
             enqueue("StartAlarm;" + param);
         }
         if (action.equals(STOP_ALARM)) {
-            Logger.logDebug("Stopping alarm on Garmin");
+            Logger.logDebug(TAG + "Stopping alarm on Garmin");
             enqueue("StopAlarm;");
         }
         if (action.equals(UPDATE_ALARM)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
-            Logger.logDebug("Updating Garmin alarm to " + param);
+            Logger.logDebug(TAG + "Updating Garmin alarm to " + param);
             enqueue("SetAlarm;" + param);
         }
         if (action.equals(HINT)) {
             long param = intent.getLongExtra("REPEAT", 0);
-            Logger.logDebug("Sending hint to Garmin, with repeat " + param);
+            Logger.logDebug(TAG + "Sending hint to Garmin, with repeat " + param);
             enqueue("Hint;" + param);
         }
         if (action.equals(CHECK_CONNECTED)) {
-            Logger.logDebug("Checking Garmin connection...");
+            Logger.logDebug(TAG + "Checking Garmin connection...");
             messageQueue.remove("StopApp");
             try {
                 if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
-                    Logger.logDebug("Trying to open app on watch...");
+                    Logger.logDebug(TAG + "Trying to open app on watch...");
                     watchAppOpenTime = System.currentTimeMillis();
                     connectIQ.openApplication(getDevice(), getApp(), new IQOpenApplicationListener() {
                         @Override
@@ -541,7 +541,7 @@ public class SleepAsAndroidProviderService extends Service {
 
 
 
-                            Logger.logDebug("onOpenApplication response: " + iqOpenApplicationStatus);
+                            Logger.logDebug(TAG + "onOpenApplication response: " + iqOpenApplicationStatus);
 
                             if (iqOpenApplicationStatus.equals(IQOpenApplicationStatus.APP_IS_ALREADY_RUNNING)) {
                                 Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
@@ -558,11 +558,11 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     public void startWatchApp(){
-        Logger.logDebug("Checking Garmin connection...");
+        Logger.logDebug(TAG + "Checking Garmin connection...");
         messageQueue.remove("StopApp");
         try {
             if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
-                Logger.logDebug("Trying to open app on watch...");
+                Logger.logDebug(TAG + "Trying to open app on watch...");
                 watchAppOpenTime = System.currentTimeMillis();
                 connectIQ.openApplication(getDevice(), getApp(), new IQOpenApplicationListener() {
                     @Override
@@ -582,7 +582,7 @@ public class SleepAsAndroidProviderService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Logger.logDebug("onDestroy msgQueue: " + messageQueue);
+        Logger.logDebug(TAG + "onDestroy msgQueue: " + messageQueue);
         connectIqReady = false;
         handler.removeCallbacks(sendMessageRunnable);
         unregisterApp();
@@ -609,7 +609,7 @@ public class SleepAsAndroidProviderService extends Service {
             pm.getPackageInfo(appPackageName, PackageManager.GET_ACTIVITIES);
             return true;
         } catch (PackageManager.NameNotFoundException e) {
-            Logger.logDebug("Not installed: " + appPackageName.toString());
+            Logger.logDebug(TAG + "Not installed: " + appPackageName.toString());
         } catch (Exception e) {
             return false;
         }

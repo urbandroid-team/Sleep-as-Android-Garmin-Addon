@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.garmin.android.connectiq.ConnectIQ;
 import com.urbandroid.sleep.garmin.logging.Logger;
-//import com.urbandroid.common.error.ErrorReporter;
+import com.urbandroid.common.error.ErrorReporter;
 
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.CHECK_CONNECTED;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.HINT;
@@ -75,12 +75,10 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
 
         try {
             Logger.logDebug(intent);
-            /* if ((ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction()) && intent.hasExtra(ConnectIQ.EXTRA_APPLICATION_ID) &&
+            if ((ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction()) && intent.hasExtra(ConnectIQ.EXTRA_APPLICATION_ID) &&
                     SleepAsAndroidProviderService.IQ_APP_ID.equals(intent.getStringExtra(ConnectIQ.EXTRA_APPLICATION_ID)) &&
                             !SleepAsAndroidProviderService.RUNNING)) {
-                            */
-            if ((ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction()) &&
-                    !SleepAsAndroidProviderService.RUNNING)) {
+//            if ((ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction()) && !SleepAsAndroidProviderService.RUNNING)) {
                 Logger.logInfo(TAG + "ConnectIQ intent received, starting service...");
                 context.startService(new Intent(context, SleepAsAndroidProviderService.class));
                 Intent startIntent = new Intent(SleepAsAndroidProviderService.STARTED_ON_WATCH_NAME);
@@ -90,7 +88,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
             Logger.logInfo(TAG, e);
         }
 
-        Logger.logInfo("Intent from watch: " + intent.getAction().toString());
+        Logger.logInfo("Receiver intent: " + intent.getAction().toString());
 
         String action = intent.getAction() != null ? intent.getAction() : "";
 
@@ -136,13 +134,14 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
             serviceIntent.setAction(SleepAsAndroidProviderService.STOP_ALARM);
             context.startService(serviceIntent);
         } else if (action.equals(CHECK_CONNECTED)) {
+            Logger.logDebug("Receiver: Check connected");
             Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
             serviceIntent.setAction(SleepAsAndroidProviderService.CHECK_CONNECTED);
             context.startService(serviceIntent);
         } else if (action.equals(REPORT)) {
             Logger.logInfo("Generating on demand report");
             Logger.logInfo(context.getPackageName());
-//            ErrorReporter.getInstance().generateOnDemandReport(null, "Manual report", "No comment");
+            ErrorReporter.getInstance().generateOnDemandReport(null, "Manual report", "No comment");
         }
     }
 }

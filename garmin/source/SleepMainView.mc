@@ -10,6 +10,7 @@ var globString;
 var menuArray = [Ui.loadResource(Rez.Strings.menu_label_1),Ui.loadResource(Rez.Strings.menu_label_2),timecurrent,Ui.loadResource(Rez.Strings.menu_label_3)];
 var arrayIndex = 2;
 
+
 var width; var height; var shape;
 
 function moduloPosArith(i,m){
@@ -20,11 +21,41 @@ function moduloPosArith(i,m){
 class SleepMainView extends Ui.View {
 
     var bkg_night;
-
+    var upText;
+    var mainText;
+    var downText;
+    
+	var startingStr = Ui.loadResource(Rez.Strings.starting);
+	var trackingStr = Ui.loadResource(Rez.Strings.tracking);
+	var stoppingStr = Ui.loadResource(Rez.Strings.stopping);
 
     function initialize() {
-		log("SleepMainView intiilalize");
+		log("SleepMainView initialize");
         View.initialize();
+        
+        upText = new Ui.Text({
+        		:text=>null,
+        		:color=>Gfx.COLOR_DK_GRAY,
+        		:font=>Gfx.FONT_XTINY,
+        		:locX =>Ui.LAYOUT_HALIGN_CENTER,
+        		:locY=>Ui.LAYOUT_VALIGN_TOP
+        });
+
+		mainText = new Ui.Text({
+        		:text=>null,
+        		:color=>Gfx.COLOR_WHITE,
+        		:font=>Gfx.FONT_LARGE,
+        		:locX =>Ui.LAYOUT_HALIGN_CENTER,
+        		:locY=>Ui.LAYOUT_VALIGN_CENTER
+        });
+
+        downText = new Ui.Text({
+        		:text=>null,
+  	    		:color=>Gfx.COLOR_DK_GRAY,
+        		:font=>Gfx.FONT_XTINY,
+        		:locX =>Ui.LAYOUT_HALIGN_CENTER,
+           		:locY=>Ui.LAYOUT_VALIGN_BOTTOM
+        });
     }
 
     function onLayout(dc) {
@@ -46,43 +77,31 @@ class SleepMainView extends Ui.View {
 
     //! Update the view
     function onUpdate(dc) {
-    	menuArray[2] = timecurrent;
+    	if (trackingBool) {
+    		menuArray[2] = timecurrent + "\n" + trackingStr;
+    		log("changed view to tracking");
+    	} 
+ 		if (!trackingBool) {
+    		menuArray[2] = timecurrent + "\n" + startingStr;
+    	}
+    	if (stoppingBool) {
+	    	menuArray[2] = timecurrent + "\n" + stoppingStr;
+    	}
+    	
+    	
     	log("onUpdate");
         dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
         dc.clear();
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
 
-        var upTextString = menuArray[ moduloPosArith( arrayIndex-1,menuArray.size() ) ];
-        var upText = new Ui.Text({
-        		:text=>upTextString,
-        		:color=>Gfx.COLOR_DK_GRAY,
-        		:font=>Gfx.FONT_MEDIUM,
-        		:locX =>Ui.LAYOUT_HALIGN_CENTER,
-        		:locY=>Ui.LAYOUT_VALIGN_TOP
-        });
-
-        var mainTextString = menuArray[arrayIndex];
-		var mainText = new Ui.Text({
-        		:text=>mainTextString,
-        		:color=>Gfx.COLOR_WHITE,
-        		:font=>Gfx.FONT_LARGE,
-        		:locX =>Ui.LAYOUT_HALIGN_CENTER,
-        		:locY=>Ui.LAYOUT_VALIGN_CENTER
-        });
-
-		var downTextString = menuArray[ moduloPosArith( arrayIndex+1,menuArray.size() ) ];
-        var downText = new Ui.Text({
-        		:text=>downTextString,
-  	    		:color=>Gfx.COLOR_DK_GRAY,
-        		:font=>Gfx.FONT_MEDIUM,
-        		:locX =>Ui.LAYOUT_HALIGN_CENTER,
-           		:locY=>Ui.LAYOUT_VALIGN_BOTTOM
-        });
+        upText.setText(menuArray[ moduloPosArith( arrayIndex-1,menuArray.size() ) ]);
+ 	    downText.setText(menuArray[ moduloPosArith( arrayIndex+1,menuArray.size() ) ]);
+ 	    mainText.setText(menuArray[arrayIndex]);
 
         // Change font size of number
-    	if (arrayIndex==1 ){downText.setFont(Gfx.FONT_NUMBER_MEDIUM);}
-    	if (arrayIndex==2 ){mainText.setFont(Gfx.FONT_NUMBER_HOT);}
-    	if (arrayIndex==3 ){upText.setFont(Gfx.FONT_NUMBER_MEDIUM);}
+    	if (arrayIndex==1 ){downText.setFont(Gfx.FONT_XTINY);}
+    	if (arrayIndex==2 ){mainText.setFont(Gfx.FONT_LARGE);}
+    	if (arrayIndex==3 ){upText.setFont(Gfx.FONT_XTINY);}
 
     	upText.draw(dc);
     	mainText.draw(dc);

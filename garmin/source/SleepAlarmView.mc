@@ -1,5 +1,4 @@
 using Toybox.WatchUi as Ui;
-using Toybox.Communications as Comm;
 using Toybox.System as Sys;
 using Toybox.Graphics as Gfx;
 
@@ -7,11 +6,19 @@ class SleepAlarmView extends Ui.View {
     var width;
     var height;
     var screenShape;
+    var alarmIcon;
     
 
 
     function initialize() {
         View.initialize();
+        
+        alarmIcon = new Ui.Bitmap({
+    		:rezId=>Rez.Drawables.id_alarm_icon,
+    		:locX=>Ui.LAYOUT_HALIGN_CENTER,
+    		:locY=>((Ui.LAYOUT_VALIGN_CENTER)+20),
+		});
+
     }
 
     function onLayout(dc) {
@@ -35,11 +42,7 @@ class SleepAlarmView extends Ui.View {
         dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_WHITE);
 
         //dc.drawText(width/2, height/2-15, Gfx.FONT_MEDIUM, "Alarm!!!\n" + timecurrent, Gfx.TEXT_JUSTIFY_CENTER);
-        var alarmIcon = new Ui.Bitmap({
-    		:rezId=>Rez.Drawables.id_alarm_icon,
-    		:locX=>Ui.LAYOUT_HALIGN_CENTER,
-    		:locY=>Ui.LAYOUT_VALIGN_CENTER*.75,
-			});
+
 			
         var AlarmText = new Ui.Text({
             :text=>timecurrent,
@@ -48,7 +51,8 @@ class SleepAlarmView extends Ui.View {
             :locX =>WatchUi.LAYOUT_HALIGN_CENTER,
             :locY=>WatchUi.LAYOUT_VALIGN_CENTER
         });
-        dc.drawBitmap(alarmIcon);
+//        dc.drawBitmap(0,0,alarmIcon);
+		alarmIcon.draw(dc);
         AlarmText.draw(dc);            
 
 

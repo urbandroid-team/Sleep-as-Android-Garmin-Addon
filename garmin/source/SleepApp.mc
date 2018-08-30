@@ -8,10 +8,11 @@ using Toybox.Attention as Attention;
 using Toybox.System as Sys;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Math as Math;
+using Toybox.Lang as Lang;
 
 // Globals
 
-    var debug = true; var fakeTransmit = false; var beta = false;
+    var debug = true; var fakeTransmit = true; var beta = false;
     var notice = "";
 
     var dataTimer;
@@ -36,7 +37,15 @@ using Toybox.Math as Math;
     var alarmViewActive = false;
     
     var trackingBool = false;
-
+    var stoppingBool = false;
+    var targetExitTime = 0;
+    var shouldExit = false;
+    
+    function exitTimer(afterCycles) {
+		targetExitTime = afterCycles;
+    	shouldExit = true;
+    }
+ 
     // Logs into the /GARMIN/APPS/LOGS/appname.TXT
     // The file has to be created manually first. It is not possible to gather debug logs in production (after distribution in the ConnectIQ store)
     function log(a) {
@@ -84,6 +93,7 @@ using Toybox.Math as Math;
     }
 
     function sendStopTracking() {
+    	stoppingBool = true;
         enqueue("STOPPING");
     }
 
@@ -108,21 +118,24 @@ using Toybox.Math as Math;
     
     function normalExit(){
     	log("Normal Exit");
+    	stoppingBool = true;
     	if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
                 Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
 
 		} else if (!Sys.getDeviceSettings().phoneConnected){
-				Sys.exit();
+				exitTimer(20);
 		}
     }
     
     function forceExit(){
     	log("Force Exit");
+    	stoppingBool = true;
 		if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
         	Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
 		}
-        Sys.exit();
+		exitTimer(20);
     }
+    
     
 
 
@@ -215,6 +228,13 @@ class SleepApp extends App.AppBase {
         if (now.sec == 0) {
             Ui.requestUpdate();
         }
+        	
+        if (shouldExit) {
+        	if (targetExitTime == 0) {
+       		 	Sys.exit();
+    		}
+        	targetExitTime = targetExitTime - 1;
+    	}
 
         info = Sensor.getInfo();
 
@@ -282,11 +302,9 @@ class SleepApp extends App.AppBase {
     function handleIncomingMessage(mail) {
         var data;
         log("Incoming mail: " + mail);
-        // betalog("Incoming mail: " + mail);
 
         if ( mail.equals("StopApp") && stopAppDelay == 5) {
-            // Comm.emptyMailbox();
-            Sys.exit();
+			exitTimer(10);
         } else if ( mail.equals("Check") ) {
             sendConfirmConnection();
         } else if ( mail.find("Pause;") == 0 ) {
@@ -318,8 +336,11 @@ class SleepApp extends App.AppBase {
     		hrTracking = true;
         	hrCurrentlyReading = true;
         } else if ( mail.equals("StartTracking")) {
-        	trackingBool = true;
-        	
+        	if (!trackingBool) {
+        		trackingBool = true;
+        		Ui.requestUpdate();
+        		log("Switched trackingBool to true");
+    		}
         } else {
             // mail = "Message not handled: " + mail;
             log("Message not handled" + mail.toString());
@@ -502,6 +523,6 @@ class SleepApp extends App.AppBase {
     //! Return the initial view of your application here
     function getInitialView() {
         log("getInitialView");
-        return [ new SleepAlarmView(), new SleepAlarmDelegate() ];
+        return [ new SleepMainView(), new SleepMainDelegate() ];
     }
 }

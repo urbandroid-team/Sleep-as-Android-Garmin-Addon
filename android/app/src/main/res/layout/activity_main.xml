@@ -130,9 +130,19 @@
                     android:textColor="@color/secondary"
                     style="?android:attr/textAppearanceMedium"
                     android:id="@+id/textView7"
-                    android:text="@string/whitelist_GCM"
+                    android:text="@string/whitelist_GCM_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/whitelist_GCM"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@drawable/button_flat"
+                    android:text="@string/read_more"
+                    android:textColor="@color/primary"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

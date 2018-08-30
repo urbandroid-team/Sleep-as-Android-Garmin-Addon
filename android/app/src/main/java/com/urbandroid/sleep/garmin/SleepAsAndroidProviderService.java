@@ -130,7 +130,7 @@ public class SleepAsAndroidProviderService extends Service {
         Logger.logDebug(TAG + "Garmin service onCreate");
         handler = new Handler();
 
-        // checking if Garmin Connect Mobile installed
+        // checking if Start sleep from watch installed
         if (!isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER)) {
             launchPlayStore(PACKAGE_SLEEP_USERFRIENDLY,PACKAGE_SLEEP_WATCH_STARTER);
         }

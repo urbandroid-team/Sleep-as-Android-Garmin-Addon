@@ -165,6 +165,14 @@ public class MainActivity extends Activity {
 
         mConnectIQ.initialize(this, true, mListener);
 
+        findViewById(R.id.whitelist_GCM).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.urbandroid.org/documentation/faq/alarms-sleep-tracking-dont-work/#garmin"));
+                startActivity(browserIntent);
+            }
+        });
+
         findViewById(R.id.install_gcm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

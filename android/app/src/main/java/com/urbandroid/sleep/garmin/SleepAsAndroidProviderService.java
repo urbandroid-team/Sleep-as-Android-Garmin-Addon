@@ -312,6 +312,11 @@ public class SleepAsAndroidProviderService extends Service {
         }
     }
 
+    @Override
+    public void sendBroadcast(Intent intent) {
+        intent.putExtra("SOURCE_PACKAGE", getPackageName());
+        super.sendBroadcast(intent);
+    }
 
     public void unregisterApp() {
         if (getDevice() != null) {

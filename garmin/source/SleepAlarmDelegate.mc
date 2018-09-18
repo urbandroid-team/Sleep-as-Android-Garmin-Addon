@@ -7,6 +7,7 @@ class SleepAlarmDelegate extends Ui.BehaviorDelegate {
     }
 
     function onMenu() {
+    	log("OnMenu");
         Ui.pushView(new Rez.Menus.AlarmMenu(), new SleepAlarmMenuDelegate(), Ui.SLIDE_UP);
         return true;
     }
@@ -18,5 +19,16 @@ class SleepAlarmDelegate extends Ui.BehaviorDelegate {
     function onSelect() {
     	return true;
     }
+    
+    function onKey(keyEvent){
+        var k = keyEvent.getKey();
+    	log("onKey: " + k);
+    	
+    	if (k == KEY_ENTER) {
+			log("KEY_ENTER pressed");
+			onMenu();
+			return true;
+    	}
+	}
 
 }

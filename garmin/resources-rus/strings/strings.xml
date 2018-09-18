@@ -6,4 +6,7 @@
     <string id="menu_label_4">Выход \n из приложения</string>
     <string id="alarm_menu_label_1">Отложить</string>
     <string id="alarm_menu_label_2">Отменить</string>
+    <string id="starting">Начиная...</string>
+    <string id="tracking">Мониторинг...</string>
+    <string id="stopping">Остановка...</string>
 </strings>

@@ -8,11 +8,10 @@ using Toybox.Attention as Attention;
 using Toybox.System as Sys;
 using Toybox.Time.Gregorian as Calendar;
 using Toybox.Math as Math;
-using Toybox.Lang as Lang;
 
 // Globals
 
-    var debug = true; var fakeTransmit = true; var beta = false;
+    var debug = true; var fakeTransmit = false; var beta = false; var debugAlarm = false;
     var notice = "";
 
     var dataTimer;
@@ -304,7 +303,8 @@ class SleepApp extends App.AppBase {
         log("Incoming mail: " + mail);
 
         if ( mail.equals("StopApp") && stopAppDelay == 5) {
-			exitTimer(10);
+        	stopAlarm();
+			exitTimer(22);
         } else if ( mail.equals("Check") ) {
             sendConfirmConnection();
         } else if ( mail.find("Pause;") == 0 ) {
@@ -335,6 +335,11 @@ class SleepApp extends App.AppBase {
     		Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
     		hrTracking = true;
         	hrCurrentlyReading = true;
+        	if (!trackingBool) {
+        		trackingBool = true;
+        		Ui.requestUpdate();
+        		log("Switched trackingBool to true");
+    		}
         } else if ( mail.equals("StartTracking")) {
         	if (!trackingBool) {
         		trackingBool = true;
@@ -437,7 +442,7 @@ class SleepApp extends App.AppBase {
                 Attention.vibrate(shortPulse);
             } else {
                 if (Attention has :playTone) {
-                    Attention.playTone(8); // TONE_ALARM
+                    Attention.playTone(8);  
                 }
             }
         }
@@ -523,6 +528,9 @@ class SleepApp extends App.AppBase {
     //! Return the initial view of your application here
     function getInitialView() {
         log("getInitialView");
+        if (debugAlarm) {
+        	return [ new SleepAlarmView(), new SleepAlarmDelegate() ];
+        }
         return [ new SleepMainView(), new SleepMainDelegate() ];
     }
 }

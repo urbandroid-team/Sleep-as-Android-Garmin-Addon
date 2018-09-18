@@ -10,7 +10,7 @@ import com.urbandroid.sleep.garmin.logging.Logger;
 
 public class GlobalInitializer {
     private static boolean isInitialized = false;
-    public static boolean debug = false;
+    public static boolean debug = false; // Must be false for production
 
     public synchronized static void initializeIfRequired(Context context) {
         if (isInitialized) {

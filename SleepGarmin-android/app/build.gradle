@@ -32,7 +32,7 @@ android {
         applicationId "com.urbandroid.sleep.garmin"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 10
+        versionCode 11
         versionName "20180918"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -51,7 +51,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.2'
 }
 
 repositories {

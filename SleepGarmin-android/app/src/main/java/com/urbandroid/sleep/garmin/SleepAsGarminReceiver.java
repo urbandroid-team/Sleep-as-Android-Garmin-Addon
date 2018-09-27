@@ -30,6 +30,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
 
     private static final String TAG = SleepAsGarminReceiver.class.getSimpleName();
     private static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
+    private static final String PACKAGE_SLEEP_GARMIN = "com.urbandroid.sleep.garmin";
 //    private static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
     private boolean sleepInstalled = true;
 //    private boolean gcmInstalled = true;
@@ -82,6 +83,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                 Logger.logInfo(TAG + "ConnectIQ intent received, starting service...");
                 context.startService(new Intent(context, SleepAsAndroidProviderService.class));
                 Intent startIntent = new Intent(SleepAsAndroidProviderService.STARTED_ON_WATCH_NAME);
+                startIntent.setPackage(PACKAGE_SLEEP_GARMIN);
                 context.sendBroadcast(startIntent);
             }
         } catch (IllegalArgumentException e) {

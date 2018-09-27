@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
     private boolean debug = false;
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
+    public static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
     private static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
     private static final String PACKAGE_SLEEP_WATCH_STARTER = "com.urbandroid.watchsleepstarter";
     private static final String IQ_APP_ID = SleepAsAndroidProviderService.IQ_APP_ID;

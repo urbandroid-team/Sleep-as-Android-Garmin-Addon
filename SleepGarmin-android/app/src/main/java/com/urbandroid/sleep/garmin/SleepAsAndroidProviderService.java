@@ -1,22 +1,16 @@
 package com.urbandroid.sleep.garmin;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.widget.Toast;
 import com.garmin.android.connectiq.ConnectIQ;
 import com.garmin.android.connectiq.ConnectIQ.*;
-import com.garmin.android.connectiq.ConnectIQAdbStrategy;
 import com.garmin.android.connectiq.IQApp;
 import com.garmin.android.connectiq.IQDevice;
 import com.garmin.android.connectiq.exception.InvalidStateException;
@@ -25,10 +19,8 @@ import com.urbandroid.sleep.garmin.logging.Logger;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SleepAsAndroidProviderService extends Service {
 
-    public static final String IQ_APP_ID = "21CAD9617B914811B0B27EA6240DE29B";
+    public static final String IQ_APP_ID = "e80a4793-f5a3-44c7-bd7f-52a97f5d8310";
     private static final String TAG = "Garmin addon service: ";
     public static Boolean RUNNING = false;
 
@@ -135,21 +127,14 @@ public class SleepAsAndroidProviderService extends Service {
             launchPlayStore(PACKAGE_SLEEP_USERFRIENDLY,PACKAGE_SLEEP_WATCH_STARTER);
         }
 
-        // checking if Garmin Connect Mobile installed
-        if (isAppInstalled(PACKAGE_GCM)) {
-            if (GlobalInitializer.debug){
-                connectIQ = ConnectIQ.getInstance(this, IQConnectType.TETHERED);
-            }else{
-                connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
-            }
-
-            //initialize SDK
-            //initializeConnectIQ(this,connectIQ,true,mListener);
-            connectIQ.initialize(this,true,mListener);
-        } else {
-            launchPlayStore(PACKAGE_GCM_USERFRIENDLY,PACKAGE_GCM);
-            stopSelf();
+        if (GlobalInitializer.debug){
+            connectIQ = ConnectIQ.getInstance(this, IQConnectType.TETHERED);
+        }else{
+            connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
         }
+
+        // initialize SDK
+        connectIQ.initialize(this,true,mListener);
     }
 
 
@@ -268,35 +253,35 @@ public class SleepAsAndroidProviderService extends Service {
                             }
                         } else if (receivedMsgType.equals("SNOOZE")) {
                             Intent snoozeIntent = new Intent(SNOOZE_ACTION_NAME);
-                            sendBroadcast(snoozeIntent);
+                            sendExplicitBroadcastToSleep(snoozeIntent);
                         } else if (receivedMsgType.equals("DISMISS")) {
                             Intent dismissIntent = new Intent(DISMISS_ACTION_NAME);
-                            sendBroadcast(dismissIntent);
+                            sendExplicitBroadcastToSleep(dismissIntent);
                         } else if (receivedMsgType.equals("PAUSE")) {
                             Intent pauseIntent = new Intent(PAUSE_ACTION_NAME);
-                            sendBroadcast(pauseIntent);
+                            sendExplicitBroadcastToSleep(pauseIntent);
                         } else if (receivedMsgType.equals("RESUME")) {
                             Intent resumeIntent = new Intent(RESUME_ACTION_NAME);
-                            sendBroadcast(resumeIntent);
+                            sendExplicitBroadcastToSleep(resumeIntent);
                         } else if (receivedMsgType.equals("STARTING")) {
                             Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
-                            sendBroadcast(startIntent);
+                            sendExplicitBroadcastToSleep(startIntent);
                         } else if (receivedMsgType.equals("HR")) {
                             float[] hrData = new float[] {Float.valueOf(msgArray[1])};
                             Logger.logInfo(TAG + ": received HR data from watch " + hrData[0]);
                             Intent hrDataIntent = new Intent(NEW_HR_DATA_ACTION_NAME);
                             hrDataIntent.putExtra("DATA", hrData);
-                            sendBroadcast(hrDataIntent);
+                            sendExplicitBroadcastToSleep(hrDataIntent);
                         } else if (receivedMsgType.equals("STOPPING")) {
                             Intent stopIntent = new Intent(STOP_SLEEP_TRACK_ACTION);
-                            sendBroadcast(stopIntent);
+                            sendExplicitBroadcastToSleep(stopIntent);
                         }
 
                         if (maxFloatValues != null && maxRawFloatValues != null) {
                             Intent dataUpdateIntent = new Intent(NEW_DATA_ACTION_NAME);
                             dataUpdateIntent.putExtra("MAX_RAW_DATA", maxRawFloatValues);
                             dataUpdateIntent.putExtra("MAX_DATA", maxFloatValues);
-                            sendBroadcast(dataUpdateIntent);
+                            sendExplicitBroadcastToSleep(dataUpdateIntent);
                             maxRawFloatValues = null;
                             maxFloatValues = null;
                         }
@@ -312,10 +297,10 @@ public class SleepAsAndroidProviderService extends Service {
         }
     }
 
-    @Override
-    public void sendBroadcast(Intent intent) {
+    public void sendExplicitBroadcastToSleep(Intent intent) {
         intent.putExtra("SOURCE_PACKAGE", getPackageName());
-        super.sendBroadcast(intent);
+        intent.setPackage(MainActivity.PACKAGE_SLEEP);
+        sendBroadcast(intent);
     }
 
     public void unregisterApp() {
@@ -550,7 +535,7 @@ public class SleepAsAndroidProviderService extends Service {
 
                             if (iqOpenApplicationStatus.equals(IQOpenApplicationStatus.APP_IS_ALREADY_RUNNING)) {
                                 Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
-                                sendBroadcast(startIntent);
+                                sendExplicitBroadcastToSleep(startIntent);
                             }
                         }
                     });

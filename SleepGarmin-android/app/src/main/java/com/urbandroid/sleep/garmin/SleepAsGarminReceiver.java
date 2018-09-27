@@ -76,14 +76,19 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
 
         try {
             Logger.logDebug(intent);
-            if ((ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction()) && intent.hasExtra(ConnectIQ.EXTRA_APPLICATION_ID) &&
-                    SleepAsAndroidProviderService.IQ_APP_ID.equals(intent.getStringExtra(ConnectIQ.EXTRA_APPLICATION_ID)) &&
-                            !SleepAsAndroidProviderService.RUNNING)) {
+            if (
+                    ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction())
+                    && intent.hasExtra(ConnectIQ.EXTRA_APPLICATION_ID)
+                    && SleepAsAndroidProviderService.IQ_APP_ID.equals(intent.getStringExtra(ConnectIQ.EXTRA_APPLICATION_ID))
+//                    &&  SleepAsAndroidProviderService.RUNNING
+            ) {
 //            if ((ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction()) && !SleepAsAndroidProviderService.RUNNING)) {
                 Logger.logInfo(TAG + "ConnectIQ intent received, starting service...");
                 context.startService(new Intent(context, SleepAsAndroidProviderService.class));
+
                 Intent startIntent = new Intent(SleepAsAndroidProviderService.STARTED_ON_WATCH_NAME);
-                startIntent.setPackage(PACKAGE_SLEEP_GARMIN);
+                startIntent.putExtra("SOURCE_PACKAGE", context.getPackageName());
+                startIntent.setPackage(PACKAGE_SLEEP);
                 context.sendBroadcast(startIntent);
             }
         } catch (IllegalArgumentException e) {

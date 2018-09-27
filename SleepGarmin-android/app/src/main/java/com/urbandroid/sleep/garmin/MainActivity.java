@@ -17,6 +17,7 @@ import com.urbandroid.sleep.garmin.logging.Logger;
 import java.util.List;
 
 import static com.garmin.android.connectiq.IQApp.IQAppStatus.INSTALLED;
+import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.IQ_STORE_ID;
 
 public class MainActivity extends Activity {
 
@@ -273,13 +274,13 @@ public class MainActivity extends Activity {
 
     private void installWatchApp(final ConnectIQ mConnectIQ) {
         try {
-            mConnectIQ.openStore(new IQApp(IQ_APP_ID).getApplicationId());
+            mConnectIQ.openStore(new IQApp(IQ_STORE_ID).getApplicationId());
         } catch (InvalidStateException ee) {
             mConnectIQ.initialize(this, true, new ConnectIQ.ConnectIQListener() {
                 @Override
                 public void onSdkReady() {
                     try {
-                        mConnectIQ.openStore(new IQApp(IQ_APP_ID).getApplicationId());
+                        mConnectIQ.openStore(new IQApp(IQ_STORE_ID).getApplicationId());
                     } catch (Exception e) {
                         Logger.logSevere(e);
                     }

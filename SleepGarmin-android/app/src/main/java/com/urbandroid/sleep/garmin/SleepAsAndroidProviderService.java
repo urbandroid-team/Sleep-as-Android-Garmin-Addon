@@ -29,7 +29,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SleepAsAndroidProviderService extends Service {
 
-    public static final String IQ_APP_ID = "e80a4793-f5a3-44c7-bd7f-52a97f5d8310";
+    public static final String IQ_STORE_ID = "e80a4793-f5a3-44c7-bd7f-52a97f5d8310";
+    public static final String IQ_APP_ID = "21CAD9617B914811B0B27EA6240DE29B";
     private static final String TAG = "Garmin addon service: ";
     public static Boolean RUNNING = false;
 

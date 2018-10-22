@@ -148,7 +148,11 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
         } else if (action.equals(REPORT)) {
             Logger.logInfo("Generating on demand report");
             Logger.logInfo(context.getPackageName());
-            ErrorReporter.getInstance().generateOnDemandReport(null, "Manual report", "No comment");
+            String comment = "No comment";
+            if (intent.hasExtra("USER_COMMENT")) {
+                comment = intent.getStringExtra("USER_COMMENT");
+            }
+            ErrorReporter.getInstance().generateOnDemandReport(null, "Manual report", comment);
         }
     }
 }

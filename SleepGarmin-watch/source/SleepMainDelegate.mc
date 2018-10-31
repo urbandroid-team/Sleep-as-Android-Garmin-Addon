@@ -52,9 +52,11 @@ class SleepMainDelegate extends Ui.InputDelegate  {
 		var x = clickEvent.getCoordinates()[0];
 		var y = clickEvent.getCoordinates()[1];
 		log("onTap at: " + clickEvent.getCoordinates());
-		if (y <= height*.25){scrollDown();}
-		if (y >= height*.75){scrollUp();}
-		if (y > height*.25 && y< height * .75){onSelect();}
+		if (y != null && height != null) {
+			if (y <= height*.25){scrollDown();}
+			if (y >= height*.75){scrollUp();}
+			if (y > height*.25 && y < height * .75){onSelect();}
+		}
 		return true;
     }
 

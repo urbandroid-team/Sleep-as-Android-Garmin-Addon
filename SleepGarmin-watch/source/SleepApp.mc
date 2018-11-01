@@ -121,9 +121,8 @@ using Toybox.Math as Math;
     	if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
                 Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
 
-		} else if (!Sys.getDeviceSettings().phoneConnected){
-				exitTimer(20);
-		}
+		} 
+		exitTimer(20);
     }
     
     function forceExit(){

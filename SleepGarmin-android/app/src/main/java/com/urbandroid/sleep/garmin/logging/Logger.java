@@ -60,8 +60,6 @@ public class Logger {
     private static Map<LogConfig, Long> currentLogWriterBytesWritten = new HashMap<LogConfig, Long>();
     private static Map<LogConfig, LinkedList<LogRecord>> logWriteBuffers;
 
-    private static LogFlusher logFlusher;
-
     private static ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
         protected DateFormat initialValue() {
             return new SimpleDateFormat("HH:mm:ss.SSS");
@@ -104,7 +102,7 @@ public class Logger {
             // Non-main process is flushed often as we cannot read it from memory.
             int flushFrequencySeconds = initForMainProcess ? 60 : 1;
             // We can use in-file logging in cache-dir
-            logFlusher = new LogFlusher(context.getApplicationContext(), flushFrequencySeconds);
+            LogFlusher logFlusher = new LogFlusher(context.getApplicationContext(), flushFrequencySeconds);
             new Thread(logFlusher, "Log-Flusher").start();
         }
     }
@@ -174,18 +172,6 @@ public class Logger {
                     }
                 }
             }
-        }
-    }
-
-    public static void persistBuffer() {
-        if (logFlusher != null) {
-            logFlusher.forceFlush(false);
-        }
-    }
-
-    public static void syncPersistBuffer() {
-        if (logFlusher != null) {
-            logFlusher.forceFlush(true);
         }
     }
 

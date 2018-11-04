@@ -21,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -93,9 +94,7 @@ public class Logger {
         Logger.logInMemorylevel = inMemoryLogLevel;
         logConfigs.add(DEFAULT_LOG);
         if (configs != null) {
-            for (LogConfig config : configs) {
-                logConfigs.add(config);
-            }
+            Collections.addAll(logConfigs, configs);
         }
         initLogBuffer();
         Logger.defaultTag = defaultTag;
@@ -447,9 +446,9 @@ public class Logger {
 
         public String getFormattedRecord() {
             StringBuilder builder = new StringBuilder();
-            builder.append(tag + "." + getLevelName() + ": " + formatMessage(config, timestamp, message, threadName) + (throwable == null ? "" : " " + throwable.getClass().getName() + ": " + throwable.getMessage()));
+            builder.append(tag).append(".").append(getLevelName()).append(": ").append(formatMessage(config, timestamp, message, threadName)).append(throwable == null ? "" : " " + throwable.getClass().getName() + ": " + throwable.getMessage());
             if (throwable != null) {
-                builder.append("\n" + appendStackTrace(throwable.getStackTrace()));
+                builder.append("\n").append(appendStackTrace(throwable.getStackTrace()));
             }
             return builder.toString();
         }

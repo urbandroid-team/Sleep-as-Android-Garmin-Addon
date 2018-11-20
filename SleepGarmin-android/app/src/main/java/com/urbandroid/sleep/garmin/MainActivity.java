@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import com.garmin.android.connectiq.ConnectIQ;
 import com.garmin.android.connectiq.IQApp;
 import com.garmin.android.connectiq.IQDevice;
 import com.garmin.android.connectiq.exception.InvalidStateException;
 import com.garmin.android.connectiq.exception.ServiceUnavailableException;
-import com.urbandroid.sleep.garmin.logging.Logger;
+import com.urbandroid.common.logging.Logger;
 
 import java.util.List;
 
@@ -88,7 +87,7 @@ public class MainActivity extends Activity {
         public void onSdkShutDown() {
             Logger.logDebug("onSdkShutDown");
             try {
-                if (mConnectIQ != null) {
+                if (mConnectIQ != null && mDevice != null) {
                     mConnectIQ.unregisterForDeviceEvents(mDevice);
                 }
             } catch (InvalidStateException e) {
@@ -152,19 +151,33 @@ public class MainActivity extends Activity {
         GlobalInitializer.initializeIfRequired(this);
         setContentView(R.layout.activity_main);
 
-
-
         Logger.logDebug("Main Activity connectIQ intialization");
 
         if (GlobalInitializer.debug){
             mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.TETHERED);
             Logger.logDebug("ConnectIQ instance set to TETHERED");
+            mConnectIQ.initialize(this, true, mListener);
         } else {
             mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.WIRELESS);
+            mConnectIQ.initialize(this, false, new ConnectIQ.ConnectIQListener() {
+                @Override
+                public void onSdkReady() {
+                    Logger.logDebug("Yay we['re here");
+                }
+
+                @Override
+                public void onInitializeError(ConnectIQ.IQSdkErrorStatus iqSdkErrorStatus) {
+
+                }
+
+                @Override
+                public void onSdkShutDown() {
+
+                }
+            });
             Logger.logDebug("ConnectIQ instance set to WIRELESS");
         }
 
-        mConnectIQ.initialize(this, true, mListener);
 
         findViewById(R.id.whitelist_GCM).setOnClickListener(new View.OnClickListener() {
             @Override

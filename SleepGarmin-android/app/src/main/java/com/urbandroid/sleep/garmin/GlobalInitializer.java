@@ -2,14 +2,11 @@ package com.urbandroid.sleep.garmin;
 
 import android.content.Context;
 import android.os.Handler;
-//import com.urbandroid.common.error.DefaultConfigurationBuilder;
-//import com.urbandroid.common.error.ErrorReporter;
-//import com.urbandroid.common.error.ErrorReporterConfiguration;
 
 import com.urbandroid.common.error.DefaultConfigurationBuilder;
 import com.urbandroid.common.error.ErrorReporter;
 import com.urbandroid.common.error.ErrorReporterConfiguration;
-import com.urbandroid.sleep.garmin.logging.Logger;
+import com.urbandroid.common.logging.Logger;
 
 public class GlobalInitializer {
     private static boolean isInitialized = false;
@@ -29,6 +26,8 @@ public class GlobalInitializer {
                         withLockupDatection(false).build();
 
         ErrorReporter.initialize(context, configuration);
+
+        Notifications.createChannels(context);
     }
 
 

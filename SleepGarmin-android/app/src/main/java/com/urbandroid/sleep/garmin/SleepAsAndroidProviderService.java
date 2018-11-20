@@ -1,40 +1,56 @@
 package com.urbandroid.sleep.garmin;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.AlarmManagerCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 import com.garmin.android.connectiq.ConnectIQ;
 import com.garmin.android.connectiq.ConnectIQ.*;
+import com.garmin.android.connectiq.ConnectIQAdbStrategy;
 import com.garmin.android.connectiq.IQApp;
 import com.garmin.android.connectiq.IQDevice;
 import com.garmin.android.connectiq.exception.InvalidStateException;
 import com.garmin.android.connectiq.exception.ServiceUnavailableException;
-import com.urbandroid.sleep.garmin.logging.Logger;
+import com.urbandroid.common.logging.Logger;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
 
 public class SleepAsAndroidProviderService extends Service {
 
     public static final String IQ_STORE_ID = "e80a4793-f5a3-44c7-bd7f-52a97f5d8310";
     public static final String IQ_APP_ID = "21CAD9617B914811B0B27EA6240DE29B";
-    private static final String TAG = "Garmin addon service: ";
+    private static final String TAG = "Sleep Garmin service: ";
     public static Boolean RUNNING = false;
 
     private Boolean connectIqReady = false;
+    private Boolean connectIqInitializing = false;
 
     private long watchAppOpenTime = -1;
 
@@ -64,6 +80,10 @@ public class SleepAsAndroidProviderService extends Service {
     final static String REPORT = "com.urbandroid.sleep.watch.REPORT";
     final static String ROMPT_NOT_SHOWN = "PROMPT_NOT_SHOWN_ON_DEVICE";
 
+    final static String ACTION_STOP_SELF = "com.urbandroid.sleep.garmin.STOP_SELF";
+    final static String ACTION_RESTART_SELF = "com.urbandroid.sleep.garmin.RESTART_SELF";
+    final static long TIME_TO_RECOVER = TimeUnit.MINUTES.toMillis(15);
+
     // App Names (app names/user friendly names)
     private static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
     private static final String PACKAGE_SLEEP_USERFRIENDLY = "Sleep As Android";
@@ -84,7 +104,7 @@ public class SleepAsAndroidProviderService extends Service {
     private float[] maxFloatValues = null;
     private float[] maxRawFloatValues = null;
 
-    public static final int MAX_DELIVERY_ERROR = 5;
+    public static final int MAX_DELIVERY_ERROR = 50;
     public static final int MAX_DELIVERY_IN_PROGRESS = 5;
     public static final int MESSAGE_INTERVAL = 3000;
     public static final int MESSAGE_INTERVAL_ON_FAILURE = 1000;
@@ -92,29 +112,7 @@ public class SleepAsAndroidProviderService extends Service {
 //    public static final int MAX_DELIVERY_PAUSE = 20;
 
     private Handler handler;
-
-    private ConnectIQListener mListener = new ConnectIQListener() {
-
-        @Override
-        public void onInitializeError(IQSdkErrorStatus errStatus) {
-            Logger.logDebug(TAG + " " + errStatus.toString());
-            connectIqReady = false;
-            stopSelf();
-        }
-
-        @Override
-        public void onSdkReady() {
-            connectIqReady = true;
-            Logger.logInfo(TAG + " onSdkReady");
-
-            registerWatchMessagesReceiver();
-            checkAppIsAvailable();
-        }
-
-        @Override
-        public void onSdkShutDown() {
-        }
-    };
+    private Context context;
 
     @Override
     public void onCreate() {
@@ -124,23 +122,17 @@ public class SleepAsAndroidProviderService extends Service {
         handler = new Handler();
 
         // checking if Start sleep from watch installed
-        if (!isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER)) {
-            launchPlayStore(PACKAGE_SLEEP_USERFRIENDLY,PACKAGE_SLEEP_WATCH_STARTER);
+        // TODO udelat jako notfiikaci
+        if (!isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER) && Build.VERSION.SDK_INT >= 26) {
+//            launchPlayStore(PACKAGE_SLEEP_USERFRIENDLY,PACKAGE_SLEEP_WATCH_STARTER);
         }
 
-        if (GlobalInitializer.debug){
-            connectIQ = ConnectIQ.getInstance(this, IQConnectType.TETHERED);
-        }else{
-            connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
-        }
-
-        // initialize SDK
-        connectIQ.initialize(this,true,mListener);
+        connectIqInitializing = false;
+        connectIqReady = false;
     }
 
-
-
     private void launchPlayStore(String userFriendlyName,final String appPackageName){
+        // TODO line below is wrong should not be userFriendlyName as that is always Sleep
         Toast.makeText(getApplicationContext(),  userFriendlyName + " not installed", Toast.LENGTH_LONG).show();
         try {
             Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName));
@@ -159,7 +151,6 @@ public class SleepAsAndroidProviderService extends Service {
         return null;
     }
 
-
     @Nullable
     private IQDevice getDevice() {
         return getDevice(ConnectIQ.getInstance());
@@ -170,8 +161,14 @@ public class SleepAsAndroidProviderService extends Service {
         try {
             List<IQDevice> devices = connectIQ.getConnectedDevices();
             if (devices != null && devices.size() > 0) {
-                Logger.logDebug(TAG +  devices.get(0).toString() );
+                Logger.logDebug(TAG + "getDevice connected: " + devices.get(0).toString() );
                 return devices.get(0);
+            } else {
+                devices = connectIQ.getKnownDevices();
+                if (devices != null && devices.size() > 0) {
+                    Logger.logDebug(TAG + "getDevice known: " + devices.get(0).toString() );
+                    return devices.get(0);
+                }
             }
         } catch (InvalidStateException e) {
             Logger.logSevere(e);
@@ -189,7 +186,6 @@ public class SleepAsAndroidProviderService extends Service {
         return new IQApp(IQ_APP_ID);
     }
 
-
     public void checkAppIsAvailable() {
         try {
             connectIQ.getApplicationInfo(IQ_APP_ID, getDevice(ConnectIQ.getInstance()), new ConnectIQ.IQApplicationInfoListener() {
@@ -197,15 +193,13 @@ public class SleepAsAndroidProviderService extends Service {
                 @Override
                 public void onApplicationInfoReceived(IQApp app) {
 
-
                 }
 
                 @Override
                 public void onApplicationNotInstalled(String applicationId) {
                         Toast.makeText(getApplicationContext(), "Sleep not installed on your Garmin watch", Toast.LENGTH_LONG).show();
                         Logger.logDebug(TAG + "Sleep watch app not installed.");
-                        stopSelf();
-
+                        stopSelfAndDontScheduleRecovery(getApplicationContext());
                 }
             });
         } catch (InvalidStateException e) {
@@ -216,7 +210,7 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     private void registerWatchMessagesReceiver(){
-        Logger.logDebug(TAG + "registerWatchMessageRecived started");
+        Logger.logDebug(TAG + "registerWatchMessageReceiver started");
         try {
             if (getDevice() != null) {
                 connectIQ.registerForAppEvents(getDevice(), getApp(), new ConnectIQ.IQApplicationEventListener() {
@@ -291,7 +285,7 @@ public class SleepAsAndroidProviderService extends Service {
 
             } else {
                 Logger.logDebug(TAG + "registerWatchMessagesReceiver: No device found.");
-                stopSelf();
+                stopSelfAndScheduleRecovery(getApplicationContext());
             }
         } catch (InvalidStateException e) {
             Logger.logSevere(e);
@@ -308,7 +302,7 @@ public class SleepAsAndroidProviderService extends Service {
         if (getDevice() != null) {
             try {
                 connectIQ.unregisterForApplicationEvents(getDevice(), getApp());
-                connectIQ.unregisterAllForEvents();
+//                connectIQ.unregisterAllForEvents();
             } catch (InvalidStateException e) {
                 Logger.logSevere(e);
             } catch (IllegalArgumentException e) {
@@ -362,7 +356,7 @@ public class SleepAsAndroidProviderService extends Service {
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
             handler.removeCallbacks(sendMessageRunnable);
             emptyQueue();
-            stopSelf();
+            stopSelfAndScheduleRecovery(this);
         } else {
 //            Logger.logDebug("1");
 //                Logger.logDebug("2");
@@ -407,22 +401,67 @@ public class SleepAsAndroidProviderService extends Service {
         }
     }
 
+    private PendingIntent getRecoveryIntent(Context context) {
+        Intent pendingIntent = new Intent(context, SleepAsAndroidProviderService.class);
+        pendingIntent.setAction(ACTION_RESTART_SELF);
+        pendingIntent.setPackage(context.getPackageName());
+
+        PendingIntent pi = PendingIntent.getService(context.getApplicationContext(), 0, pendingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            pi = PendingIntent.getForegroundService(context.getApplicationContext(), 0, pendingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
+        return pi;
+    }
+
+    private void cancelRecovery(Context context) {
+        final AlarmManager m = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        m.cancel(getRecoveryIntent(context));
+    }
+
+    private void stopSelfAndDontScheduleRecovery(Context context) {
+        cancelRecovery(context);
+        stopSelf();
+    }
+
+    private void stopSelfAndScheduleRecovery(Context context) {
+        stopSelf();
+
+        PendingIntent pi = getRecoveryIntent(context);
+
+        final AlarmManager m = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        m.cancel(pi);
+
+        long alarmTime = System.currentTimeMillis() + TIME_TO_RECOVER;
+
+            if (Build.VERSION.SDK_INT >= 21) {
+                AlarmManagerCompat.setExactAndAllowWhileIdle(m, AlarmManager.RTC_WAKEUP, alarmTime, pi);
+            } else if (Build.VERSION.SDK_INT >= 19) {
+                m.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pi);
+            } else {
+                m.set(AlarmManager.RTC_WAKEUP, alarmTime, pi);
+            }
+
+            Logger.logInfo("Restart alarm scheduled " + new Date(alarmTime));
+        }
+
     private void doSendMessage(final String message){
         Logger.logDebug(TAG + "doSendMessage");
         try {
-            connectIQ.sendMessage(getDevice(), getApp(), message, new IQSendMessageListener() {
+            connectIQ.sendMessage(getDevice(), getApp(connectIQ), message, new IQSendMessageListener() {
                 @Override
                 public void onMessageStatus(IQDevice iqDevice, IQApp iqApp, IQMessageStatus status) {
-    //                        Logger.logDebug(TAG + "sendNextMessage Trying to send message to watch: " + message);
+//                    Logger.logDebug(TAG + "onMessageStatus: " + message + " " + iqDevice.getDeviceIdentifier() + " " + iqApp.getApplicationId());
                     if (status != IQMessageStatus.SUCCESS) {
-                        Logger.logDebug(TAG + "sendNextMessage Message " + message + " failed to send to watch: " + status);
+                        Logger.logDebug(TAG + "doSendMessage MSG " + message + " failed to send to watch: " + status);
                         deliveryErrorCount++;
                     } else {
-                        Logger.logDebug(TAG + "sendNextMessage Successfully sent to watch: " + message + " " + status);
+                        Logger.logDebug(TAG + "doSendMessage Success sent to watch: " + message + " " + status);
                         messageQueue.remove(message);
                         if (message.equals("StopApp")) {
     //                            emptyQueue();
-                            stopSelf();
+                            stopSelfAndDontScheduleRecovery(getApplicationContext());
                         }
                         deliveryErrorCount = 0;
                     }
@@ -454,19 +493,66 @@ public class SleepAsAndroidProviderService extends Service {
         if (bundle != null) {
             Set<String> keys = bundle.keySet();
             Iterator<String> it = keys.iterator();
-//            Logger.logDebug(TAG + "Dumping Intent start");
+            Logger.logDebug(TAG + "Dumping Intent start");
             while (it.hasNext()) {
                 String key = it.next();
-//                Logger.logDebug(TAG + "[" + key + "=" + bundle.get(key)+"]");
+                Logger.logDebug(TAG + "[" + key + "=" + bundle.get(key)+"]");
             }
-//            Logger.logDebug(TAG + "Dumping Intent end");
+            Logger.logDebug(TAG + "Dumping Intent end");
         }
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+        startForeground();
         RUNNING = true;
 
+        if (intent != null && ACTION_STOP_SELF.equals(intent.getAction())) {
+            stopSelfAndDontScheduleRecovery(this);
+            return START_NOT_STICKY;
+        }
+
+        if (GlobalInitializer.debug){
+            connectIQ = ConnectIQ.getInstance(this, IQConnectType.TETHERED);
+        } else {
+            connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
+        }
+
+        if (!connectIqReady) {
+            connectIqInitializing = true;
+            // initialize SDK
+            // connectIQ.initialize(this,true,connectIQSdkListener);
+            // init a wrapped SDK with fix for "Cannot cast to Long" issue viz https://forums.garmin.com/forum/developers/connect-iq/connect-iq-bug-reports/158068-?p=1278464#post1278464
+            context = initializeConnectIQWrapped(this, connectIQ, false, new ConnectIQListener() {
+
+                @Override
+                public void onInitializeError(IQSdkErrorStatus errStatus) {
+                    Logger.logDebug(TAG + " " + errStatus.toString());
+                    connectIqReady = false;
+                    stopSelfAndScheduleRecovery(getApplicationContext());
+                }
+
+                @Override
+                public void onSdkReady() {
+                    connectIqInitializing = false;
+                    connectIqReady = true;
+                    Logger.logInfo(TAG + " onSdkReady");
+
+                    registerWatchMessagesReceiver();
+                    checkAppIsAvailable();
+
+                    handleMessageFromSleep(intent);
+                }
+
+                @Override
+                public void onSdkShutDown() { }
+            });
+        }
+
+        return START_STICKY;
+    }
+
+    private void handleMessageFromSleep(Intent intent) {
         String action = intent != null ? intent.getAction() : "";
         if (action == null) {
             action = "";
@@ -529,11 +615,7 @@ public class SleepAsAndroidProviderService extends Service {
                     connectIQ.openApplication(getDevice(), getApp(), new IQOpenApplicationListener() {
                         @Override
                         public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, IQOpenApplicationStatus iqOpenApplicationStatus) {
-
-
-
                             Logger.logDebug(TAG + "onOpenApplication response: " + iqOpenApplicationStatus);
-
                             if (iqOpenApplicationStatus.equals(IQOpenApplicationStatus.APP_IS_ALREADY_RUNNING)) {
                                 Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
                                 sendExplicitBroadcastToSleep(startIntent);
@@ -545,7 +627,7 @@ public class SleepAsAndroidProviderService extends Service {
                 Logger.logSevere(e);
             }
         }
-        return START_STICKY;
+
     }
 
     public void startWatchApp(){
@@ -577,9 +659,16 @@ public class SleepAsAndroidProviderService extends Service {
         connectIqReady = false;
         handler.removeCallbacks(sendMessageRunnable);
         unregisterApp();
+        cancelRecovery(getApplicationContext());
 
         try {
-            connectIQ.shutdown(this);
+            if (context != null) {
+                Logger.logDebug("Shutting down with wrapped context");
+                connectIQ.shutdown(context);
+            } else {
+                Logger.logDebug("Shutting down without wrapped context");
+                connectIQ.shutdown(this);
+            }
         } catch (InvalidStateException e) {
             // This is usually because the SDK was already shut down so no worries.
             Logger.logSevere(e);
@@ -589,6 +678,37 @@ public class SleepAsAndroidProviderService extends Service {
             Logger.logSevere(e);
         }
         RUNNING = false;
+    }
+
+    private BroadcastReceiver receiver;
+
+    private void startForeground() {
+        Logger.logDebug(TAG + "Starting foreground");
+
+        final Intent stopIntent = new Intent(this, SleepAsAndroidProviderService.class);
+        stopIntent.setAction(ACTION_STOP_SELF);
+
+        PendingIntent pendingIntent = PendingIntent.getService(this, 150, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            pendingIntent = PendingIntent.getForegroundService(this, 150, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+
+        final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_TRACKING)
+                .setContentIntent(pendingIntent)
+                .setColor(getResources().getColor(R.color.tint_dark))
+                .addAction(R.drawable.ic_action_stop, getResources().getString(R.string.stop), pendingIntent)
+                .setContentText(getString(R.string.running));
+
+        if (Build.VERSION.SDK_INT < 24) {
+                notificationBuilder.setContentTitle(getResources().getString(R.string.app_name_long));
+        }
+
+        notificationBuilder.setSmallIcon(R.drawable.ic_action_track);
+
+        startForeground(1349, notificationBuilder.build());
+
+
     }
 
 
@@ -607,50 +727,18 @@ public class SleepAsAndroidProviderService extends Service {
         return false;
     }
 
-
-    /* Possible fix for Long error (aaka SEND_MESSAGE_STATUS and EXTRA_OPEN_APPLICATION_DEVICE)
-    private static class ConnectIQWrappedReceiver extends BroadcastReceiver {
-        private final BroadcastReceiver receiver;
-
-        ConnectIQWrappedReceiver(BroadcastReceiver receiver) {
-            this.receiver = receiver;
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if ("com.garmin.android.connectiq.SEND_MESSAGE_STATUS".equals(intent.getAction())) {
-                replaceIQDeviceById(intent, "com.garmin.android.connectiq.EXTRA_REMOTE_DEVICE");
-            } else if ("com.garmin.android.connectiq.OPEN_APPLICATION".equals(intent.getAction())) {
-                replaceIQDeviceById(intent, "com.garmin.android.connectiq.EXTRA_OPEN_APPLICATION_DEVICE");
-            }
-            receiver.onReceive(context, intent);
-        }
-    }
-
-    private static void replaceIQDeviceById(Intent intent, String extraName) {
-        try {
-            IQDevice device = intent.getParcelableExtra(extraName);
-            if (device != null) {
-                intent.putExtra(extraName, device.getDeviceIdentifier());
-            }
-        } catch (ClassCastException e) {
-// It's already a long, i.e. on the simulator.
-        }
-    }
-
-
-    private static void initializeConnectIQ(
+    private static Context initializeConnectIQWrapped(
             Context context, ConnectIQ connectIQ, boolean autoUI, ConnectIQ.ConnectIQListener listener) {
         if (connectIQ instanceof ConnectIQAdbStrategy) {
             connectIQ.initialize(context, autoUI, listener);
-            return;
+            return context;
         }
         Context wrappedContext = new ContextWrapper(context) {
             private HashMap<BroadcastReceiver, BroadcastReceiver> receiverToWrapper = new HashMap<>();
 
             @Override
             public Intent registerReceiver(final BroadcastReceiver receiver, IntentFilter filter) {
-                BroadcastReceiver wrappedRecv = new ConnectIQWrappedReceiver(receiver);
+                BroadcastReceiver wrappedRecv = new IQMessageReceiverWrapper(receiver);
                 synchronized (receiverToWrapper) {
                     receiverToWrapper.put(receiver, wrappedRecv);
                 }
@@ -669,8 +757,8 @@ public class SleepAsAndroidProviderService extends Service {
             }
         };
         connectIQ.initialize(wrappedContext, autoUI, listener);
+        return wrappedContext;
     }
 
-    */
 
 }

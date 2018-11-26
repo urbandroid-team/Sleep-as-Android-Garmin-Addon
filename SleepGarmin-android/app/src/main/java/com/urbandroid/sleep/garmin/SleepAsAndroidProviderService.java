@@ -120,6 +120,7 @@ public class SleepAsAndroidProviderService extends Service {
         GlobalInitializer.initializeIfRequired(this);
         Logger.logDebug(TAG + "Garmin service onCreate");
         handler = new Handler();
+        context = this;
 
         // checking if Start sleep from watch installed
         // TODO udelat jako notfiikaci
@@ -188,7 +189,7 @@ public class SleepAsAndroidProviderService extends Service {
 
     public void checkAppIsAvailable() {
         try {
-            connectIQ.getApplicationInfo(IQ_APP_ID, getDevice(ConnectIQ.getInstance()), new ConnectIQ.IQApplicationInfoListener() {
+            connectIQ.getApplicationInfo(IQ_APP_ID, getDevice(connectIQ), new ConnectIQ.IQApplicationInfoListener() {
 
                 @Override
                 public void onApplicationInfoReceived(IQApp app) {
@@ -209,11 +210,11 @@ public class SleepAsAndroidProviderService extends Service {
         }
     }
 
-    private void registerWatchMessagesReceiver(){
+    private void registerWatchMessagesReceiver(ConnectIQ connectIQ){
         Logger.logDebug(TAG + "registerWatchMessageReceiver started");
         try {
-            if (getDevice() != null) {
-                connectIQ.registerForAppEvents(getDevice(), getApp(), new ConnectIQ.IQApplicationEventListener() {
+            if (getDevice(connectIQ) != null) {
+                connectIQ.registerForAppEvents(getDevice(connectIQ), getApp(connectIQ), new ConnectIQ.IQApplicationEventListener() {
                     @Override
                     public void onMessageReceived(IQDevice device, IQApp app, List<Object> message, IQMessageStatus status) {
 //                 This is the place where we are intercepting messages from watch
@@ -270,6 +271,7 @@ public class SleepAsAndroidProviderService extends Service {
                         } else if (receivedMsgType.equals("STOPPING")) {
                             Intent stopIntent = new Intent(STOP_SLEEP_TRACK_ACTION);
                             sendExplicitBroadcastToSleep(stopIntent);
+                            stopSelfAndDontScheduleRecovery(context);
                         }
 
                         if (maxFloatValues != null && maxRawFloatValues != null) {
@@ -298,10 +300,10 @@ public class SleepAsAndroidProviderService extends Service {
         sendBroadcast(intent);
     }
 
-    public void unregisterApp() {
-        if (getDevice() != null) {
+    public void unregisterApp(ConnectIQ connectIQ) {
+        if (getDevice(connectIQ) != null) {
             try {
-                connectIQ.unregisterForApplicationEvents(getDevice(), getApp());
+                connectIQ.unregisterForApplicationEvents(getDevice(connectIQ), getApp(connectIQ));
 //                connectIQ.unregisterAllForEvents();
             } catch (InvalidStateException e) {
                 Logger.logSevere(e);
@@ -380,7 +382,7 @@ public class SleepAsAndroidProviderService extends Service {
                 final String message = messageQueue.get(0);
 
                 Logger.logDebug(TAG + "ConnectIQ:" + connectIQ.toString());
-                Logger.logDebug(TAG + "Garmin app: " + getApp().getApplicationId());
+                Logger.logDebug(TAG + "Garmin app: " + getApp(connectIQ).getApplicationId());
                 Logger.logDebug(TAG + "sendNextMessage Sending message: " + message.toString());
                 deliveryInProgress.set(true);
 
@@ -421,11 +423,13 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     private void stopSelfAndDontScheduleRecovery(Context context) {
+        Logger.logDebug("stopSelfAnd DON'T ScheduleRecovery");
         cancelRecovery(context);
         stopSelf();
     }
 
     private void stopSelfAndScheduleRecovery(Context context) {
+        Logger.logDebug("stopSelfAndScheduleRecovery");
         stopSelf();
 
         PendingIntent pi = getRecoveryIntent(context);
@@ -449,7 +453,7 @@ public class SleepAsAndroidProviderService extends Service {
     private void doSendMessage(final String message){
         Logger.logDebug(TAG + "doSendMessage");
         try {
-            connectIQ.sendMessage(getDevice(), getApp(connectIQ), message, new IQSendMessageListener() {
+            connectIQ.sendMessage(getDevice(connectIQ), getApp(connectIQ), message, new IQSendMessageListener() {
                 @Override
                 public void onMessageStatus(IQDevice iqDevice, IQApp iqApp, IQMessageStatus status) {
 //                    Logger.logDebug(TAG + "onMessageStatus: " + message + " " + iqDevice.getDeviceIdentifier() + " " + iqApp.getApplicationId());
@@ -504,6 +508,7 @@ public class SleepAsAndroidProviderService extends Service {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
+        Logger.logDebug(TAG + "onStartCommand foreground with intent " + intent.getAction());
         startForeground();
         RUNNING = true;
 
@@ -519,34 +524,66 @@ public class SleepAsAndroidProviderService extends Service {
         }
 
         if (!connectIqReady) {
+            Logger.logDebug(TAG + "Initializing SDK");
             connectIqInitializing = true;
             // initialize SDK
-            // connectIQ.initialize(this,true,connectIQSdkListener);
+            connectIQ.initialize(this,true,new ConnectIQListener() {
+
+                 @Override
+                 public void onInitializeError(IQSdkErrorStatus errStatus) {
+                     Logger.logDebug(TAG + " " + errStatus.toString());
+                     connectIqReady = false;
+                     stopSelfAndScheduleRecovery(getApplicationContext());
+                 }
+
+                 @Override
+                 public void onSdkReady() {
+                     connectIqInitializing = false;
+                     connectIqReady = true;
+                     Logger.logInfo(TAG + " onSdkReady");
+
+                     registerWatchMessagesReceiver(connectIQ);
+//                     checkAppIsAvailable();
+
+                     handleMessageFromSleep(intent);
+                 }
+
+                 @Override
+                 public void onSdkShutDown() {
+                     Logger.logDebug(TAG + "onSdkShutDown");
+                     connectIqInitializing = false;
+                     connectIqReady = false;
+                 }
+             });
+
             // init a wrapped SDK with fix for "Cannot cast to Long" issue viz https://forums.garmin.com/forum/developers/connect-iq/connect-iq-bug-reports/158068-?p=1278464#post1278464
-            context = initializeConnectIQWrapped(this, connectIQ, false, new ConnectIQListener() {
-
-                @Override
-                public void onInitializeError(IQSdkErrorStatus errStatus) {
-                    Logger.logDebug(TAG + " " + errStatus.toString());
-                    connectIqReady = false;
-                    stopSelfAndScheduleRecovery(getApplicationContext());
-                }
-
-                @Override
-                public void onSdkReady() {
-                    connectIqInitializing = false;
-                    connectIqReady = true;
-                    Logger.logInfo(TAG + " onSdkReady");
-
-                    registerWatchMessagesReceiver();
-                    checkAppIsAvailable();
-
-                    handleMessageFromSleep(intent);
-                }
-
-                @Override
-                public void onSdkShutDown() { }
-            });
+//            context = initializeConnectIQWrapped(this, connectIQ, false, new ConnectIQListener() {
+//
+//                @Override
+//                public void onInitializeError(IQSdkErrorStatus errStatus) {
+//                    Logger.logDebug(TAG + " " + errStatus.toString());
+//                    connectIqReady = false;
+//                    stopSelfAndScheduleRecovery(getApplicationContext());
+//                }
+//
+//                @Override
+//                public void onSdkReady() {
+//                    connectIqInitializing = false;
+//                    connectIqReady = true;
+//                    Logger.logInfo(TAG + " onSdkReady");
+//
+//                    registerWatchMessagesReceiver(connectIQ);
+//                    checkAppIsAvailable();
+//
+//                    handleMessageFromSleep(intent);
+//                }
+//
+//                @Override
+//                public void onSdkShutDown() {
+//                    connectIqInitializing = false;
+//                    connectIqReady = false;
+//                }
+//            });
         }
 
         return START_STICKY;
@@ -568,51 +605,51 @@ public class SleepAsAndroidProviderService extends Service {
             }
 
             enqueue("StartTracking");
-            Logger.logDebug(TAG + "Sending StartTracking");
+            Logger.logDebug(TAG + "Sending StartTracking to watch");
         }
 
         if (action.equals(STOP_WATCH_APP)) {
-            Logger.logDebug(TAG + "Sending stop command to Garmin");
+            Logger.logDebug(TAG + "Sending stop command to watch");
             emptyQueue();
             enqueue("StopApp");
         }
         if (action.equals(SET_PAUSE)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
-            Logger.logDebug(TAG + "Sending pause command to Garmin for " + param);
+            Logger.logDebug(TAG + "Sending pause command to watch for " + param);
             enqueue("Pause;" + param);
         }
         if (action.equals(SET_BATCH_SIZE)) {
             long param = intent.getLongExtra("SIZE", 0);
-            Logger.logDebug(TAG + "Setting batch on Garmin to " + param);
+            Logger.logDebug(TAG + "Setting batch on watch to " + param);
             enqueue("BatchSize;" + param);
         }
         if (action.equals(START_ALARM)) {
             long param = intent.getLongExtra("DELAY", 0);
-            Logger.logDebug(TAG + "Sending start alarm to Garmin with delay " + param);
+            Logger.logDebug(TAG + "Sending start alarm to watch with delay " + param);
             enqueue("StartAlarm;" + param);
         }
         if (action.equals(STOP_ALARM)) {
-            Logger.logDebug(TAG + "Stopping alarm on Garmin");
+            Logger.logDebug(TAG + "Stopping alarm on watch");
             enqueue("StopAlarm;");
         }
         if (action.equals(UPDATE_ALARM)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
-            Logger.logDebug(TAG + "Updating Garmin alarm to " + param);
+            Logger.logDebug(TAG + "Updating watch alarm to " + param);
             enqueue("SetAlarm;" + param);
         }
         if (action.equals(HINT)) {
             long param = intent.getLongExtra("REPEAT", 0);
-            Logger.logDebug(TAG + "Sending hint to Garmin, with repeat " + param);
+            Logger.logDebug(TAG + "Sending hint to watch, with repeat " + param);
             enqueue("Hint;" + param);
         }
         if (action.equals(CHECK_CONNECTED)) {
-            Logger.logDebug(TAG + "Checking Garmin connection...");
+            Logger.logDebug(TAG + "Checking watch connection...");
             messageQueue.remove("StopApp");
             try {
                 if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
                     Logger.logDebug(TAG + "Trying to open app on watch...");
                     watchAppOpenTime = System.currentTimeMillis();
-                    connectIQ.openApplication(getDevice(), getApp(), new IQOpenApplicationListener() {
+                    connectIQ.openApplication(getDevice(connectIQ), getApp(connectIQ), new IQOpenApplicationListener() {
                         @Override
                         public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, IQOpenApplicationStatus iqOpenApplicationStatus) {
                             Logger.logDebug(TAG + "onOpenApplication response: " + iqOpenApplicationStatus);
@@ -637,7 +674,7 @@ public class SleepAsAndroidProviderService extends Service {
             if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
                 Logger.logDebug(TAG + "Trying to open app on watch...");
                 watchAppOpenTime = System.currentTimeMillis();
-                connectIQ.openApplication(getDevice(), getApp(), new IQOpenApplicationListener() {
+                connectIQ.openApplication(getDevice(connectIQ), getApp(connectIQ), new IQOpenApplicationListener() {
                     @Override
                     public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, IQOpenApplicationStatus iqOpenApplicationStatus) {
                         if (iqOpenApplicationStatus == IQOpenApplicationStatus.PROMPT_NOT_SHOWN_ON_DEVICE) {
@@ -658,7 +695,7 @@ public class SleepAsAndroidProviderService extends Service {
         Logger.logDebug(TAG + "onDestroy msgQueue: " + messageQueue);
         connectIqReady = false;
         handler.removeCallbacks(sendMessageRunnable);
-        unregisterApp();
+        unregisterApp(connectIQ);
         cancelRecovery(getApplicationContext());
 
         try {
@@ -683,7 +720,7 @@ public class SleepAsAndroidProviderService extends Service {
     private BroadcastReceiver receiver;
 
     private void startForeground() {
-        Logger.logDebug(TAG + "Starting foreground");
+//        Logger.logDebug(TAG + "Starting foreground");
 
         final Intent stopIntent = new Intent(this, SleepAsAndroidProviderService.class);
         stopIntent.setAction(ACTION_STOP_SELF);
@@ -722,6 +759,7 @@ public class SleepAsAndroidProviderService extends Service {
         } catch (PackageManager.NameNotFoundException e) {
             Logger.logDebug(TAG + "Not installed: " + appPackageName.toString());
         } catch (Exception e) {
+            Logger.logDebug(TAG, e);
             return false;
         }
         return false;

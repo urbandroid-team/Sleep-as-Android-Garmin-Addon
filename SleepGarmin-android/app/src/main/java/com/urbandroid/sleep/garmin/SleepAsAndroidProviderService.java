@@ -104,7 +104,7 @@ public class SleepAsAndroidProviderService extends Service {
     private float[] maxFloatValues = null;
     private float[] maxRawFloatValues = null;
 
-    public static final int MAX_DELIVERY_ERROR = 50;
+    public static final int MAX_DELIVERY_ERROR = 5;
     public static final int MAX_DELIVERY_IN_PROGRESS = 5;
     public static final int MESSAGE_INTERVAL = 3000;
     public static final int MESSAGE_INTERVAL_ON_FAILURE = 1000;
@@ -241,7 +241,7 @@ public class SleepAsAndroidProviderService extends Service {
 
                                 try {
                                     maxRawFloatValues[i] = Float.valueOf(maxRawValue) * 9.806f / 1000f;
-                                    Logger.logDebug(TAG + "New actigraphy [m/s2]: " + maxRawFloatValues[i]);
+//                                    Logger.logDebug(TAG + "New actigraphy [m/s2]: " + maxRawFloatValues[i]);
                                 } catch (NumberFormatException e) {
                                     maxRawFloatValues[i] = 0;
                                 }
@@ -293,7 +293,7 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     public void sendExplicitBroadcastToSleep(Intent intent) {
-        intent.putExtra("SOURCE_PACKAGE", getPackageName());
+        Logger.logDebug("Sending broadcast to Sleep " + intent.getAction());
         intent.setPackage(MainActivity.PACKAGE_SLEEP);
         sendBroadcast(intent);
     }
@@ -421,11 +421,13 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     private void stopSelfAndDontScheduleRecovery(Context context) {
+        Logger.logDebug(TAG + "stopSelfAndDontScheduleRecovery");
         cancelRecovery(context);
         stopSelf();
     }
 
     private void stopSelfAndScheduleRecovery(Context context) {
+        Logger.logDebug(TAG + "stopSelfAndScheduleRecovery");
         stopSelf();
 
         PendingIntent pi = getRecoveryIntent(context);
@@ -518,7 +520,7 @@ public class SleepAsAndroidProviderService extends Service {
             connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
         }
 
-        if (!connectIqReady) {
+        if (!connectIqReady && !connectIqInitializing) {
             connectIqInitializing = true;
             // initialize SDK
             // connectIQ.initialize(this,true,connectIQSdkListener);
@@ -547,6 +549,8 @@ public class SleepAsAndroidProviderService extends Service {
                 @Override
                 public void onSdkShutDown() { }
             });
+        } else if (!connectIqInitializing) {
+            handleMessageFromSleep(intent);
         }
 
         return START_STICKY;
@@ -587,7 +591,7 @@ public class SleepAsAndroidProviderService extends Service {
             enqueue("BatchSize;" + param);
         }
         if (action.equals(START_ALARM)) {
-            long param = intent.getLongExtra("DELAY", 0);
+            long param = intent.getIntExtra("DELAY", 0);
             Logger.logDebug(TAG + "Sending start alarm to Garmin with delay " + param);
             enqueue("StartAlarm;" + param);
         }

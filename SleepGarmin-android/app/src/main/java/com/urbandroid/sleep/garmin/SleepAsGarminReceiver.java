@@ -104,7 +104,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
             serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
             ContextCompat.startForegroundService(context,serviceIntent);
         } else if (action.equals(SET_BATCH_SIZE)) {
-            Logger.logInfo("Ignoring set batch size -- Garmin cannot handle that");
+//            Logger.logInfo("Ignoring set batch size -- Garmin cannot handle that");
 //   Do nothing -- the Garmin commlink cannot handle that load!!!!
 //            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
 //            serviceIntent.setAction(SleepAsAndroidProviderService.SET_BATCH_SIZE);

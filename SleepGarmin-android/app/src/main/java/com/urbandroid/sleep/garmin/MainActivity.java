@@ -20,7 +20,6 @@ import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.IQ_STORE
 
 public class MainActivity extends Activity {
 
-    private boolean debug = false;
     private static final String TAG = MainActivity.class.getSimpleName();
 
     public static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
@@ -135,6 +134,11 @@ public class MainActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         try {
+            mConnectIQ.unregisterForEvents(mDevice);
+        } catch (InvalidStateException e) {
+            Logger.logSevere(e);
+        }
+        try {
             mConnectIQ.shutdown(this);
         } catch (InvalidStateException e) {
             Logger.logSevere(e);
@@ -166,14 +170,10 @@ public class MainActivity extends Activity {
                 }
 
                 @Override
-                public void onInitializeError(ConnectIQ.IQSdkErrorStatus iqSdkErrorStatus) {
-
-                }
+                public void onInitializeError(ConnectIQ.IQSdkErrorStatus iqSdkErrorStatus) {}
 
                 @Override
-                public void onSdkShutDown() {
-
-                }
+                public void onSdkShutDown() {}
             });
             Logger.logDebug("ConnectIQ instance set to WIRELESS");
         }

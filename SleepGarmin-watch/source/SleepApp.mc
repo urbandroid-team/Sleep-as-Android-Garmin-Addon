@@ -22,6 +22,7 @@ using Toybox.Math as Math;
 
     var now;
     var timecurrent = 0;
+    var startTimestamp = 0;
     var logtimestamp;
 
     var messageQueue = [];
@@ -30,33 +31,35 @@ using Toybox.Math as Math;
     var deliveryPauseCount = 0;
     const MAX_DELIVERY_ERROR = 3;
     const MAX_DELIVERY_PAUSE = 20;
+    var lastMessageReceived = 0;
 
     var alarm_currently_active = false; // Is alarm currently ringing on phone?
     var exitTapped = false;
     var alarmViewActive = false;
-    
+
     var trackingBool = false;
     var stoppingBool = false;
     var targetExitTime = 0;
     var shouldExit = false;
     
+
     function exitTimer(afterCycles) {
 		targetExitTime = afterCycles;
     	shouldExit = true;
     }
- 
+
     // Logs into the /GARMIN/APPS/LOGS/appname.TXT
     // The file has to be created manually first. It is not possible to gather debug logs in production (after distribution in the ConnectIQ store)
     function log(a) {
         if (debug == true) {
-            logtimestamp = Time.now().value();
+            logtimestamp = Time.now().value() - startTimestamp;
             Sys.println(logtimestamp + ": " + a);
         }
     }
 
     function betalog(a) {
         if (beta == true) {
-            logtimestamp = Time.now().value();
+            logtimestamp = Time.now().value() - startTimestamp;
             Sys.println(logtimestamp + ": " + a);
         }
     }
@@ -64,21 +67,21 @@ using Toybox.Math as Math;
     // Puts message in the messageQueue, also attempts to do some memory checks so as not to overload the underlying watch's queue
     function enqueue(message) {
         var freeMemRatio = Sys.getSystemStats().freeMemory*100/Sys.getSystemStats().totalMemory;
-        log("free: " + Sys.getSystemStats().freeMemory);
+        log("free: " + Sys.getSystemStats().freeMemory + " freeRatio:" + freeMemRatio);
 
-        if (messageQueue.size() > 50) {
-            log("MsgQ > 50!!!");
-        }
+        // if (messageQueue.size() > 50) {
+        //    log("MsgQ > 50!!!");
+        // }
 
         if (((freeMemRatio <= 7) && (messageQueue.size() > 0)) || (messageQueue.size() > 50)) {
-            log("Removing" + messageQueue[0] + "from q, freeMemRatio:" + freeMemRatio + ",q size:" + messageQueue.size());
+            log("Rem from q, freeRatio:" + freeMemRatio + ",q:" + messageQueue.size());
             messageQueue.remove(messageQueue[0]);
         }
 
 
         if (messageQueue.indexOf(message) == -1) {
             messageQueue.add(message);
-            log("Adding to q:" + message + " outQ: " + messageQueue);
+            // log("Adding to q:" + message + " outQ: " + messageQueue);
         }
     }
 
@@ -114,18 +117,19 @@ using Toybox.Math as Math;
         Ui.switchToView(new SleepMainView(), new SleepMainDelegate(), Ui.SLIDE_IMMEDIATE);
         alarmViewActive = false;
     }
-    
+
     function normalExit(){
     	log("Normal Exit");
     	stoppingBool = true;
     	if (Sys.getDeviceSettings().phoneConnected && !fakeTransmit) {
                 Comm.transmit("STOPPING", null, new SleepNowListener("STOPPING"));
-
-		} else if (!Sys.getDeviceSettings().phoneConnected){
+		} else if (!Sys.getDeviceSettings().phoneConnected) {
 				exitTimer(20);
-		}
+		} else if ( lastMessageReceived == 0 || ((lastMessageReceived - Time.now().value()) > 30000)) {
+				log("Possible failure_during_transfer");
+				exitTimer(20);
     }
-    
+
     function forceExit(){
     	log("Force Exit");
     	stoppingBool = true;
@@ -134,8 +138,8 @@ using Toybox.Math as Math;
 		}
 		exitTimer(20);
     }
-    
-    
+
+
 
 
 class SleepApp extends App.AppBase {
@@ -186,9 +190,10 @@ class SleepApp extends App.AppBase {
 
     function initialize() {
         AppBase.initialize();
+        startTimestamp = Time.now().value();
 
         if(Comm has :registerForPhoneAppMessages) {
-        	log("Registering for Phone Messages");
+        	log("registerForPhoneAppMessages");
             Comm.registerForPhoneAppMessages( method(:onMsg) );
         } else {
             notice = notice + "Err: Old CIQ version\n";
@@ -227,7 +232,7 @@ class SleepApp extends App.AppBase {
         if (now.sec == 0) {
             Ui.requestUpdate();
         }
-        	
+
         if (shouldExit) {
         	if (targetExitTime == 0) {
        		 	Sys.exit();
@@ -300,7 +305,8 @@ class SleepApp extends App.AppBase {
     // Handling messages coming from the phone
     function handleIncomingMessage(mail) {
         var data;
-        log("Incoming mail: " + mail);
+        log("In: " + mail);
+        lastMessageReceived = Time.now().value();
 
         if ( mail.equals("StopApp") && stopAppDelay == 5) {
         	stopAlarm();
@@ -338,17 +344,17 @@ class SleepApp extends App.AppBase {
         	if (!trackingBool) {
         		trackingBool = true;
         		Ui.requestUpdate();
-        		log("Switched trackingBool to true");
+        		log("tracking true");
     		}
         } else if ( mail.equals("StartTracking")) {
         	if (!trackingBool) {
         		trackingBool = true;
         		Ui.requestUpdate();
-        		log("Switched trackingBool to true");
+        		log("tracking true");
     		}
         } else {
             // mail = "Message not handled: " + mail;
-            log("Message not handled" + mail.toString());
+            log("Msg fail" + mail.toString());
         }
     }
 
@@ -384,9 +390,6 @@ class SleepApp extends App.AppBase {
 
                 hrCount = hrCount + 1;
                 // log(hrCount);
-                if (beta == true) {
-	                current_heartrate = hrInfo.heartRate;
-	            }
 
                 if (hrCurrentlyReading == true) {
                     // log("hrinfo, heartrate" + hrInfo + " " +hrInfo.heartRate);
@@ -413,7 +416,7 @@ class SleepApp extends App.AppBase {
 
     // Batch can be any number but usually we set it either to 1 when the phone user is currently viewing the phone so he has data from watch sent to phone immediately for viewing, or to 12 when the phone is idle, to conserve battery (we don't have to send via bluetooth as often)
     function setBatchSize(newBatchSize) {
-        log("Batch set to " + newBatchSize.toString());
+        log("Batch " + newBatchSize.toString());
         batchSize = newBatchSize;
         sendCurrentDataAndResetBatch();
     }
@@ -425,7 +428,7 @@ class SleepApp extends App.AppBase {
     }
 
     function setAlarm(timestamp) {
-        log("Alarm set to " + timestamp.toString());
+        log("Alarm " + timestamp.toString());
         scheduled_alarm_ts = timestamp;
     }
 
@@ -442,7 +445,7 @@ class SleepApp extends App.AppBase {
                 Attention.vibrate(shortPulse);
             } else {
                 if (Attention has :playTone) {
-                    Attention.playTone(8);  
+                    Attention.playTone(8);
                 }
             }
         }
@@ -450,7 +453,6 @@ class SleepApp extends App.AppBase {
 
     // Hint is lucid dreaming or anti-snoring vibration
     function doHint(repeat) {
-        log("Hint requested " + repeat.toString() + " times.");
         // Garmin only supports vibrating up to 8 VibeProfiles, so we have to cap repeating on 4
         if (repeat > 4) {
             repeat = 4;
@@ -487,7 +489,7 @@ class SleepApp extends App.AppBase {
                 	log("FakeTransmit: " + message);
                 	new SleepListener(message).onComplete();
                 } else {
-              		log("Send next message " + message);
+              		log("Send " + message.toString().substring(0,5) + "...");
 	                Comm.transmit(message, null, new SleepListener(message));
                 }
         }

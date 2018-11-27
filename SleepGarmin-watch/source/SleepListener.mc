@@ -14,8 +14,7 @@ class SleepListener extends Comm.ConnectionListener
     {
         messageQueue.remove(message);
         deliveryInProgress = false;
-        log("msgQ: " + messageQueue);
-        log(message + "sent OK");
+        log("msg sent ok, q size " + messageQueue.size());
         betalog(message + "sent OK");
     }
 

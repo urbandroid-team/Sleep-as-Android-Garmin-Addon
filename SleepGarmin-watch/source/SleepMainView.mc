@@ -24,15 +24,15 @@ class SleepMainView extends Ui.View {
     var upText;
     var mainText;
     var downText;
-    
+
 	var startingStr = Ui.loadResource(Rez.Strings.starting);
 	var trackingStr = Ui.loadResource(Rez.Strings.tracking);
 	var stoppingStr = Ui.loadResource(Rez.Strings.stopping);
 
     function initialize() {
-		log("SleepMainView initialize");
+		// log("SleepMainView initialize");
         View.initialize();
-        
+
         upText = new Ui.Text({
         		:text=>null,
         		:color=>Gfx.COLOR_DK_GRAY,
@@ -79,17 +79,17 @@ class SleepMainView extends Ui.View {
     function onUpdate(dc) {
     	if (trackingBool) {
     		menuArray[2] = timecurrent + "\n" + trackingStr;
-    		log("changed view to tracking");
-    	} 
+    		// log("changed view to tracking");
+    	}
  		if (!trackingBool) {
     		menuArray[2] = timecurrent + "\n" + startingStr;
     	}
     	if (stoppingBool) {
 	    	menuArray[2] = timecurrent + "\n" + stoppingStr;
     	}
-    	
-    	
-    	log("onUpdate");
+
+
+    	// log("onUpdate");
         dc.setColor(Gfx.COLOR_TRANSPARENT, Gfx.COLOR_BLACK);
         dc.clear();
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);

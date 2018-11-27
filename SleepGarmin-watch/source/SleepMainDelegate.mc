@@ -6,13 +6,13 @@ using Toybox.Communications as Comm;
 class SleepMainDelegate extends Ui.InputDelegate  {
 
     function initialize() {
-			log("SleepMainDelegate initialize");
+			// log("SleepMainDelegate initialize");
       //  BehaviorDelegate.initialize();
        InputDelegate.initialize();
     }
 
     function onSelect(){
-    	log("onSelect");
+    	// log("onSelect");
 
     	switch (arrayIndex) {
     		case 0:
@@ -24,7 +24,7 @@ class SleepMainDelegate extends Ui.InputDelegate  {
     		case 2:
     			break;
     		case 3:
-    			if (trackingBool){
+    			if (trackingBool && messageQueue.size() < 50){
     				normalExit();
     			} else {
     				forceExit();
@@ -36,13 +36,13 @@ class SleepMainDelegate extends Ui.InputDelegate  {
 
     function onSwipe(swipeEvent){
     	var s = swipeEvent.getDirection();
-		log("onSwipe: " + s);
+		// log("onSwipe: " + s);
 	    if (swipeEvent.getDirection() == SWIPE_DOWN ){
-	    	log("Swipe Down");
+	    	// log("Swipe Down");
 	    	scrollDown();
 	    }
 	    if (swipeEvent.getDirection() == SWIPE_UP ){
-	    	log("Swipe Up");
+	    	// log("Swipe Up");
 	    	scrollUp();
 	    }
 	    return true;
@@ -51,7 +51,7 @@ class SleepMainDelegate extends Ui.InputDelegate  {
 	function onTap(clickEvent) {
 		var x = clickEvent.getCoordinates()[0];
 		var y = clickEvent.getCoordinates()[1];
-		log("onTap at: " + clickEvent.getCoordinates());
+		// log("onTap at: " + clickEvent.getCoordinates());
 		if (y != null && height != null) {
 			if (y <= height*.25){scrollDown();}
 			if (y >= height*.75){scrollUp();}
@@ -62,7 +62,7 @@ class SleepMainDelegate extends Ui.InputDelegate  {
 
     function onKey(keyEvent){
         var k = keyEvent.getKey();
-    	log("onKey: " + k);
+    	// log("onKey: " + k);
 
     	switch (k) {
     		case KEY_ENTER:
@@ -75,38 +75,38 @@ class SleepMainDelegate extends Ui.InputDelegate  {
     			scrollUp();
     			break;
     		case KEY_ESC:
-    			log("Escape Key");
+    			// log("Escape Key");
     			returnCentre();
     			break;
     		case KEY_MENU:
-    		    log("Menu Key");
+    		    // log("Menu Key");
     			break;
 		}
     	return true;
     }
 
     function scrollUp(){
-		log("scrollUp");
+		// log("scrollUp");
     	arrayIndex = moduloPosArith( arrayIndex+1,menuArray.size());
  			// switchToView(new SleepMainView(),new SleepMainDelegate(),Ui.SLIDE_UP );
 			 refreshView();
     }
 
     function scrollDown(){
-    	log("scrollDown");
+    	// log("scrollDown");
     	arrayIndex = moduloPosArith( arrayIndex-1,menuArray.size());
     	// switchToView(new SleepMainView(),new SleepMainDelegate(),Ui.SLIDE_DOWN );
 			refreshView();
     }
 
     function returnCentre(){
-    	log("returnCentre");
+    	// log("returnCentre");
     	arrayIndex = 2;
     	refreshView();
     }
 
     function refreshView(){
-    	log("Refreshing View");
+    	// log("Refreshing View");
     	arrayIndex = moduloPosArith( arrayIndex,menuArray.size());
     	Ui.requestUpdate();
     }

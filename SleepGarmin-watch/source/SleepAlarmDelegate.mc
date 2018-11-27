@@ -7,7 +7,7 @@ class SleepAlarmDelegate extends Ui.BehaviorDelegate {
     }
 
     function onMenu() {
-    	log("OnMenu");
+    	// log("OnMenu");
         Ui.pushView(new Rez.Menus.AlarmMenu(), new SleepAlarmMenuDelegate(), Ui.SLIDE_UP);
         return true;
     }
@@ -15,20 +15,21 @@ class SleepAlarmDelegate extends Ui.BehaviorDelegate {
     function onBack() {
       return true; //! disables back button
     }
-    
+
     function onSelect() {
     	return true;
     }
-    
+
     function onKey(keyEvent){
         var k = keyEvent.getKey();
-    	log("onKey: " + k);
-    	
+    	// log("onKey: " + k);
+
     	if (k == KEY_ENTER) {
-			log("KEY_ENTER pressed");
+			// log("KEY_ENTER pressed");
 			onMenu();
 			return true;
     	}
+    	return false;
 	}
 
 }

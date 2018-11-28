@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+
 import com.garmin.android.connectiq.ConnectIQ;
 import com.garmin.android.connectiq.IQApp;
 import com.garmin.android.connectiq.IQDevice;
@@ -102,13 +103,17 @@ public class MainActivity extends Activity {
     public void registerDevice() {
         try {
             List<IQDevice> devices = mConnectIQ.getConnectedDevices();
-
             if (devices != null && devices.size() > 0) {
-//              Take just the first device we find
+                Logger.logDebug(TAG + "getDevice connected: " + devices.get(0).toString() );
                 mDevice = devices.get(0);
-                mConnectIQ.registerForDeviceEvents(mDevice, mDeviceEventListener);
-                Logger.logInfo("registered: " + mDevice.toString());
             } else {
+                devices = mConnectIQ.getKnownDevices();
+                if (devices != null && devices.size() > 0) {
+                    Logger.logDebug(TAG + "getDevice known: " + devices.get(0).toString());
+                    mDevice = devices.get(0);
+                }
+            }
+            if (mDevice == null) {
                 return;
             }
         } catch (InvalidStateException e) {
@@ -134,7 +139,9 @@ public class MainActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         try {
-            mConnectIQ.unregisterForEvents(mDevice);
+            if (mDevice != null) {
+                mConnectIQ.unregisterForEvents(mDevice);
+            }
         } catch (InvalidStateException e) {
             Logger.logSevere(e);
         }

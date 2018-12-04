@@ -18,8 +18,15 @@ import android.support.v4.app.AlarmManagerCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
+
 import com.garmin.android.connectiq.ConnectIQ;
-import com.garmin.android.connectiq.ConnectIQ.*;
+import com.garmin.android.connectiq.ConnectIQ.ConnectIQListener;
+import com.garmin.android.connectiq.ConnectIQ.IQConnectType;
+import com.garmin.android.connectiq.ConnectIQ.IQMessageStatus;
+import com.garmin.android.connectiq.ConnectIQ.IQOpenApplicationListener;
+import com.garmin.android.connectiq.ConnectIQ.IQOpenApplicationStatus;
+import com.garmin.android.connectiq.ConnectIQ.IQSdkErrorStatus;
+import com.garmin.android.connectiq.ConnectIQ.IQSendMessageListener;
 import com.garmin.android.connectiq.ConnectIQAdbStrategy;
 import com.garmin.android.connectiq.IQApp;
 import com.garmin.android.connectiq.IQDevice;
@@ -506,11 +513,12 @@ public class SleepAsAndroidProviderService extends Service {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-        Logger.logDebug(TAG + "onStartCommand foreground with intent " + intent.getAction());
+        Logger.logDebug(TAG + "onStartCommand foreground with intent " + ((intent != null && intent.getAction() != null) ? intent.getAction() : "null"));
+
         startForeground();
         RUNNING = true;
 
-        if (intent != null && ACTION_STOP_SELF.equals(intent.getAction())) {
+        if (intent != null && intent.getAction() != null && ACTION_STOP_SELF.equals(intent.getAction())) {
             stopSelfAndDontScheduleRecovery(this);
             return START_NOT_STICKY;
         }

@@ -306,10 +306,14 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     public void unregisterApp(ConnectIQ connectIQ) {
-        if (getDevice(connectIQ) != null) {
             try {
-                connectIQ.unregisterForApplicationEvents(getDevice(connectIQ), getApp(connectIQ));
-//                connectIQ.unregisterAllForEvents();
+                if (connectIQ == null) {
+                    connectIQ.unregisterForApplicationEvents(getDevice(connectIQ), getApp(connectIQ));
+                } else if (ConnectIQ.getInstance() == null) {
+                    connectIQ.unregisterForApplicationEvents(getDevice(), getApp());
+                } else {
+                    return;
+                }
             } catch (InvalidStateException e) {
                 Logger.logSevere(e);
             } catch (IllegalArgumentException e) {
@@ -317,7 +321,6 @@ public class SleepAsAndroidProviderService extends Service {
             } catch (RuntimeException e) {
                 Logger.logSevere(e);
             }
-        }
     }
 
     private List<String> messageQueue = Collections.synchronizedList(new LinkedList<String>());

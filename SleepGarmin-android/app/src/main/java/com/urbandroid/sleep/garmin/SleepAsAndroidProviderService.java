@@ -331,12 +331,11 @@ public class SleepAsAndroidProviderService extends Service {
 
     public void unregisterApp(ConnectIQ connectIQ) {
             try {
-                if (connectIQ == null) {
-                    connectIQ.unregisterForApplicationEvents(getDevice(connectIQ), getApp(connectIQ));
-                } else if (ConnectIQ.getInstance() == null) {
-                    connectIQ.unregisterForApplicationEvents(getDevice(), getApp());
-                } else {
-                    return;
+                if (connectIQ != null) {
+                    IQDevice device = getDevice(connectIQ);
+                    if (device != null) {
+                        connectIQ.unregisterForApplicationEvents(device, getApp(connectIQ));
+                    }
                 }
             } catch (InvalidStateException e) {
                 Logger.logSevere(e);

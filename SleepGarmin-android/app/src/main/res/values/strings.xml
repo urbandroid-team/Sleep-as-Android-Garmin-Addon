@@ -10,7 +10,7 @@
     <string name="setup_text">Setup Garmin with Sleep as Android</string>
     <string name="setup">Setup</string>
     <string name="stop">Stop</string>
-    <string name="install_watchsleepstarter">Please Install Sleep Watch Starter for Sleep as Android</string>
+    <string name="install_watchsleepstarter">Please install Watch/Phaser Starter for Sleep as Android to start tracking from the watch.</string>
     <string name="log">LOG appears below</string>
     <string name="running">Sleep tracking with Garmin. Tap to stop.</string>
 </resources>

@@ -8,17 +8,20 @@ import android.os.Build;
 public class Notifications {
 
     final static String NOTIFICATION_CHANNEL_ID_TRACKING = "garminTrackingChannel";
+    final static String NOTIFICATION_CHANNEL_ID_WARNING = "garminWarningChannel";
 
     public static void createChannels(Context context) {
         if (Build.VERSION.SDK_INT >= 26) {
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            CharSequence channelName = context.getResources().getString(R.string.running);
+            CharSequence trackingChannelTitle = context.getResources().getString(R.string.running);
+            NotificationChannel trackingNotificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID_TRACKING, trackingChannelTitle, NotificationManager.IMPORTANCE_MIN);
+            notificationManager.createNotificationChannel(trackingNotificationChannel);
 
-            int importance = NotificationManager.IMPORTANCE_MIN;
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID_TRACKING, channelName, importance);
-            notificationManager.createNotificationChannel(notificationChannel);
+            CharSequence warningChannelTitle = context.getResources().getString(R.string.running);
+            NotificationChannel warningNotificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID_WARNING, warningChannelTitle, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationManager.createNotificationChannel(warningNotificationChannel);
         }
     }
 }

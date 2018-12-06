@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.AlarmManagerCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
+import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_WARNING;
 
 public class SleepAsAndroidProviderService extends Service {
 
@@ -92,14 +94,14 @@ public class SleepAsAndroidProviderService extends Service {
     final static long TIME_TO_RECOVER = TimeUnit.MINUTES.toMillis(15);
 
     // App Names (app names/user friendly names)
-    private static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
-    private static final String PACKAGE_SLEEP_USERFRIENDLY = "Sleep As Android";
-    private static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
-    private static final String PACKAGE_GCM_USERFRIENDLY = "Garmin Connect Mobile";
-    private static final String PACKAGE_SLEEP_WATCH_STARTER = "com.urbandroid.watchsleepstarter";
-    private static final String PACKAGE_SLEEP_WATCH_STARTER_USERFRIENDLY = "Sleep Watch Starter For Sleep";
+    public static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
+    public static final String PACKAGE_SLEEP_USERFRIENDLY = "Sleep As Android";
+    public static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
+    public static final String PACKAGE_GCM_USERFRIENDLY = "Garmin Connect Mobile";
+    public static final String PACKAGE_SLEEP_WATCH_STARTER = "com.urbandroid.watchsleepstarter";
+    public static final String PACKAGE_SLEEP_WATCH_STARTER_USERFRIENDLY = "Sleep Watch Starter For Sleep";
 
-    //  Just for testing
+//  Just for testing
     public static final String EXTRA_MESSAGE = "message";
     public static final String LOG_BROADCAST = SleepAsAndroidProviderService.class.getName() + "LogBroadcast";
 //  Testing END
@@ -128,14 +130,36 @@ public class SleepAsAndroidProviderService extends Service {
         Logger.logDebug(TAG + "Garmin service onCreate");
         handler = new Handler();
 
-        // checking if Start sleep from watch installed
-        // TODO udelat jako notfiikaci
         if (!isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER) && Build.VERSION.SDK_INT >= 26) {
-//            launchPlayStore(PACKAGE_SLEEP_USERFRIENDLY,PACKAGE_SLEEP_WATCH_STARTER);
+            showNotificationToInstallSleepWatchStarter();
         }
 
         connectIqInitializing = false;
         connectIqReady = false;
+    }
+
+    private void showNotificationToInstallSleepWatchStarter() {
+        Intent installIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+PACKAGE_SLEEP_WATCH_STARTER));
+
+        installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, installIntent, 0);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_WARNING)
+                .setSmallIcon(R.drawable.ic_action_watch)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.install_watchsleepstarter)))
+                .setContentText(getString(R.string.install_watchsleepstarter))
+                .setColor(getResources().getColor(R.color.tint_dark))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        if (Build.VERSION.SDK_INT < 24) {
+            notificationBuilder.setContentTitle(getResources().getString(R.string.app_name_long));
+        }
+
+        NotificationManagerCompat nM = NotificationManagerCompat.from(this);
+        nM.notify(1348, notificationBuilder.build());
     }
 
     private void launchPlayStore(String userFriendlyName,final String appPackageName){
@@ -301,7 +325,7 @@ public class SleepAsAndroidProviderService extends Service {
     }
 
     public void sendExplicitBroadcastToSleep(Intent intent) {
-        intent.setPackage(MainActivity.PACKAGE_SLEEP);
+        intent.setPackage(PACKAGE_SLEEP);
         sendBroadcast(intent);
     }
 

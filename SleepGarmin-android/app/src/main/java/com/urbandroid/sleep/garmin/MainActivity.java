@@ -17,16 +17,16 @@ import com.urbandroid.common.logging.Logger;
 import java.util.List;
 
 import static com.garmin.android.connectiq.IQApp.IQAppStatus.INSTALLED;
+import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.IQ_APP_ID;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.IQ_STORE_ID;
+import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.PACKAGE_GCM;
+import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.PACKAGE_SLEEP;
+import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.PACKAGE_SLEEP_WATCH_STARTER;
 
 public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    public static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
-    private static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
-    private static final String PACKAGE_SLEEP_WATCH_STARTER = "com.urbandroid.watchsleepstarter";
-    private static final String IQ_APP_ID = SleepAsAndroidProviderService.IQ_APP_ID;
     private boolean sleepInstalled = true;
     private boolean gcmInstalled = true;
     private boolean watchappInstalled = true;

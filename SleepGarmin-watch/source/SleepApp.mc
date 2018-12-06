@@ -128,6 +128,7 @@ using Toybox.Math as Math;
 		} else if ( lastMessageReceived == 0 || ((lastMessageReceived - Time.now().value()) > 30000)) {
 				log("Possible failure_during_transfer");
 				exitTimer(20);
+		}
     }
 
     function forceExit(){

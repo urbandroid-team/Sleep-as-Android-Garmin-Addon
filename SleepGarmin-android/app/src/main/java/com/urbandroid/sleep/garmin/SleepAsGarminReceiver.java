@@ -16,6 +16,8 @@ import com.urbandroid.common.logging.Logger;
 import static com.urbandroid.sleep.garmin.GlobalInitializer.debug;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.CHECK_CONNECTED;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.HINT;
+import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.PACKAGE_SLEEP;
+import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.REPORT;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.SET_BATCH_SIZE;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.SET_PAUSE;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.START_ALARM;
@@ -23,8 +25,6 @@ import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.START_WA
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.STOP_ALARM;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.STOP_WATCH_APP;
 import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.UPDATE_ALARM;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.REPORT;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.dumpIntent;
 
 /**
  * Created by artaud on 29.12.16.
@@ -33,11 +33,7 @@ import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.dumpInte
 public class SleepAsGarminReceiver extends BroadcastReceiver {
 
     private static final String TAG = SleepAsGarminReceiver.class.getSimpleName();
-    private static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
-    private static final String PACKAGE_SLEEP_GARMIN = "com.urbandroid.sleep.garmin";
-//    private static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
     private boolean sleepInstalled = true;
-//    private boolean gcmInstalled = true;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -64,7 +60,6 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
         }
 
         try {
-//            dumpIntent(intent);
 
             if (ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction()) && !SleepAsAndroidProviderService.RUNNING) {
 
@@ -86,23 +81,27 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
         Logger.logInfo("Receiver intent: " + intent.getAction().toString());
 
         String action = intent.getAction() != null ? intent.getAction() : "";
+        Boolean serviceRunning = SleepAsAndroidProviderService.RUNNING;
 
         if (action.equals(START_WATCH_APP)) {
             Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
             serviceIntent.setAction(SleepAsAndroidProviderService.START_WATCH_APP);
             if (intent.hasExtra(SleepAsAndroidProviderService.DO_HR_MONITORING)) { serviceIntent.putExtra("DO_HR_MONITORING", true); }
             ContextCompat.startForegroundService(context,serviceIntent);
-
         } else if (action.equals(STOP_WATCH_APP)) {
-            Logger.logInfo("Received stop watch app.");
-            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-            serviceIntent.setAction(SleepAsAndroidProviderService.STOP_WATCH_APP);
-            ContextCompat.startForegroundService(context,serviceIntent);
+            Logger.logInfo("Received stop watch app, service running? " +  serviceRunning);
+            if (serviceRunning) {
+                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                serviceIntent.setAction(SleepAsAndroidProviderService.STOP_WATCH_APP);
+                ContextCompat.startForegroundService(context,serviceIntent);
+            }
         } else if (action.equals(SET_PAUSE)) {
-            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-            serviceIntent.setAction(SleepAsAndroidProviderService.SET_PAUSE);
-            serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
-            ContextCompat.startForegroundService(context,serviceIntent);
+            if (serviceRunning) {
+                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                serviceIntent.setAction(SleepAsAndroidProviderService.SET_PAUSE);
+                serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
+                ContextCompat.startForegroundService(context, serviceIntent);
+            }
         } else if (action.equals(SET_BATCH_SIZE)) {
 //            Logger.logInfo("Ignoring set batch size -- Garmin cannot handle that");
 //   Do nothing -- the Garmin commlink cannot handle that load!!!!
@@ -111,29 +110,37 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
 //            serviceIntent.putExtra("SIZE", intent.getLongExtra("SIZE", 0));
 //            ContextCompat.startForegroundService(context,serviceIntent);
         } else if (action.equals(HINT)) {
-            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-            serviceIntent.setAction(SleepAsAndroidProviderService.HINT);
-            serviceIntent.putExtra("REPEAT", intent.getLongExtra("REPEAT", 0));
-            ContextCompat.startForegroundService(context,serviceIntent);
+            if (serviceRunning) {
+                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                serviceIntent.setAction(SleepAsAndroidProviderService.HINT);
+                serviceIntent.putExtra("REPEAT", intent.getLongExtra("REPEAT", 0));
+                ContextCompat.startForegroundService(context, serviceIntent);
+            }
         } else if (action.equals(UPDATE_ALARM)) {
-            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-            serviceIntent.setAction(SleepAsAndroidProviderService.UPDATE_ALARM);
-            serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
-            ContextCompat.startForegroundService(context,serviceIntent);
+            if (serviceRunning) {
+                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                serviceIntent.setAction(SleepAsAndroidProviderService.UPDATE_ALARM);
+                serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
+                ContextCompat.startForegroundService(context, serviceIntent);
+            }
         } else if (action.equals(START_ALARM)) {
-            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-            serviceIntent.putExtra("DELAY", intent.getIntExtra("DELAY", 0));
-            serviceIntent.setAction(SleepAsAndroidProviderService.START_ALARM);
-            ContextCompat.startForegroundService(context,serviceIntent);
+            if (serviceRunning) {
+                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                serviceIntent.putExtra("DELAY", intent.getIntExtra("DELAY", 0));
+                serviceIntent.setAction(SleepAsAndroidProviderService.START_ALARM);
+                ContextCompat.startForegroundService(context, serviceIntent);
+            }
         } else if (action.equals(STOP_ALARM)) {
-            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-            serviceIntent.setAction(SleepAsAndroidProviderService.STOP_ALARM);
-            ContextCompat.startForegroundService(context,serviceIntent);
+            if (serviceRunning) {
+                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                serviceIntent.setAction(SleepAsAndroidProviderService.STOP_ALARM);
+                ContextCompat.startForegroundService(context, serviceIntent);
+            }
         } else if (action.equals(CHECK_CONNECTED)) {
-            Logger.logDebug("Receiver: Check connected");
-            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-            serviceIntent.setAction(SleepAsAndroidProviderService.CHECK_CONNECTED);
-            ContextCompat.startForegroundService(context,serviceIntent);
+                Logger.logDebug("Receiver: Check connected");
+                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                serviceIntent.setAction(SleepAsAndroidProviderService.CHECK_CONNECTED);
+                ContextCompat.startForegroundService(context, serviceIntent);
         } else if (action.equals(REPORT)) {
             Logger.logInfo("Generating on demand report");
             Logger.logInfo(context.getPackageName());

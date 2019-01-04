@@ -95,11 +95,8 @@ public class SleepAsAndroidProviderService extends Service {
 
     // App Names (app names/user friendly names)
     public static final String PACKAGE_SLEEP = "com.urbandroid.sleep";
-    public static final String PACKAGE_SLEEP_USERFRIENDLY = "Sleep As Android";
     public static final String PACKAGE_GCM = "com.garmin.android.apps.connectmobile";
-    public static final String PACKAGE_GCM_USERFRIENDLY = "Garmin Connect Mobile";
     public static final String PACKAGE_SLEEP_WATCH_STARTER = "com.urbandroid.watchsleepstarter";
-    public static final String PACKAGE_SLEEP_WATCH_STARTER_USERFRIENDLY = "Sleep Watch Starter For Sleep";
 
 //  Just for testing
     public static final String EXTRA_MESSAGE = "message";

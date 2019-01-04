@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
@@ -32,6 +34,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
+    google()
     flatDir {
         dirs 'libs'
     }
@@ -43,8 +46,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.urbandroid.common:common-1.11:1.11@aar'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.urbandroid.common:common-1.14:1.14@aar'
     testImplementation 'junit:junit:4.12'
-    implementation 'org.jetbrains:annotations-java5:15.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 

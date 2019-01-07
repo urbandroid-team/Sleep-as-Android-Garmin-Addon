@@ -453,6 +453,7 @@ public class SleepAsAndroidProviderService extends Service {
 
     private void stopSelfAndDontScheduleRecovery(Context context) {
         Logger.logDebug(TAG + "stopSelfAndDontScheduleRecovery");
+        emptyQueue();
         cancelRecovery(context);
         stopSelf();
     }

@@ -149,6 +149,7 @@ public class SleepAsAndroidProviderService extends Service {
                 .setColor(getResources().getColor(R.color.tint_dark))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
+                .setOnlyAlertOnce(true)
                 .setAutoCancel(true);
 
         if (Build.VERSION.SDK_INT < 24) {

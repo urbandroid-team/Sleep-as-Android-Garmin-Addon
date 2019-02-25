@@ -581,7 +581,10 @@ public class SleepAsAndroidProviderService extends Service {
                 }
 
                 @Override
-                public void onSdkShutDown() { }
+                public void onSdkShutDown() {
+                    connectIqInitializing = false;
+                    connectIqReady = false;
+                }
             });
         } else if (!connectIqInitializing) {
             handleMessageFromSleep(intent);

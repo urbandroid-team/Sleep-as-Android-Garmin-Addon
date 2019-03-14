@@ -8,8 +8,8 @@ android {
         applicationId "com.urbandroid.sleep.garmin"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 18
-        versionName "20190225"
+        versionCode 19
+        versionName "20190314"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {

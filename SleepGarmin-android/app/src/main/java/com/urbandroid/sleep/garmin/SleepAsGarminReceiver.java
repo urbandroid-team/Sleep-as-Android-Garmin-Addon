@@ -83,72 +83,87 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
         String action = intent.getAction() != null ? intent.getAction() : "";
         Boolean serviceRunning = SleepAsAndroidProviderService.RUNNING;
 
-        if (action.equals(START_WATCH_APP)) {
-            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-            serviceIntent.setAction(SleepAsAndroidProviderService.START_WATCH_APP);
-            if (intent.hasExtra(SleepAsAndroidProviderService.DO_HR_MONITORING)) { serviceIntent.putExtra("DO_HR_MONITORING", true); }
-            ContextCompat.startForegroundService(context,serviceIntent);
-        } else if (action.equals(STOP_WATCH_APP)) {
-            Logger.logInfo("Received stop watch app, service running? " +  serviceRunning);
-            if (serviceRunning) {
+        switch (action) {
+            case START_WATCH_APP: {
                 Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                serviceIntent.setAction(SleepAsAndroidProviderService.STOP_WATCH_APP);
-                ContextCompat.startForegroundService(context,serviceIntent);
-            }
-        } else if (action.equals(SET_PAUSE)) {
-            if (serviceRunning) {
-                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                serviceIntent.setAction(SleepAsAndroidProviderService.SET_PAUSE);
-                serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
+                serviceIntent.setAction(SleepAsAndroidProviderService.START_WATCH_APP);
+                if (intent.hasExtra(SleepAsAndroidProviderService.DO_HR_MONITORING)) {
+                    serviceIntent.putExtra("DO_HR_MONITORING", true);
+                }
                 ContextCompat.startForegroundService(context, serviceIntent);
+                break;
             }
-        } else if (action.equals(SET_BATCH_SIZE)) {
+            case STOP_WATCH_APP:
+                Logger.logInfo("Received stop watch app, service running? " + serviceRunning);
+                if (serviceRunning) {
+                    Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                    serviceIntent.setAction(SleepAsAndroidProviderService.STOP_WATCH_APP);
+                    ContextCompat.startForegroundService(context, serviceIntent);
+                }
+                break;
+            case SET_PAUSE:
+                if (serviceRunning) {
+                    Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                    serviceIntent.setAction(SleepAsAndroidProviderService.SET_PAUSE);
+                    serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
+                    ContextCompat.startForegroundService(context, serviceIntent);
+                }
+                break;
+            case SET_BATCH_SIZE:
 //            Logger.logInfo("Ignoring set batch size -- Garmin cannot handle that");
 //   Do nothing -- the Garmin commlink cannot handle that load!!!!
 //            Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
 //            serviceIntent.setAction(SleepAsAndroidProviderService.SET_BATCH_SIZE);
 //            serviceIntent.putExtra("SIZE", intent.getLongExtra("SIZE", 0));
 //            ContextCompat.startForegroundService(context,serviceIntent);
-        } else if (action.equals(HINT)) {
-            if (serviceRunning) {
-                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                serviceIntent.setAction(SleepAsAndroidProviderService.HINT);
-                serviceIntent.putExtra("REPEAT", intent.getLongExtra("REPEAT", 0));
-                ContextCompat.startForegroundService(context, serviceIntent);
-            }
-        } else if (action.equals(UPDATE_ALARM)) {
-            if (serviceRunning) {
-                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                serviceIntent.setAction(SleepAsAndroidProviderService.UPDATE_ALARM);
-                serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
-                ContextCompat.startForegroundService(context, serviceIntent);
-            }
-        } else if (action.equals(START_ALARM)) {
-            if (serviceRunning) {
-                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                serviceIntent.putExtra("DELAY", intent.getIntExtra("DELAY", 0));
-                serviceIntent.setAction(SleepAsAndroidProviderService.START_ALARM);
-                ContextCompat.startForegroundService(context, serviceIntent);
-            }
-        } else if (action.equals(STOP_ALARM)) {
-            if (serviceRunning) {
-                Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                serviceIntent.setAction(SleepAsAndroidProviderService.STOP_ALARM);
-                ContextCompat.startForegroundService(context, serviceIntent);
-            }
-        } else if (action.equals(CHECK_CONNECTED)) {
+                break;
+            case HINT:
+                if (serviceRunning) {
+                    Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                    serviceIntent.setAction(SleepAsAndroidProviderService.HINT);
+                    serviceIntent.putExtra("REPEAT", intent.getLongExtra("REPEAT", 0));
+                    ContextCompat.startForegroundService(context, serviceIntent);
+                }
+                break;
+            case UPDATE_ALARM:
+                if (serviceRunning) {
+                    Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                    serviceIntent.setAction(SleepAsAndroidProviderService.UPDATE_ALARM);
+                    serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
+                    ContextCompat.startForegroundService(context, serviceIntent);
+                }
+                break;
+            case START_ALARM:
+                if (serviceRunning) {
+                    Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                    serviceIntent.putExtra("DELAY", intent.getIntExtra("DELAY", 0));
+                    serviceIntent.setAction(SleepAsAndroidProviderService.START_ALARM);
+                    ContextCompat.startForegroundService(context, serviceIntent);
+                }
+                break;
+            case STOP_ALARM:
+                if (serviceRunning) {
+                    Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
+                    serviceIntent.setAction(SleepAsAndroidProviderService.STOP_ALARM);
+                    ContextCompat.startForegroundService(context, serviceIntent);
+                }
+                break;
+            case CHECK_CONNECTED: {
                 Logger.logDebug("Receiver: Check connected");
                 Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                 serviceIntent.setAction(SleepAsAndroidProviderService.CHECK_CONNECTED);
                 ContextCompat.startForegroundService(context, serviceIntent);
-        } else if (action.equals(REPORT)) {
-            Logger.logInfo("Generating on demand report");
-            Logger.logInfo(context.getPackageName());
-            String comment = "No comment";
-            if (intent.hasExtra("USER_COMMENT")) {
-                comment = intent.getStringExtra("USER_COMMENT");
+                break;
             }
-            ErrorReporter.getInstance().generateOnDemandReport(null, "Manual report", comment);
+            case REPORT:
+                Logger.logInfo("Generating on demand report");
+                Logger.logInfo(context.getPackageName());
+                String comment = "No comment";
+                if (intent.hasExtra("USER_COMMENT")) {
+                    comment = intent.getStringExtra("USER_COMMENT");
+                }
+                ErrorReporter.getInstance().generateOnDemandReport(null, "Manual report", comment);
+                break;
         }
     }
 

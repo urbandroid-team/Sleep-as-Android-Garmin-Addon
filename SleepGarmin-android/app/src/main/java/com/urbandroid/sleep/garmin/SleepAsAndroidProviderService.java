@@ -63,6 +63,17 @@ public class SleepAsAndroidProviderService extends Service {
 
     private long watchAppOpenTime = -1;
 
+    // To watch
+    public final static String TO_WATCH_STOP = "StopApp";
+    public final static String TO_WATCH_PAUSE = "Pause;";
+    public final static String TO_WATCH_BATCH_SIZE = "BatchSize;";
+    public final static String TO_WATCH_ALARM_START = "StartAlarm;";
+    public final static String TO_WATCH_ALARM_STOP = "StopAlarm;";
+    public final static String TO_WATCH_ALARM_SET = "SetAlarm;";
+    public final static String TO_WATCH_HINT = "Hint;";
+    public final static String TO_WATCH_TRACKING_START_HR = "StartHRTracking";
+    public final static String TO_WATCH_TRACKING_START = "StartTracking";
+
     // From watch to plugin
     public final static String NEW_DATA_ACTION_NAME = "com.urbandroid.sleep.watch.DATA_UPDATE";
     public final static String NEW_HR_DATA_ACTION_NAME = "com.urbandroid.sleep.watch.HR_DATA_UPDATE";
@@ -134,6 +145,65 @@ public class SleepAsAndroidProviderService extends Service {
         connectIqInitializing = false;
         connectIqReady = false;
     }
+
+    @Override
+    public int onStartCommand(final Intent intent, int flags, int startId) {
+        Logger.logDebug(TAG + "onStartCommand foreground with intent " + ((intent != null && intent.getAction() != null) ? intent.getAction() : "null"));
+
+        startForeground();
+        RUNNING = true;
+
+        if (intent != null && intent.getAction() != null && ACTION_STOP_SELF.equals(intent.getAction())) {
+            stopSelfAndDontScheduleRecovery(this);
+            return START_NOT_STICKY;
+        }
+
+        if (GlobalInitializer.debug){
+            connectIQ = ConnectIQ.getInstance(this, IQConnectType.TETHERED);
+        } else {
+            connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
+        }
+
+        if (!connectIqReady && !connectIqInitializing) {
+            connectIqInitializing = true;
+            // initialize SDK
+            // connectIQ.initialize(this,true,connectIQSdkListener);
+            // init a wrapped SDK with fix for "Cannot cast to Long" issue viz https://forums.garmin.com/forum/developers/connect-iq/connect-iq-bug-reports/158068-?p=1278464#post1278464
+            context = initializeConnectIQWrapped(this, connectIQ, false, new ConnectIQListener() {
+
+                @Override
+                public void onInitializeError(IQSdkErrorStatus errStatus) {
+                    Logger.logDebug(TAG + " " + errStatus.toString());
+                    connectIqReady = false;
+                    stopSelfAndScheduleRecovery(getApplicationContext());
+                }
+
+                @Override
+                public void onSdkReady() {
+                    connectIqInitializing = false;
+                    connectIqReady = true;
+                    Logger.logInfo(TAG + " onSdkReady");
+
+                    registerWatchMessagesReceiver();
+                    registerDeviceStatusReceiver();
+                    checkAppIsAvailable();
+
+                    handleMessageFromSleep(intent);
+                }
+
+                @Override
+                public void onSdkShutDown() {
+                    connectIqInitializing = false;
+                    connectIqReady = false;
+                }
+            });
+        } else if (!connectIqInitializing) {
+            handleMessageFromSleep(intent);
+        }
+
+        return START_STICKY;
+    }
+
 
     private void showNotificationToInstallSleepWatchStarter() {
         Intent installIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+PACKAGE_SLEEP_WATCH_STARTER));
@@ -238,11 +308,35 @@ public class SleepAsAndroidProviderService extends Service {
         }
     }
 
-    private void registerWatchMessagesReceiver(){
-        Logger.logDebug(TAG + "registerWatchMessageReceiver started");
+    private void registerDeviceStatusReceiver() {
+        Logger.logDebug(TAG + "registerDeviceStatusReceiver");
+        IQDevice dev = getDevice(connectIQ);
         try {
-            if (getDevice(connectIQ) != null) {
-                connectIQ.registerForAppEvents(getDevice(connectIQ), getApp(connectIQ), new ConnectIQ.IQApplicationEventListener() {
+            if (dev != null) {
+                connectIQ.registerForDeviceEvents(dev, new ConnectIQ.IQDeviceEventListener() {
+                    @Override
+                    public void onDeviceStatusChanged(IQDevice device, IQDevice.IQDeviceStatus newStatus) {
+                        Logger.logDebug(TAG + "Device status changed, now " + newStatus);
+                    }
+                });
+            }
+        } catch (InvalidStateException e) {
+            e.printStackTrace();
+        }
+
+        // Get the current status
+        IQDevice.IQDeviceStatus current = dev.getStatus();
+
+        // Unregister when we no longer need status updates
+//        connectIQ.unregisterForDeviceEvents(dev);
+    }
+
+    private void registerWatchMessagesReceiver(){
+        Logger.logDebug(TAG + "registerWatchMessageReceiver");
+        IQDevice dev = getDevice(connectIQ);
+        try {
+            if (dev != null) {
+                connectIQ.registerForAppEvents(dev, getApp(connectIQ), new ConnectIQ.IQApplicationEventListener() {
                     @Override
                     public void onMessageReceived(IQDevice device, IQApp app, List<Object> message, IQMessageStatus status) {
 //                 This is the place where we are intercepting messages from watch
@@ -250,56 +344,69 @@ public class SleepAsAndroidProviderService extends Service {
                         String[] msgArray = message.toArray()[0].toString().replaceAll("\\[","").replaceAll("\\]", "").split(",");
                         String receivedMsgType = msgArray[0];
 
-                        if (receivedMsgType.equals("DATA")) {
-                            String[] values = Arrays.copyOfRange(msgArray, 1, msgArray.length);
-                            maxFloatValues = new float[values.length];
-                            for (int i = 0; i < values.length; i++) {
-                                String maxValue = values[i];
+                        switch (receivedMsgType) {
+                            case "DATA": {
+                                String[] values = Arrays.copyOfRange(msgArray, 1, msgArray.length);
+                                maxFloatValues = new float[values.length];
+                                for (int i = 0; i < values.length; i++) {
+                                    String maxValue = values[i];
 
-                                try {
-                                    maxFloatValues[i] = Float.valueOf(maxValue);
-                                } catch (NumberFormatException e) {
-                                    maxFloatValues[i] = 0;
+                                    try {
+                                        maxFloatValues[i] = Float.valueOf(maxValue);
+                                    } catch (NumberFormatException e) {
+                                        maxFloatValues[i] = 0;
+                                    }
                                 }
+                                break;
                             }
-                        } else if (receivedMsgType.equals("DATA_NEW")) {
-                            String[] values = Arrays.copyOfRange(msgArray, 1, msgArray.length);
-                            maxRawFloatValues = new float[values.length];
-                            for (int i = 0; i < values.length; i++) {
-                                String maxRawValue = values[i];
+                            case "DATA_NEW": {
+                                String[] values = Arrays.copyOfRange(msgArray, 1, msgArray.length);
+                                maxRawFloatValues = new float[values.length];
+                                for (int i = 0; i < values.length; i++) {
+                                    String maxRawValue = values[i];
 
-                                try {
-                                    maxRawFloatValues[i] = Float.valueOf(maxRawValue) * 9.806f / 1000f;
+                                    try {
+                                        maxRawFloatValues[i] = Float.valueOf(maxRawValue) * 9.806f / 1000f;
 //                                    Logger.logDebug(TAG + "New actigraphy [m/s2]: " + maxRawFloatValues[i]);
-                                } catch (NumberFormatException e) {
-                                    maxRawFloatValues[i] = 0;
+                                    } catch (NumberFormatException e) {
+                                        maxRawFloatValues[i] = 0;
+                                    }
                                 }
+                                break;
                             }
-                        } else if (receivedMsgType.equals("SNOOZE")) {
-                            Intent snoozeIntent = new Intent(SNOOZE_ACTION_NAME);
-                            sendExplicitBroadcastToSleep(snoozeIntent);
-                        } else if (receivedMsgType.equals("DISMISS")) {
-                            Intent dismissIntent = new Intent(DISMISS_ACTION_NAME);
-                            sendExplicitBroadcastToSleep(dismissIntent);
-                        } else if (receivedMsgType.equals("PAUSE")) {
-                            Intent pauseIntent = new Intent(PAUSE_ACTION_NAME);
-                            sendExplicitBroadcastToSleep(pauseIntent);
-                        } else if (receivedMsgType.equals("RESUME")) {
-                            Intent resumeIntent = new Intent(RESUME_ACTION_NAME);
-                            sendExplicitBroadcastToSleep(resumeIntent);
-                        } else if (receivedMsgType.equals("STARTING")) {
-                            Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
-                            sendExplicitBroadcastToSleep(startIntent);
-                        } else if (receivedMsgType.equals("HR")) {
-                            float[] hrData = new float[] {Float.valueOf(msgArray[1])};
-                            Logger.logInfo(TAG + ": received HR data from watch " + hrData[0]);
-                            Intent hrDataIntent = new Intent(NEW_HR_DATA_ACTION_NAME);
-                            hrDataIntent.putExtra("DATA", hrData);
-                            sendExplicitBroadcastToSleep(hrDataIntent);
-                        } else if (receivedMsgType.equals("STOPPING")) {
-                            Intent stopIntent = new Intent(STOP_SLEEP_TRACK_ACTION);
-                            sendExplicitBroadcastToSleep(stopIntent);
-                            stopSelfAndDontScheduleRecovery(context);
+                            case "SNOOZE":
+                                Intent snoozeIntent = new Intent(SNOOZE_ACTION_NAME);
+                                sendExplicitBroadcastToSleep(snoozeIntent);
+                                break;
+                            case "DISMISS":
+                                Intent dismissIntent = new Intent(DISMISS_ACTION_NAME);
+                                sendExplicitBroadcastToSleep(dismissIntent);
+                                break;
+                            case "PAUSE":
+                                Intent pauseIntent = new Intent(PAUSE_ACTION_NAME);
+                                sendExplicitBroadcastToSleep(pauseIntent);
+                                break;
+                            case "RESUME":
+                                Intent resumeIntent = new Intent(RESUME_ACTION_NAME);
+                                sendExplicitBroadcastToSleep(resumeIntent);
+                                break;
+                            case "STARTING":
+                                Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
+                                sendExplicitBroadcastToSleep(startIntent);
+                                break;
+                            case "HR":
+                                float[] hrData = new float[]{Float.valueOf(msgArray[1])};
+                                Logger.logInfo(TAG + ": received HR data from watch " + hrData[0]);
+                                Intent hrDataIntent = new Intent(NEW_HR_DATA_ACTION_NAME);
+                                hrDataIntent.putExtra("DATA", hrData);
+                                sendExplicitBroadcastToSleep(hrDataIntent);
+                                break;
+                            case "STOPPING":
+                                Intent stopIntent = new Intent(STOP_SLEEP_TRACK_ACTION);
+                                sendExplicitBroadcastToSleep(stopIntent);
+                                doSendMessage(TO_WATCH_STOP);
+//                                stopSelfAndDontScheduleRecovery(context);
+                                break;
                         }
 
                         if (maxFloatValues != null && maxRawFloatValues != null) {
@@ -410,9 +517,9 @@ public class SleepAsAndroidProviderService extends Service {
 
                 final String message = messageQueue.get(0);
 
-                Logger.logDebug(TAG + "ConnectIQ:" + connectIQ.toString());
-                Logger.logDebug(TAG + "Garmin app: " + getApp(connectIQ).getApplicationId());
-                Logger.logDebug(TAG + "sendNextMessage Sending message: " + message.toString());
+//                Logger.logDebug(TAG + "ConnectIQ:" + connectIQ.toString());
+//                Logger.logDebug(TAG + "Garmin app: " + getApp(connectIQ).getApplicationId());
+                Logger.logDebug(TAG + "sendNextMessage: " + message.toString());
                 deliveryInProgress.set(true);
 
                 handler.removeCallbacks(sendMessageRunnable);
@@ -536,63 +643,6 @@ public class SleepAsAndroidProviderService extends Service {
         }
     }
 
-    @Override
-    public int onStartCommand(final Intent intent, int flags, int startId) {
-        Logger.logDebug(TAG + "onStartCommand foreground with intent " + ((intent != null && intent.getAction() != null) ? intent.getAction() : "null"));
-
-        startForeground();
-        RUNNING = true;
-
-        if (intent != null && intent.getAction() != null && ACTION_STOP_SELF.equals(intent.getAction())) {
-            stopSelfAndDontScheduleRecovery(this);
-            return START_NOT_STICKY;
-        }
-
-        if (GlobalInitializer.debug){
-            connectIQ = ConnectIQ.getInstance(this, IQConnectType.TETHERED);
-        } else {
-            connectIQ = ConnectIQ.getInstance(this, IQConnectType.WIRELESS);
-        }
-
-        if (!connectIqReady && !connectIqInitializing) {
-            connectIqInitializing = true;
-            // initialize SDK
-            // connectIQ.initialize(this,true,connectIQSdkListener);
-            // init a wrapped SDK with fix for "Cannot cast to Long" issue viz https://forums.garmin.com/forum/developers/connect-iq/connect-iq-bug-reports/158068-?p=1278464#post1278464
-            context = initializeConnectIQWrapped(this, connectIQ, false, new ConnectIQListener() {
-
-                @Override
-                public void onInitializeError(IQSdkErrorStatus errStatus) {
-                    Logger.logDebug(TAG + " " + errStatus.toString());
-                    connectIqReady = false;
-                    stopSelfAndScheduleRecovery(getApplicationContext());
-                }
-
-                @Override
-                public void onSdkReady() {
-                    connectIqInitializing = false;
-                    connectIqReady = true;
-                    Logger.logInfo(TAG + " onSdkReady");
-
-                    registerWatchMessagesReceiver();
-                    checkAppIsAvailable();
-
-                    handleMessageFromSleep(intent);
-                }
-
-                @Override
-                public void onSdkShutDown() {
-                    connectIqInitializing = false;
-                    connectIqReady = false;
-                }
-            });
-        } else if (!connectIqInitializing) {
-            handleMessageFromSleep(intent);
-        }
-
-        return START_STICKY;
-    }
-
     private void handleMessageFromSleep(Intent intent) {
         String action = intent != null ? intent.getAction() : "";
         if (action == null) {
@@ -604,51 +654,51 @@ public class SleepAsAndroidProviderService extends Service {
             dumpIntent(intent);
 
             if (intent.hasExtra(DO_HR_MONITORING)) {
-                enqueue("StartHRTracking");
+                enqueue(TO_WATCH_TRACKING_START_HR);
                 Logger.logInfo(TAG + "Using HR monitoring");
             }
 
-            enqueue("StartTracking");
+            enqueue(TO_WATCH_TRACKING_START);
             Logger.logDebug(TAG + "Sending StartTracking to watch");
         }
 
         if (action.equals(STOP_WATCH_APP)) {
             Logger.logDebug(TAG + "Sending stop command to watch");
             emptyQueue();
-            enqueue("StopApp");
+            enqueue(TO_WATCH_STOP);
         }
         if (action.equals(SET_PAUSE)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
             Logger.logDebug(TAG + "Sending pause command to watch for " + param);
-            enqueue("Pause;" + param);
+            enqueue(TO_WATCH_PAUSE + param);
         }
         if (action.equals(SET_BATCH_SIZE)) {
             long param = intent.getLongExtra("SIZE", 0);
             Logger.logDebug(TAG + "Setting batch on watch to " + param);
-            enqueue("BatchSize;" + param);
+            enqueue(TO_WATCH_BATCH_SIZE + param);
         }
         if (action.equals(START_ALARM)) {
             long param = intent.getIntExtra("DELAY", 0);
             Logger.logDebug(TAG + "Sending start alarm to watch with delay " + param);
-            enqueue("StartAlarm;" + param);
+            enqueue(TO_WATCH_ALARM_START + param);
         }
         if (action.equals(STOP_ALARM)) {
             Logger.logDebug(TAG + "Stopping alarm on watch");
-            enqueue("StopAlarm;");
+            enqueue(TO_WATCH_ALARM_STOP);
         }
         if (action.equals(UPDATE_ALARM)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
             Logger.logDebug(TAG + "Updating watch alarm to " + param);
-            enqueue("SetAlarm;" + param);
+            enqueue(TO_WATCH_ALARM_SET + param);
         }
         if (action.equals(HINT)) {
             long param = intent.getLongExtra("REPEAT", 0);
             Logger.logDebug(TAG + "Sending hint to watch, with repeat " + param);
-            enqueue("Hint;" + param);
+            enqueue(TO_WATCH_HINT + param);
         }
         if (action.equals(CHECK_CONNECTED)) {
             Logger.logDebug(TAG + "Checking watch connection...");
-            messageQueue.remove("StopApp");
+            messageQueue.remove(TO_WATCH_STOP);
             try {
                 if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
                     Logger.logDebug(TAG + "Trying to open app on watch...");
@@ -673,7 +723,7 @@ public class SleepAsAndroidProviderService extends Service {
 
     public void startWatchApp(){
         Logger.logDebug(TAG + "Checking Garmin connection...");
-        messageQueue.remove("StopApp");
+        messageQueue.remove(TO_WATCH_STOP);
         try {
             if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
                 Logger.logDebug(TAG + "Trying to open app on watch...");

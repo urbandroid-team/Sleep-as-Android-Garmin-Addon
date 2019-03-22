@@ -324,11 +324,6 @@ public class SleepAsAndroidProviderService extends Service {
             e.printStackTrace();
         }
 
-        // Get the current status
-        IQDevice.IQDeviceStatus current = dev.getStatus();
-
-        // Unregister when we no longer need status updates
-//        connectIQ.unregisterForDeviceEvents(dev);
     }
 
     private void registerWatchMessagesReceiver(){
@@ -440,6 +435,7 @@ public class SleepAsAndroidProviderService extends Service {
                     IQDevice device = getDevice(connectIQ);
                     if (device != null) {
                         connectIQ.unregisterForApplicationEvents(device, getApp(connectIQ));
+                        connectIQ.unregisterForDeviceEvents(device);
                     }
                 }
             } catch (InvalidStateException e) {

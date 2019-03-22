@@ -404,8 +404,8 @@ public class SleepAsAndroidProviderService extends Service {
                             case "STOPPING":
                                 Intent stopIntent = new Intent(STOP_SLEEP_TRACK_ACTION);
                                 sendExplicitBroadcastToSleep(stopIntent);
-                                doSendMessage(TO_WATCH_STOP);
-//                                stopSelfAndDontScheduleRecovery(context);
+                                emptyQueue();
+                                enqueue(TO_WATCH_STOP);
                                 break;
                         }
 
@@ -555,6 +555,7 @@ public class SleepAsAndroidProviderService extends Service {
 
     private void cancelRecovery(Context context) {
         final AlarmManager m = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Logger.logDebug(TAG + "Canceling restart intent");
         m.cancel(getRecoveryIntent(context));
     }
 
@@ -576,16 +577,16 @@ public class SleepAsAndroidProviderService extends Service {
 
         long alarmTime = System.currentTimeMillis() + TIME_TO_RECOVER;
 
-            if (Build.VERSION.SDK_INT >= 21) {
-                AlarmManagerCompat.setExactAndAllowWhileIdle(m, AlarmManager.RTC_WAKEUP, alarmTime, pi);
-            } else if (Build.VERSION.SDK_INT >= 19) {
-                m.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pi);
-            } else {
-                m.set(AlarmManager.RTC_WAKEUP, alarmTime, pi);
-            }
-
-            Logger.logInfo("Restart alarm scheduled " + new Date(alarmTime));
+        if (Build.VERSION.SDK_INT >= 21) {
+            AlarmManagerCompat.setExactAndAllowWhileIdle(m, AlarmManager.RTC_WAKEUP, alarmTime, pi);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            m.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pi);
+        } else {
+            m.set(AlarmManager.RTC_WAKEUP, alarmTime, pi);
         }
+
+        Logger.logInfo("Restart alarm scheduled " + new Date(alarmTime));
+    }
 
     private void doSendMessage(final String message){
         Logger.logDebug(TAG + "doSendMessage");
@@ -750,7 +751,6 @@ public class SleepAsAndroidProviderService extends Service {
         connectIqReady = false;
         handler.removeCallbacks(sendMessageRunnable);
         unregisterApp(connectIQ);
-        cancelRecovery(getApplicationContext());
 
         try {
             if (context != null) {

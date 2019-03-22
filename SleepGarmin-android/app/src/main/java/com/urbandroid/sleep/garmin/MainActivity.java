@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
         try {
             mConnectIQ.shutdown(this);
         } catch (InvalidStateException e) {
-            Logger.logSevere(e);
+            Logger.logDebug(TAG, "Normal shutdown of the SDK", e);
         } catch (IllegalArgumentException e) {
             Logger.logSevere(e);
         } catch (RuntimeException e) {

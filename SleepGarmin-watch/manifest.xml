@@ -2,6 +2,11 @@
     <iq:application entry="SleepApp" id="21CAD9617B914811B0B27EA6240DE29B" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="1.4.0" name="@Strings.AppName" type="watch-app">
         <iq:products>
             <iq:product id="d2bravo"/>
+            <iq:product id="d2bravo_titanium"/>
+            <iq:product id="d2charlie"/>
+            <iq:product id="d2delta"/>
+            <iq:product id="d2deltapx"/>
+            <iq:product id="d2deltas"/>
             <iq:product id="descentmk1"/>
             <iq:product id="fenix3"/>
             <iq:product id="fenix3_hr"/>
@@ -23,6 +28,7 @@
             <iq:product id="vivoactive"/>
             <iq:product id="vivoactive3"/>
             <iq:product id="vivoactive3m"/>
+            <iq:product id="vivoactive3mlte"/>
             <iq:product id="vivoactive_hr"/>
         </iq:products>
         <iq:permissions>

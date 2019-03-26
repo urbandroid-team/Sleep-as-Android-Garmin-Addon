@@ -11,7 +11,7 @@ using Toybox.Math as Math;
 
 // Globals
 
-    var debug = true; var fakeTransmit = false; var beta = false; var debugAlarm = false;
+    var debug = false; var fakeTransmit = false; var beta = false; var debugAlarm = false;
     var notice = "";
 
     var dataTimer;
@@ -339,24 +339,35 @@ class SleepApp extends App.AppBase {
         } else if ( mail.find("StopAlarm;") == 0 ) {
             stopAlarm();
         } else if ( mail.equals("StartHRTracking")) {
-    		Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
-    		hrTracking = true;
-        	hrCurrentlyReading = true;
-        	if (!trackingBool) {
-        		trackingBool = true;
-        		Ui.requestUpdate();
-        		log("tracking true");
-    		}
+        	toggleHrTracking(true);
         } else if ( mail.equals("StartTracking")) {
-        	if (!trackingBool) {
-        		trackingBool = true;
-        		Ui.requestUpdate();
-        		log("tracking true");
-    		}
+        	toggleHrTracking(true);
         } else {
             // mail = "Message not handled: " + mail;
             log("Msg fail" + mail.toString());
         }
+    }
+    
+    function toggleHrTracking(enabled) {
+    	if (enabled == true) {
+    		Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+			hrTracking = true;
+	    	hrCurrentlyReading = true;
+	    	if (!trackingBool) {
+	    		trackingBool = true;
+	    		Ui.requestUpdate();
+	    		log("tracking true");
+			}
+		} else {
+    		Sensor.setEnabledSensors([]);
+			hrTracking = false;
+	    	hrCurrentlyReading = false;
+	    	if (trackingBool) {
+	    		trackingBool = false;
+	    		Ui.requestUpdate();
+	    		log("tracking false");
+			}
+		}
     }
 
     function extractDataFromIncomingMessage(mail) {

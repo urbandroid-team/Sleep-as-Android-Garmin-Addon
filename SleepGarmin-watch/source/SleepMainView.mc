@@ -94,6 +94,9 @@ class SleepMainView extends Ui.View {
         dc.clear();
         dc.setColor(Gfx.COLOR_WHITE, Gfx.COLOR_TRANSPARENT);
 
+		upText.setLocation(Ui.LAYOUT_HALIGN_CENTER, 25);
+		downText.setLocation(Ui.LAYOUT_HALIGN_CENTER, dc.getHeight() - 35);
+		
         upText.setText(menuArray[ moduloPosArith( arrayIndex-1,menuArray.size() ) ]);
  	    downText.setText(menuArray[ moduloPosArith( arrayIndex+1,menuArray.size() ) ]);
  	    mainText.setText(menuArray[arrayIndex]);

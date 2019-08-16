@@ -296,8 +296,10 @@ public class SleepAsAndroidProviderService extends Service {
 
                 @Override
                 public void onApplicationNotInstalled(String applicationId) {
-                        Toast.makeText(getApplicationContext(), "Sleep not installed on your Garmin watch", Toast.LENGTH_LONG).show();
-                        Logger.logDebug(TAG + "Sleep watch app not installed.");
+                        if (getDevice() != null) {
+                            Toast.makeText(getApplicationContext(), "Sleep not installed on your Garmin watch", Toast.LENGTH_LONG).show();
+                            Logger.logDebug(TAG + "Sleep watch app not installed.");
+                        }
                         stopSelfAndDontScheduleRecovery(getApplicationContext());
                 }
             });

@@ -7,8 +7,8 @@ android {
     defaultConfig {
         applicationId "com.urbandroid.sleep.garmin"
         minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 20
+        targetSdkVersion 28
+        versionCode 22
         versionName "20190816"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

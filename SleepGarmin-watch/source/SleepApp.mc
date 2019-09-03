@@ -145,7 +145,7 @@ using Toybox.Math as Math;
 
 class SleepApp extends App.AppBase {
 
-    const SAMPLE_PERIOD = 100; //ms
+    const SAMPLE_PERIOD = 200; //ms
     const AGG_PERIOD = 10000; //ms
     const MAX_AGG_COUNT = AGG_PERIOD/SAMPLE_PERIOD;
 

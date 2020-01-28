@@ -55,7 +55,7 @@ public class SleepAsAndroidProviderService extends Service {
 
     public static final String IQ_STORE_ID = "e80a4793-f5a3-44c7-bd7f-52a97f5d8310";
     public static final String IQ_APP_ID = "21CAD9617B914811B0B27EA6240DE29B";
-    private static final String TAG = "Sleep Garmin service: ";
+    private static final String TAG = "ProviderService: ";
     public static Boolean RUNNING = false;
 
     private Boolean connectIqReady = false;
@@ -135,7 +135,7 @@ public class SleepAsAndroidProviderService extends Service {
     public void onCreate() {
         super.onCreate();
         GlobalInitializer.initializeIfRequired(this);
-        Logger.logDebug(TAG + "Garmin service onCreate");
+        Logger.logDebug(TAG + "onCreate");
         handler = new Handler();
 
         if (!isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER) && Build.VERSION.SDK_INT >= 26) {
@@ -148,7 +148,7 @@ public class SleepAsAndroidProviderService extends Service {
 
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
-        Logger.logDebug(TAG + "onStartCommand foreground with intent " + ((intent != null && intent.getAction() != null) ? intent.getAction() : "null"));
+        Logger.logDebug(TAG + "onStartCommand, intent " + ((intent != null && intent.getAction() != null) ? intent.getAction() : "null"));
 
         startForeground();
         RUNNING = true;
@@ -633,12 +633,12 @@ public class SleepAsAndroidProviderService extends Service {
         if (bundle != null) {
             Set<String> keys = bundle.keySet();
             Iterator<String> it = keys.iterator();
-            Logger.logDebug(TAG + "Dumping Intent start");
+            Logger.logDebug(TAG + "---- Dumping Intent start");
             while (it.hasNext()) {
                 String key = it.next();
                 Logger.logDebug(TAG + "[" + key + "=" + bundle.get(key)+"]");
             }
-            Logger.logDebug(TAG + "Dumping Intent end");
+            Logger.logDebug(TAG + "---- Dumping Intent end");
         }
     }
 
@@ -649,45 +649,45 @@ public class SleepAsAndroidProviderService extends Service {
         }
 
         if (action.equals(START_WATCH_APP)){
-            Logger.logDebug(TAG + "Received Start tracking command from Sleep.");
+            Logger.logDebug(TAG + "START_WATCH_APP");
             dumpIntent(intent);
 
             if (intent.hasExtra(DO_HR_MONITORING)) {
                 enqueue(TO_WATCH_TRACKING_START_HR);
-                Logger.logInfo(TAG + "Using HR monitoring");
+                Logger.logInfo(TAG + "TO_WATCH_TRACKING_START_HR");
             }
 
             enqueue(TO_WATCH_TRACKING_START);
-            Logger.logDebug(TAG + "Sending StartTracking to watch");
+            Logger.logDebug(TAG + "TO_WATCH_TRACKING_START");
         }
 
         if (action.equals(STOP_WATCH_APP)) {
-            Logger.logDebug(TAG + "Sending stop command to watch");
+            Logger.logDebug(TAG + "TO_WATCH_STOP");
             emptyQueue();
             enqueue(TO_WATCH_STOP);
         }
         if (action.equals(SET_PAUSE)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
-            Logger.logDebug(TAG + "Sending pause command to watch for " + param);
+            Logger.logDebug(TAG + "TO_WATCH_PAUSE " + param);
             enqueue(TO_WATCH_PAUSE + param);
         }
         if (action.equals(SET_BATCH_SIZE)) {
             long param = intent.getLongExtra("SIZE", 0);
-            Logger.logDebug(TAG + "Setting batch on watch to " + param);
+            Logger.logDebug(TAG + "TO_WATCH_BATCH_SIZE " + param);
             enqueue(TO_WATCH_BATCH_SIZE + param);
         }
         if (action.equals(START_ALARM)) {
             long param = intent.getIntExtra("DELAY", 0);
-            Logger.logDebug(TAG + "Sending start alarm to watch with delay " + param);
+            Logger.logDebug(TAG + "TO_WATCH_ALARM_START, delay " + param);
             enqueue(TO_WATCH_ALARM_START + param);
         }
         if (action.equals(STOP_ALARM)) {
-            Logger.logDebug(TAG + "Stopping alarm on watch");
+            Logger.logDebug(TAG + "TO_WATCH_ALARM_STROP");
             enqueue(TO_WATCH_ALARM_STOP);
         }
         if (action.equals(UPDATE_ALARM)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
-            Logger.logDebug(TAG + "Updating watch alarm to " + param);
+            Logger.logDebug(TAG + "TO_WATCH_ALARM_SET " + param);
             enqueue(TO_WATCH_ALARM_SET + param);
         }
         if (action.equals(HINT)) {
@@ -837,7 +837,6 @@ public class SleepAsAndroidProviderService extends Service {
 
             @Override
             public void unregisterReceiver(BroadcastReceiver receiver) {
-            // We need to unregister the wrapped receiver.
                 BroadcastReceiver wrappedReceiver = null;
                 synchronized (receiverToWrapper) {
                     wrappedReceiver = receiverToWrapper.get(receiver);
@@ -849,6 +848,5 @@ public class SleepAsAndroidProviderService extends Service {
         connectIQ.initialize(wrappedContext, autoUI, listener);
         return wrappedContext;
     }
-
 
 }

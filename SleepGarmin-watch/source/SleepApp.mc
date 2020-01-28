@@ -12,6 +12,7 @@ using Toybox.Math as Math;
 // Globals
 
     var debug = false; var fakeTransmit = false; var beta = false; var debugAlarm = false;
+
     var notice = "";
 
     var dataTimer;
@@ -41,7 +42,7 @@ using Toybox.Math as Math;
     var stoppingBool = false;
     var targetExitTime = 0;
     var shouldExit = false;
-    
+
 
     function exitTimer(afterCycles) {
 		targetExitTime = afterCycles;
@@ -316,7 +317,7 @@ class SleepApp extends App.AppBase {
             sendConfirmConnection();
         } else if ( mail.find("Pause;") == 0 ) {
             // Currently doing nothing when pause received from phone
-            data = extractDataFromIncomingMessage(mail).toNumber();  // time
+            // data = extractDataFromIncomingMessage(mail).toNumber();  // time
             // enqueue(data);
             // TODO extract value and pause tracking (start sending -0.01s) and show pause time
         } else if ( mail.find("BatchSize;") == 0 ) {
@@ -347,11 +348,12 @@ class SleepApp extends App.AppBase {
             log("Msg fail" + mail.toString());
         }
     }
-    
+
     function toggleHrTracking(enabled) {
     	if (enabled == true) {
     		Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
 			hrTracking = true;
+            // probably a bug below....this method can be called at any time so it should not change hrCurrentlyReading
 	    	hrCurrentlyReading = true;
 	    	if (!trackingBool) {
 	    		trackingBool = true;
@@ -440,7 +442,7 @@ class SleepApp extends App.AppBase {
     }
 
     function setAlarm(timestamp) {
-        log("Alarm " + timestamp.toString());
+        // log("Alarm " + timestamp.toString());
         scheduled_alarm_ts = timestamp;
     }
 

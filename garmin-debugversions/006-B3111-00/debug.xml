@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<debugInfo>
+<pcToLineNum>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="3" lineNum="5" pc="268435456" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="3" lineNum="6" pc="268435460" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="4" lineNum="9" pc="268435479" symbol="onMenu"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="4" lineNum="11" pc="268435483" symbol="onMenu"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="4" lineNum="12" pc="268435567" symbol="onMenu"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="5" lineNum="15" pc="268435571" symbol="onBack"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="5" lineNum="16" pc="268435575" symbol="onBack"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="6" lineNum="19" pc="268435579" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="6" lineNum="20" pc="268435583" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="7" lineNum="23" pc="268435587" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="7" lineNum="24" pc="268435591" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="7" lineNum="27" pc="268435604" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="7" lineNum="29" pc="268435618" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="7" lineNum="30" pc="268435630" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmDelegate.mc" id="7" lineNum="32" pc="268435636" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="9" lineNum="8" pc="268435640" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="9" lineNum="11" pc="268435644" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="14" pc="268435663" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="17" pc="268435667" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="19" pc="268435764" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="20" pc="268435776" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="22" pc="268435779" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="23" pc="268435791" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="25" pc="268435794" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="27" pc="268435797" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="28" pc="268435837" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="30" pc="268435852" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="32" pc="268435864" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="10" lineNum="34" pc="268435867" symbol="onSelect"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="11" lineNum="37" pc="268435880" symbol="onSwipe"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="11" lineNum="38" pc="268435884" symbol="onSwipe"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="11" lineNum="40" pc="268435897" symbol="onSwipe"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="11" lineNum="42" pc="268435920" symbol="onSwipe"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="11" lineNum="44" pc="268435935" symbol="onSwipe"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="11" lineNum="46" pc="268435958" symbol="onSwipe"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="11" lineNum="48" pc="268435973" symbol="onSwipe"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="51" pc="268435977" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="52" pc="268435981" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="53" pc="268436000" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="55" pc="268436019" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="56" pc="268436042" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="56" pc="268436062" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="57" pc="268436077" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="57" pc="268436097" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="58" pc="268436112" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="58" pc="268436155" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="12" lineNum="60" pc="268436173" symbol="onTap"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="63" pc="268436177" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="64" pc="268436181" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="67" pc="268436194" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="69" pc="268436319" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="70" pc="268436331" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="72" pc="268436334" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="73" pc="268436346" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="75" pc="268436349" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="76" pc="268436361" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="79" pc="268436364" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="80" pc="268436376" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="83" pc="268436379" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="13" lineNum="85" pc="268436382" symbol="onKey"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="14" lineNum="88" pc="268436386" symbol="scrollUp"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="14" lineNum="90" pc="268436390" symbol="scrollUp"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="14" lineNum="92" pc="268436440" symbol="scrollUp"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="15" lineNum="95" pc="268436453" symbol="scrollDown"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="15" lineNum="97" pc="268436457" symbol="scrollDown"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="15" lineNum="99" pc="268436507" symbol="scrollDown"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="16" lineNum="102" pc="268436520" symbol="returnCentre"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="16" lineNum="104" pc="268436524" symbol="returnCentre"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="16" lineNum="105" pc="268436537" symbol="returnCentre"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="17" lineNum="108" pc="268436550" symbol="refreshView"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="17" lineNum="110" pc="268436554" symbol="refreshView"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="17" lineNum="111" pc="268436598" symbol="refreshView"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainDelegate.mc" id="18" lineNum="114" pc="268436615" symbol="pauseSelected"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="19" lineNum="16" pc="268436620" symbol="moduloPosArith"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="19" lineNum="17" pc="268436632" symbol="moduloPosArith"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="19" lineNum="17" pc="268436643" symbol="moduloPosArith"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="19" lineNum="18" pc="268436668" symbol="moduloPosArith"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="21" lineNum="32" pc="268436675" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="21" lineNum="34" pc="268436679" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="21" lineNum="36" pc="268436697" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="21" lineNum="44" pc="268436826" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="21" lineNum="52" pc="268436955" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="22" lineNum="61" pc="268437085" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="22" lineNum="62" pc="268437089" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="22" lineNum="63" pc="268437126" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="22" lineNum="65" pc="268437155" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="22" lineNum="66" pc="268437174" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="23" lineNum="73" pc="268437194" symbol="onShow"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="23" lineNum="75" pc="268437198" symbol="onShow"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="79" pc="268437219" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="80" pc="268437223" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="81" pc="268437234" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="84" pc="268437274" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="85" pc="268437286" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="87" pc="268437326" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="88" pc="268437337" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="93" pc="268437377" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="94" pc="268437413" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="95" pc="268437425" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="97" pc="268437461" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="98" pc="268437530" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="99" pc="268437599" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="102" pc="268437634" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="102" pc="268437651" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="103" pc="268437684" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="103" pc="268437701" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="104" pc="268437734" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="104" pc="268437751" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="106" pc="268437784" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="107" pc="268437804" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="24" lineNum="108" pc="268437824" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="114" pc="268437845" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="115" pc="268437849" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="116" pc="268437862" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="118" pc="268437874" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="119" pc="268437887" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="121" pc="268437899" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="122" pc="268437912" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="124" pc="268437924" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepMainView.mc" id="25" lineNum="125" pc="268437937" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmMenuDelegate.mc" id="27" lineNum="7" pc="268437950" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmMenuDelegate.mc" id="27" lineNum="8" pc="268437954" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmMenuDelegate.mc" id="28" lineNum="11" pc="268437973" symbol="onMenuItem"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmMenuDelegate.mc" id="28" lineNum="12" pc="268437977" symbol="onMenuItem"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmMenuDelegate.mc" id="28" lineNum="13" pc="268437988" symbol="onMenuItem"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmMenuDelegate.mc" id="28" lineNum="14" pc="268438003" symbol="onMenuItem"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmMenuDelegate.mc" id="28" lineNum="15" pc="268438014" symbol="onMenuItem"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="30" lineNum="13" pc="268438030" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="30" lineNum="14" pc="268438034" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="30" lineNum="16" pc="268438052" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="31" lineNum="24" pc="268438167" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="31" lineNum="26" pc="268438171" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="32" lineNum="32" pc="268438201" symbol="onShow"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="32" lineNum="33" pc="268438205" symbol="onShow"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="37" pc="268438216" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="38" pc="268438220" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="39" pc="268438239" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="40" pc="268438258" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="41" pc="268438294" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="42" pc="268438306" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="47" pc="268438342" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="55" pc="268438476" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="33" lineNum="56" pc="268438496" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="34" lineNum="67" pc="268438511" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="34" lineNum="69" pc="268438515" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="34" lineNum="70" pc="268438528" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="34" lineNum="72" pc="268438540" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="34" lineNum="73" pc="268438553" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="34" lineNum="75" pc="268438565" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepAlarmView.mc" id="34" lineNum="76" pc="268438578" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="36" lineNum="12" pc="268438591" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="36" lineNum="13" pc="268438595" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="37" lineNum="16" pc="268438614" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="37" lineNum="17" pc="268438618" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="37" lineNum="18" pc="268438655" symbol="onLayout"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="38" lineNum="24" pc="268438685" symbol="onShow"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="29" pc="268438690" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="30" pc="268438694" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="31" pc="268438713" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="32" pc="268438732" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="33" pc="268438768" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="34" pc="268438780" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="37" pc="268438816" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="39" pc="268438840" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="40" pc="268438918" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="41" pc="268438932" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="43" pc="268439016" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="44" pc="268439040" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="46" pc="268439060" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="47" pc="268439123" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="48" pc="268439137" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="52" pc="268439221" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="53" pc="268439284" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="54" pc="268439298" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="56" pc="268439382" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="58" pc="268439406" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="65" pc="268439540" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="68" pc="268439554" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="69" pc="268439568" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="39" lineNum="73" pc="268439652" symbol="onUpdate"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="40" lineNum="80" pc="268439725" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="40" lineNum="81" pc="268439729" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepView.mc" id="40" lineNum="82" pc="268439742" symbol="onHide"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="41" lineNum="45" pc="268439755" symbol="exitTimer"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="41" lineNum="46" pc="268439767" symbol="exitTimer"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="41" lineNum="47" pc="268439777" symbol="exitTimer"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="42" lineNum="52" pc="268439788" symbol="log"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="42" lineNum="53" pc="268439800" symbol="log"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="42" lineNum="54" pc="268439814" symbol="log"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="42" lineNum="55" pc="268439855" symbol="log"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="43" lineNum="59" pc="268439892" symbol="betalog"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="43" lineNum="60" pc="268439904" symbol="betalog"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="43" lineNum="61" pc="268439918" symbol="betalog"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="43" lineNum="62" pc="268439959" symbol="betalog"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="44" lineNum="67" pc="268439996" symbol="enqueue"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="44" lineNum="68" pc="268440008" symbol="enqueue"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="44" lineNum="69" pc="268440059" symbol="enqueue"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="44" lineNum="75" pc="268440107" symbol="enqueue"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="44" lineNum="76" pc="268440176" symbol="enqueue"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="44" lineNum="77" pc="268440220" symbol="enqueue"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="44" lineNum="81" pc="268440255" symbol="enqueue"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="44" lineNum="82" pc="268440283" symbol="enqueue"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="45" lineNum="88" pc="268440307" symbol="sendResumeTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="45" lineNum="89" pc="268440319" symbol="sendResumeTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="46" lineNum="92" pc="268440337" symbol="sendPauseTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="46" lineNum="93" pc="268440349" symbol="sendPauseTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="47" lineNum="96" pc="268440367" symbol="sendStopTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="47" lineNum="97" pc="268440379" symbol="sendStopTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="47" lineNum="98" pc="268440389" symbol="sendStopTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="48" lineNum="101" pc="268440407" symbol="sendDismissAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="48" lineNum="102" pc="268440419" symbol="sendDismissAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="49" lineNum="105" pc="268440437" symbol="sendSnoozeAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="49" lineNum="106" pc="268440449" symbol="sendSnoozeAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="49" lineNum="107" pc="268440466" symbol="sendSnoozeAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="50" lineNum="110" pc="268440479" symbol="sendConfirmConnection"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="50" lineNum="111" pc="268440491" symbol="sendConfirmConnection"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="51" lineNum="114" pc="268440509" symbol="stopAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="51" lineNum="115" pc="268440521" symbol="stopAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="51" lineNum="116" pc="268440531" symbol="stopAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="51" lineNum="117" pc="268440603" symbol="stopAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="52" lineNum="120" pc="268440614" symbol="normalExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="52" lineNum="121" pc="268440626" symbol="normalExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="52" lineNum="122" pc="268440643" symbol="normalExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="52" lineNum="123" pc="268440653" symbol="normalExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="52" lineNum="124" pc="268440692" symbol="normalExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="52" lineNum="126" pc="268440744" symbol="normalExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="52" lineNum="127" pc="268440769" symbol="normalExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="53" lineNum="131" pc="268440790" symbol="forceExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="53" lineNum="132" pc="268440802" symbol="forceExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="53" lineNum="133" pc="268440819" symbol="forceExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="53" lineNum="134" pc="268440829" symbol="forceExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="53" lineNum="135" pc="268440868" symbol="forceExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="53" lineNum="137" pc="268440920" symbol="forceExit"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="55" lineNum="189" pc="268440938" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="55" lineNum="190" pc="268440942" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="55" lineNum="191" pc="268440960" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="55" lineNum="193" pc="268440992" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="55" lineNum="194" pc="268441007" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="55" lineNum="195" pc="268441024" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="55" lineNum="197" pc="268441059" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="55" lineNum="200" pc="268441081" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="56" lineNum="203" pc="268441117" symbol="onMsg"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="56" lineNum="205" pc="268441121" symbol="onMsg"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="209" pc="268441151" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="210" pc="268441155" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="211" pc="268441172" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="212" pc="268441206" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="214" pc="268441250" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="215" pc="268441262" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="216" pc="268441285" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="218" pc="268441342" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="221" pc="268441358" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="57" lineNum="221" pc="268441372" symbol="onStart"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="226" pc="268441398" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="228" pc="268441402" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="229" pc="268441425" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="230" pc="268441482" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="231" pc="268441505" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="234" pc="268441524" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="235" pc="268441535" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="236" pc="268441552" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="238" pc="268441571" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="241" pc="268441596" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="243" pc="268441619" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="245" pc="268441638" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="246" pc="268441655" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="248" pc="268441677" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="250" pc="268441700" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="251" pc="268441720" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="254" pc="268441736" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="256" pc="268441756" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="257" pc="268441767" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="258" pc="268441786" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="259" pc="268441803" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="260" pc="268441817" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="262" pc="268441892" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="263" pc="268441912" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="264" pc="268441924" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="265" pc="268441961" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="266" pc="268441978" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="268" pc="268441994" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="269" pc="268442010" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="272" pc="268442029" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="275" pc="268442057" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="58" lineNum="277" pc="268442069" symbol="timerCallback"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="59" lineNum="282" pc="268442082" symbol="sendStartingTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="59" lineNum="283" pc="268442086" symbol="sendStartingTracking"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="60" lineNum="285" pc="268442104" symbol="sendCurrentDataAndResetBatch"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="60" lineNum="286" pc="268442108" symbol="sendCurrentDataAndResetBatch"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="60" lineNum="287" pc="268442154" symbol="sendCurrentDataAndResetBatch"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="60" lineNum="288" pc="268442200" symbol="sendCurrentDataAndResetBatch"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="60" lineNum="289" pc="268442226" symbol="sendCurrentDataAndResetBatch"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="60" lineNum="290" pc="268442240" symbol="sendCurrentDataAndResetBatch"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="60" lineNum="293" pc="268442254" symbol="sendCurrentDataAndResetBatch"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="60" lineNum="294" pc="268442268" symbol="sendCurrentDataAndResetBatch"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="61" lineNum="298" pc="268442286" symbol="sendHRData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="61" lineNum="299" pc="268442290" symbol="sendHRData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="61" lineNum="300" pc="268442321" symbol="sendHRData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="304" pc="268442336" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="305" pc="268442340" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="306" pc="268442340" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="308" pc="268442360" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="309" pc="268442399" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="310" pc="268442411" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="311" pc="268442431" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="312" pc="268442450" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="313" pc="268442465" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="315" pc="268442490" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="318" pc="268442517" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="319" pc="268442542" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="320" pc="268442566" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="321" pc="268442583" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="322" pc="268442608" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="323" pc="268442632" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="324" pc="268442649" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="325" pc="268442674" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="326" pc="268442704" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="327" pc="268442721" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="329" pc="268442734" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="331" pc="268442744" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="332" pc="268442759" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="333" pc="268442784" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="334" pc="268442808" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="335" pc="268442825" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="336" pc="268442850" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="337" pc="268442865" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="338" pc="268442884" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="339" pc="268442926" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="340" pc="268442936" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="341" pc="268442946" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="342" pc="268442958" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="343" pc="268442968" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="344" pc="268442984" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="346" pc="268443007" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="347" pc="268443026" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="348" pc="268443038" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="349" pc="268443048" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="350" pc="268443064" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="62" lineNum="354" pc="268443087" symbol="handleIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="63" lineNum="358" pc="268443117" symbol="extractDataFromIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="63" lineNum="359" pc="268443121" symbol="extractDataFromIncomingMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="362" pc="268443167" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="363" pc="268443171" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="364" pc="268443198" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="366" pc="268443218" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="367" pc="268443238" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="368" pc="268443264" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="369" pc="268443290" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="370" pc="268443303" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="371" pc="268443316" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="374" pc="268443332" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="375" pc="268443361" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="64" lineNum="378" pc="268443376" symbol="gatherData"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="383" pc="268443399" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="384" pc="268443403" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="386" pc="268443417" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="388" pc="268443444" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="391" pc="268443466" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="393" pc="268443480" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="396" pc="268443508" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="399" pc="268443545" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="401" pc="268443555" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="402" pc="268443584" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="405" pc="268443600" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="407" pc="268443620" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="65" lineNum="408" pc="268443633" symbol="gatherHR"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="66" lineNum="415" pc="268443653" symbol="setBatchSize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="66" lineNum="416" pc="268443657" symbol="setBatchSize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="66" lineNum="417" pc="268443686" symbol="setBatchSize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="66" lineNum="418" pc="268443696" symbol="setBatchSize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="67" lineNum="421" pc="268443709" symbol="checkIfAlarmScheduledForNow"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="67" lineNum="422" pc="268443713" symbol="checkIfAlarmScheduledForNow"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="67" lineNum="423" pc="268443733" symbol="checkIfAlarmScheduledForNow"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="68" lineNum="427" pc="268443749" symbol="setAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="68" lineNum="428" pc="268443753" symbol="setAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="68" lineNum="429" pc="268443782" symbol="setAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="69" lineNum="432" pc="268443793" symbol="startAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="69" lineNum="433" pc="268443797" symbol="startAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="69" lineNum="434" pc="268443807" symbol="startAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="69" lineNum="435" pc="268443820" symbol="startAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="69" lineNum="436" pc="268443833" symbol="startAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="70" lineNum="439" pc="268443850" symbol="ringAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="70" lineNum="440" pc="268443854" symbol="ringAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="70" lineNum="441" pc="268443868" symbol="ringAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="70" lineNum="442" pc="268443883" symbol="ringAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="70" lineNum="444" pc="268443910" symbol="ringAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="70" lineNum="445" pc="268443925" symbol="ringAlarm"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="452" pc="268443953" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="454" pc="268443957" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="455" pc="268443968" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="457" pc="268443978" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="459" pc="268444013" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="460" pc="268444028" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="461" pc="268444036" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="462" pc="268444051" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="463" pc="268444099" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="465" pc="268444160" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="466" pc="268444181" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="467" pc="268444196" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="71" lineNum="468" pc="268444211" symbol="doHint"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="475" pc="268444249" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="476" pc="268444253" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="477" pc="268444273" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="478" pc="268444292" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="479" pc="268444312" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="480" pc="268444325" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="482" pc="268444344" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="483" pc="268444412" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="484" pc="268444428" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="485" pc="268444438" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="486" pc="268444452" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="487" pc="268444472" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="489" pc="268444509" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="72" lineNum="490" pc="268444563" symbol="sendNextMessage"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="495" pc="268444610" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="497" pc="268444614" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="499" pc="268444625" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="500" pc="268444725" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="502" pc="268444819" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="503" pc="268444833" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="505" pc="268444846" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="506" pc="268444860" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="511" pc="268444876" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="512" pc="268444886" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="513" pc="268444908" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="73" lineNum="514" pc="268444930" symbol="store_max"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="74" lineNum="518" pc="268444953" symbol="onStop"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="74" lineNum="519" pc="268444957" symbol="onStop"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="74" lineNum="520" pc="268444974" symbol="onStop"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="74" lineNum="522" pc="268444992" symbol="onStop"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="75" lineNum="528" pc="268445088" symbol="getInitialView"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="75" lineNum="529" pc="268445092" symbol="getInitialView"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="75" lineNum="530" pc="268445109" symbol="getInitialView"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="75" lineNum="531" pc="268445120" symbol="getInitialView"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepApp.mc" id="75" lineNum="533" pc="268445190" symbol="getInitialView"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepNowListener.mc" id="77" lineNum="8" pc="268445258" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepNowListener.mc" id="77" lineNum="9" pc="268445262" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepNowListener.mc" id="77" lineNum="10" pc="268445284" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepNowListener.mc" id="78" lineNum="13" pc="268445295" symbol="onComplete"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepNowListener.mc" id="78" lineNum="15" pc="268445299" symbol="onComplete"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepNowListener.mc" id="79" lineNum="18" pc="268445326" symbol="onError"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepNowListener.mc" id="79" lineNum="20" pc="268445330" symbol="onError"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="81" lineNum="8" pc="268445357" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="81" lineNum="9" pc="268445361" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="81" lineNum="10" pc="268445383" symbol="initialize"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="82" lineNum="13" pc="268445394" symbol="onComplete"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="82" lineNum="15" pc="268445398" symbol="onComplete"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="82" lineNum="16" pc="268445424" symbol="onComplete"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="82" lineNum="17" pc="268445434" symbol="onComplete"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="82" lineNum="18" pc="268445469" symbol="onComplete"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="83" lineNum="21" pc="268445496" symbol="onError"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="83" lineNum="23" pc="268445500" symbol="onError"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="83" lineNum="24" pc="268445510" symbol="onError"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="83" lineNum="25" pc="268445529" symbol="onError"/>
+<entry filename="/home/artaud/prog/urbandroid/source/SleepGarmin/SleepGarmin-watch/source/SleepListener.mc" id="83" lineNum="26" pc="268445555" symbol="onError"/>
+<entry filename="Rez" id="89" lineNum="22" pc="268445582" symbol="initialize"/>
+<entry filename="Rez" id="89" lineNum="23" pc="268445586" symbol="initialize"/>
+<entry filename="Rez" id="89" lineNum="24" pc="268445604" symbol="initialize"/>
+<entry filename="Rez" id="89" lineNum="25" pc="268445656" symbol="initialize"/>
+<entry filename="Rez" id="91" lineNum="35" pc="268445709" symbol="initialize"/>
+<entry filename="Rez" id="91" lineNum="36" pc="268445713" symbol="initialize"/>
+<entry filename="Rez" id="91" lineNum="37" pc="268445731" symbol="initialize"/>
+<entry filename="Rez" id="91" lineNum="38" pc="268445783" symbol="initialize"/>
+<entry filename="Rez" id="91" lineNum="39" pc="268445835" symbol="initialize"/>
+<entry filename="Rez" id="91" lineNum="40" pc="268445887" symbol="initialize"/>
+<entry filename="Rez" id="94" lineNum="60" pc="268445940" symbol="MainLayout"/>
+</pcToLineNum>
+<symbolTable>
+<entry id="89" method="true" symbol="pauseSelected"/>
+<entry id="8389101" method="true" symbol="onSwipe"/>
+<entry field="true" id="8389793" method="true" symbol="debug"/>
+<entry field="true" id="40" symbol="targetExitTime"/>
+<entry field="true" id="92" symbol="MAX_AGG_COUNT"/>
+<entry id="8388987" method="true" symbol="vibrate"/>
+<entry id="8388899" method="true" symbol="log"/>
+<entry field="true" id="108" symbol="vibrateOnAlarm"/>
+<entry field="true" id="107" symbol="alarm_gap_duration_current"/>
+<entry id="8389124" method="true" symbol="onUpdate"/>
+<entry field="true" id="61" symbol="id_alarm_icon"/>
+<entry field="true" id="98" symbol="HR_ON_COUNT"/>
+<entry id="88" method="true" symbol="refreshView"/>
+<entry field="true" id="112" symbol="max_sum"/>
+<entry field="true" id="22" symbol="debugAlarm"/>
+<entry field="true" id="97" symbol="delay"/>
+<entry field="true" id="109" symbol="shortPulse"/>
+<entry id="8389097" method="true" symbol="onKey"/>
+<entry field="true" id="100" symbol="hrCurrentlyReading"/>
+<entry field="true" id="8388611" module="true" symbol="Toybox"/>
+<entry id="8388645" module="true" symbol="Time"/>
+<entry id="64" object="true" symbol="MainMenu"/>
+<entry id="8389619" method="true" symbol="onSelect"/>
+<entry id="8388770" module="true" object="true" symbol="Strings"/>
+<entry id="8388643" module="true" symbol="Sensor"/>
+<entry id="53" method="true" symbol="forceExit"/>
+<entry id="126" method="true" symbol="gatherData"/>
+<entry id="46" method="true" symbol="sendPauseTracking"/>
+<entry id="8389280" method="true" symbol="getInitialView"/>
+<entry field="true" id="80" symbol="startingStr"/>
+<entry field="true" id="59" symbol="id_bkg_night"/>
+<entry id="137" symbol="item_alarm_2"/>
+<entry id="136" symbol="item_alarm_1"/>
+<entry field="true" id="28" symbol="logtimestamp"/>
+<entry field="true" id="41" symbol="shouldExit"/>
+<entry field="true" id="39" symbol="stoppingBool"/>
+<entry id="122" method="true" symbol="sendCurrentDataAndResetBatch"/>
+<entry field="true" id="94" symbol="listener"/>
+<entry id="8388639" module="true" symbol="Graphics"/>
+<entry id="42" method="true" symbol="exitTimer"/>
+<entry id="9" object="true" symbol="SleepAlarmDelegate"/>
+<entry id="65" method="true" symbol="MainLayout"/>
+<entry field="true" id="30" symbol="deliveryInProgress"/>
+<entry field="true" id="115" symbol="batchSize"/>
+<entry field="true" id="66" symbol="alarm_menu_label_2"/>
+<entry field="true" id="67" symbol="alarm_menu_label_1"/>
+<entry id="8388769" module="true" object="true" symbol="Rez"/>
+<entry id="8389123" method="true" symbol="onShow"/>
+<entry field="true" id="96" symbol="scheduled_alarm_ts"/>
+<entry id="52" method="true" symbol="normalExit"/>
+<entry field="true" id="60" symbol="id_bkg_alarm"/>
+<entry id="130" method="true" symbol="setAlarm"/>
+<entry id="10" object="true" symbol="SleepMainDelegate"/>
+<entry id="8389098" method="true" symbol="onTap"/>
+<entry id="15" method="true" symbol="moduloPosArith"/>
+<entry id="119" method="true" symbol="onMsg"/>
+<entry id="8388636" module="true" symbol="Attention"/>
+<entry id="17" object="true" symbol="SleepAlarmMenuDelegate"/>
+<entry field="true" id="11" symbol="globString"/>
+<entry id="8388702" method="true" symbol="initialize"/>
+<entry field="true" id="113" symbol="currentMax"/>
+<entry field="true" id="114" symbol="aggCount"/>
+<entry field="true" id="75" symbol="AppName"/>
+<entry field="true" id="73" symbol="starting"/>
+<entry field="true" id="99" symbol="HR_MAX_COUNT"/>
+<entry field="true" id="8388922" method="true" symbol="now"/>
+<entry id="19" object="true" symbol="SleepView"/>
+<entry field="true" id="14" symbol="shape"/>
+<entry field="true" id="8389605" symbol="accel"/>
+<entry id="8389080" method="true" symbol="onMenu"/>
+<entry id="18" object="true" symbol="SleepAlarmView"/>
+<entry field="true" id="36" symbol="exitTapped"/>
+<entry id="45" method="true" symbol="sendResumeTracking"/>
+<entry field="true" id="12" symbol="menuArray"/>
+<entry field="true" id="105" symbol="stopAppDelay"/>
+<entry field="true" id="77" symbol="upText"/>
+<entry id="141" symbol="item_4"/>
+<entry id="140" symbol="item_3"/>
+<entry id="139" symbol="item_2"/>
+<entry id="138" symbol="item_1"/>
+<entry field="true" id="101" symbol="hrTracking"/>
+<entry id="85" method="true" symbol="scrollUp"/>
+<entry id="8388641" module="true" symbol="Math"/>
+<entry field="true" id="25" symbol="current_heartrate"/>
+<entry field="true" id="62" symbol="LauncherIcon"/>
+<entry field="true" id="117" symbol="batch_new"/>
+<entry id="8388646" module="true" object="true" symbol="Timer"/>
+<entry field="true" id="70" symbol="menu_label_4"/>
+<entry field="true" id="68" symbol="menu_label_3"/>
+<entry field="true" id="72" symbol="menu_label_2"/>
+<entry id="8389081" method="true" symbol="onBack"/>
+<entry field="true" id="71" symbol="menu_label_1"/>
+<entry field="true" id="27" symbol="startTimestamp"/>
+<entry id="132" method="true" symbol="ringAlarm"/>
+<entry field="true" id="21" symbol="beta"/>
+<entry id="8388648" module="true" symbol="WatchUi"/>
+<entry id="8389281" method="true" symbol="onStop"/>
+<entry id="135" method="true" symbol="store_max"/>
+<entry id="48" method="true" symbol="sendDismissAlarm"/>
+<entry id="8388829" method="true" symbol="onComplete"/>
+<entry id="47" method="true" symbol="sendStopTracking"/>
+<entry field="true" id="111" symbol="lastValues"/>
+<entry field="true" id="93" symbol="hrInfo"/>
+<entry id="49" method="true" symbol="sendSnoozeAlarm"/>
+<entry field="true" id="8389065" symbol="locY"/>
+<entry field="true" id="8389064" symbol="locX"/>
+<entry field="true" id="91" symbol="AGG_PERIOD"/>
+<entry field="true" id="26" symbol="timecurrent"/>
+<entry id="8388771" module="true" object="true" symbol="Drawables"/>
+<entry field="true" id="13" symbol="arrayIndex"/>
+<entry id="134" method="true" symbol="sendNextMessage"/>
+<entry id="128" method="true" symbol="setBatchSize"/>
+<entry id="8389122" method="true" symbol="onLayout"/>
+<entry id="133" method="true" symbol="doHint"/>
+<entry field="true" id="38" symbol="trackingBool"/>
+<entry id="8389279" method="true" symbol="onStart"/>
+<entry field="true" id="8389670" symbol="screenShape"/>
+<entry id="86" method="true" symbol="scrollDown"/>
+<entry field="true" id="83" symbol="alarmIcon"/>
+<entry id="56" object="true" symbol="SleepListener"/>
+<entry id="127" method="true" symbol="gatherHR"/>
+<entry field="true" id="29" symbol="messageQueue"/>
+<entry id="8388985" method="true" symbol="playTone"/>
+<entry id="55" object="true" symbol="SleepNowListener"/>
+<entry id="8389348" symbol="font"/>
+<entry field="true" id="95" symbol="connectIQVersion"/>
+<entry field="true" id="79" symbol="downText"/>
+<entry field="true" id="35" symbol="alarm_currently_active"/>
+<entry id="8389347" symbol="color"/>
+<entry id="123" method="true" symbol="sendHRData"/>
+<entry field="true" id="23" symbol="notice"/>
+<entry field="true" id="32" symbol="deliveryPauseCount"/>
+<entry field="true" id="20" symbol="fakeTransmit"/>
+<entry field="true" id="8389067" symbol="height"/>
+<entry id="125" method="true" symbol="extractDataFromIncomingMessage"/>
+<entry id="8389109" method="true" symbol="onMenuItem"/>
+<entry field="true" id="106" symbol="alarm_gap_duration"/>
+<entry field="true" id="78" symbol="mainText"/>
+<entry id="87" method="true" symbol="returnCentre"/>
+<entry id="63" object="true" symbol="AlarmMenu"/>
+<entry id="50" method="true" symbol="sendConfirmConnection"/>
+<entry field="true" id="8389583" symbol="alarmCount"/>
+<entry id="54" object="true" symbol="SleepApp"/>
+<entry id="58" module="true" symbol="Layouts"/>
+<entry field="true" id="110" symbol="last"/>
+<entry field="true" id="74" symbol="tracking"/>
+<entry field="true" id="69" symbol="stopping"/>
+<entry field="true" id="84" symbol="message"/>
+<entry id="8389939" method="true" symbol="registerForPhoneAppMessages"/>
+<entry id="121" method="true" symbol="sendStartingTracking"/>
+<entry field="true" id="34" symbol="MAX_DELIVERY_PAUSE"/>
+<entry field="true" id="102" symbol="hrValue"/>
+<entry id="43" method="true" symbol="betalog"/>
+<entry id="8389125" method="true" symbol="onHide"/>
+<entry field="true" id="33" symbol="MAX_DELIVERY_ERROR"/>
+<entry field="true" id="116" symbol="batch"/>
+<entry field="true" id="82" symbol="stoppingStr"/>
+<entry id="131" method="true" symbol="startAlarm"/>
+<entry id="8389345" symbol="rezId"/>
+<entry id="124" method="true" symbol="handleIncomingMessage"/>
+<entry id="8388828" method="true" symbol="onError"/>
+<entry id="8390088" module="true" object="true" symbol="JsonData"/>
+<entry field="true" id="81" symbol="trackingStr"/>
+<entry id="120" method="true" symbol="timerCallback"/>
+<entry field="true" id="90" symbol="SAMPLE_PERIOD"/>
+<entry field="true" id="24" symbol="dataTimer"/>
+<entry id="44" method="true" symbol="enqueue"/>
+<entry id="8389346" symbol="text"/>
+<entry field="true" id="8389066" symbol="width"/>
+<entry field="true" id="37" symbol="alarmViewActive"/>
+<entry id="51" method="true" symbol="stopAlarm"/>
+<entry field="true" id="118" symbol="max_sum_new"/>
+<entry id="129" method="true" symbol="checkIfAlarmScheduledForNow"/>
+<entry id="57" module="true" symbol="Menus"/>
+<entry field="true" id="8388960" symbol="heartRate"/>
+<entry field="true" id="104" symbol="timerCount"/>
+<entry id="16" object="true" symbol="SleepMainView"/>
+<entry field="true" id="8388936" method="true" symbol="info"/>
+<entry field="true" id="76" symbol="bkg_night"/>
+<entry id="8388772" module="true" object="true" symbol="Fonts"/>
+<entry field="true" id="103" symbol="hrCount"/>
+<entry field="true" id="31" symbol="deliveryErrorCount"/>
+</symbolTable>
+<localVars>
+<entry endPc="268435639" name="k" stackId="2" startPc="268435591"/>
+<entry endPc="268435640" name="keyEvent" stackId="1" startPc="268435587"/>
+<entry endPc="268435976" name="s" stackId="2" startPc="268435884"/>
+<entry endPc="268435977" name="swipeEvent" stackId="1" startPc="268435880"/>
+<entry endPc="268436176" name="x" stackId="2" startPc="268435981"/>
+<entry endPc="268436176" name="y" stackId="3" startPc="268435981"/>
+<entry endPc="268436177" name="clickEvent" stackId="1" startPc="268435977"/>
+<entry endPc="268436385" name="k" stackId="2" startPc="268436181"/>
+<entry endPc="268436386" name="keyEvent" stackId="1" startPc="268436177"/>
+<entry endPc="268436675" name="m" stackId="2" startPc="268436620"/>
+<entry endPc="268436675" name="i" stackId="1" startPc="268436620"/>
+<entry endPc="268437194" name="dc" stackId="1" startPc="268437085"/>
+<entry endPc="268437845" name="dc" stackId="1" startPc="268437219"/>
+<entry endPc="268438030" name="item" stackId="1" startPc="268437973"/>
+<entry endPc="268438201" name="dc" stackId="1" startPc="268438167"/>
+<entry endPc="268438510" name="AlarmText" stackId="2" startPc="268438220"/>
+<entry endPc="268438511" name="dc" stackId="1" startPc="268438216"/>
+<entry endPc="268438685" name="dc" stackId="1" startPc="268438614"/>
+<entry endPc="268439649" name="timeText" stackId="2" startPc="268439406"/>
+<entry endPc="268439725" name="dc" stackId="1" startPc="268438690"/>
+<entry endPc="268439788" name="afterCycles" stackId="1" startPc="268439755"/>
+<entry endPc="268439892" name="a" stackId="1" startPc="268439788"/>
+<entry endPc="268439996" name="a" stackId="1" startPc="268439892"/>
+<entry endPc="268440306" name="freeMemRatio" stackId="2" startPc="268440008"/>
+<entry endPc="268440307" name="message" stackId="1" startPc="268439996"/>
+<entry endPc="268441151" name="msg" stackId="1" startPc="268441117"/>
+<entry endPc="268441398" name="state" stackId="1" startPc="268441151"/>
+<entry endPc="268442285" name="toSend_new" stackId="2" startPc="268442108"/>
+<entry endPc="268442285" name="toSend" stackId="1" startPc="268442108"/>
+<entry endPc="268442335" name="HRtoSend" stackId="2" startPc="268442290"/>
+<entry endPc="268442336" name="hrAvg" stackId="1" startPc="268442286"/>
+<entry endPc="268443116" name="data" stackId="2" startPc="268442340"/>
+<entry endPc="268443117" name="mail" stackId="1" startPc="268442336"/>
+<entry endPc="268443167" name="mail" stackId="1" startPc="268443117"/>
+<entry endPc="268443399" name="info" stackId="1" startPc="268443167"/>
+<entry endPc="268443653" name="hrInfo" stackId="1" startPc="268443399"/>
+<entry endPc="268443709" name="newBatchSize" stackId="1" startPc="268443653"/>
+<entry endPc="268443793" name="timestamp" stackId="1" startPc="268443749"/>
+<entry endPc="268444160" name="i" stackId="3" startPc="268444051"/>
+<entry endPc="268444178" name="vibrateData" stackId="2" startPc="268444028"/>
+<entry endPc="268444245" name="i" stackId="4" startPc="268444211"/>
+<entry endPc="268444249" name="repeat" stackId="1" startPc="268443953"/>
+<entry endPc="268444606" name="message" stackId="1" startPc="268444412"/>
+<entry endPc="268444873" name="sum_new" stackId="3" startPc="268444625"/>
+<entry endPc="268444873" name="sum" stackId="2" startPc="268444625"/>
+<entry endPc="268444953" name="currentValues" stackId="1" startPc="268444610"/>
+<entry endPc="268445088" name="state" stackId="1" startPc="268444953"/>
+<entry endPc="268445295" name="msg" stackId="1" startPc="268445258"/>
+<entry endPc="268445394" name="msg" stackId="1" startPc="268445357"/>
+<entry endPc="268445953" name="dc" stackId="1" startPc="268445940"/>
+</localVars>
+<annotations/>
+<functions>
+<functionEntry accessMode="public" name="initialize" parent="SleepAlarmDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onMenu" parent="SleepAlarmDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onBack" parent="SleepAlarmDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onSelect" parent="SleepAlarmDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onKey" parent="SleepAlarmDelegate">
+<param id="keyEvent"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="SleepMainDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onSelect" parent="SleepMainDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onSwipe" parent="SleepMainDelegate">
+<param id="swipeEvent"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onTap" parent="SleepMainDelegate">
+<param id="clickEvent"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onKey" parent="SleepMainDelegate">
+<param id="keyEvent"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="scrollUp" parent="SleepMainDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="scrollDown" parent="SleepMainDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="returnCentre" parent="SleepMainDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="refreshView" parent="SleepMainDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="pauseSelected" parent="SleepMainDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="moduloPosArith">
+<param id="i"/>
+<param id="m"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="SleepMainView">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onLayout" parent="SleepMainView">
+<param id="dc"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onShow" parent="SleepMainView">
+<documentation><![CDATA[<div class="description"> Called when this View is brought to the foreground. Restore<br/> the state of this View and prepare it to be shown. This includes<br/> loading resources into memory.<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="onUpdate" parent="SleepMainView">
+<param id="dc"/>
+<documentation><![CDATA[<div class="description"> Update the view<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="onHide" parent="SleepMainView">
+<documentation><![CDATA[<div class="description"> Called when this View is removed from the screen. Save the<br/> state of this View here. This includes freeing resources from<br/> memory.<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="SleepAlarmMenuDelegate">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onMenuItem" parent="SleepAlarmMenuDelegate">
+<param id="item"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="SleepAlarmView">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onLayout" parent="SleepAlarmView">
+<param id="dc"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onShow" parent="SleepAlarmView">
+<documentation><![CDATA[<div class="description"> Called when this View is brought to the foreground. Restore<br/> the state of this View and prepare it to be shown. This includes<br/> loading resources into memory.<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="onUpdate" parent="SleepAlarmView">
+<param id="dc"/>
+<documentation><![CDATA[<div class="description"> Update the view<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="onHide" parent="SleepAlarmView">
+<documentation><![CDATA[<div class="description"> Called when this View is removed from the screen. Save the<br/> state of this View here. This includes freeing resources from<br/> memory.<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="SleepView">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onLayout" parent="SleepView">
+<param id="dc"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onShow" parent="SleepView">
+<documentation><![CDATA[<div class="description"> Called when this View is brought to the foreground. Restore<br/> the state of this View and prepare it to be shown. This includes<br/> loading resources into memory.<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="onUpdate" parent="SleepView">
+<param id="dc"/>
+<documentation><![CDATA[<div class="description"> Update the view<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="onHide" parent="SleepView">
+<documentation><![CDATA[<div class="description"> Called when this View is removed from the screen. Save the<br/> state of this View here. This includes freeing resources from<br/> memory.<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="exitTimer">
+<param id="afterCycles"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="log">
+<param id="a"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="betalog">
+<param id="a"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="enqueue">
+<param id="message"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendResumeTracking">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendPauseTracking">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendStopTracking">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendDismissAlarm">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendSnoozeAlarm">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendConfirmConnection">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="stopAlarm">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="normalExit">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="forceExit">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="SleepApp">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onMsg" parent="SleepApp">
+<param id="msg"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onStart" parent="SleepApp">
+<param id="state"/>
+<documentation><![CDATA[<div class="description"> onStart() is called on application start up<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="timerCallback" parent="SleepApp">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendStartingTracking" parent="SleepApp">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendCurrentDataAndResetBatch" parent="SleepApp">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendHRData" parent="SleepApp">
+<param id="hrAvg"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="handleIncomingMessage" parent="SleepApp">
+<param id="mail"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="extractDataFromIncomingMessage" parent="SleepApp">
+<param id="mail"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="gatherData" parent="SleepApp">
+<param id="info"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="gatherHR" parent="SleepApp">
+<param id="hrInfo"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="setBatchSize" parent="SleepApp">
+<param id="newBatchSize"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="checkIfAlarmScheduledForNow" parent="SleepApp">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="setAlarm" parent="SleepApp">
+<param id="timestamp"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="startAlarm" parent="SleepApp">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="ringAlarm" parent="SleepApp">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="doHint" parent="SleepApp">
+<param id="repeat"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="sendNextMessage" parent="SleepApp">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="store_max" parent="SleepApp">
+<param id="currentValues"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onStop" parent="SleepApp">
+<param id="state"/>
+<documentation><![CDATA[<div class="description"> onStop() is called when your application is exiting<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="getInitialView" parent="SleepApp">
+<documentation><![CDATA[<div class="description"> Return the initial view of your application here<br/></div>]]></documentation>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="SleepNowListener">
+<param id="msg"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onComplete" parent="SleepNowListener">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onError" parent="SleepNowListener">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="SleepListener">
+<param id="msg"/>
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onComplete" parent="SleepListener">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="onError" parent="SleepListener">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="AlarmMenu">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="initialize" parent="MainMenu">
+<documentation/>
+</functionEntry>
+<functionEntry accessMode="public" name="MainLayout" parent="Layouts">
+<param id="dc"/>
+<documentation><![CDATA[<div class="description"> Draw the layout<br/> param The context<br/></div>]]></documentation>
+</functionEntry>
+</functions>
+<dataEntryOffsetMappings>
+<dataEntry offset="87" parentId="" symbolId="globals" type="module"/>
+<dataEntry offset="630" parentId="globals" symbolId="SleepAlarmDelegate" type="class"/>
+<dataEntry offset="709" parentId="globals" symbolId="SleepAlarmMenuDelegate" type="class"/>
+<dataEntry offset="764" parentId="globals" symbolId="Rez" type="module"/>
+<dataEntry offset="843" parentId="Rez" symbolId="Drawables" type="module"/>
+<dataEntry offset="906" parentId="Rez" symbolId="Menus" type="module"/>
+<dataEntry offset="953" parentId="Menus" symbolId="AlarmMenu" type="class"/>
+<dataEntry offset="1000" parentId="Menus" symbolId="MainMenu" type="class"/>
+<dataEntry offset="1047" parentId="Rez" symbolId="Fonts" type="module"/>
+<dataEntry offset="1078" parentId="Rez" symbolId="JsonData" type="module"/>
+<dataEntry offset="1109" parentId="Rez" symbolId="Layouts" type="module"/>
+<dataEntry offset="1148" parentId="Rez" symbolId="Strings" type="module"/>
+<dataEntry offset="1259" parentId="globals" symbolId="SleepMainView" type="class"/>
+<dataEntry offset="1394" parentId="globals" symbolId="SleepView" type="class"/>
+<dataEntry offset="1505" parentId="globals" symbolId="SleepAlarmView" type="class"/>
+<dataEntry offset="1616" parentId="globals" symbolId="SleepNowListener" type="class"/>
+<dataEntry offset="1687" parentId="globals" symbolId="SleepListener" type="class"/>
+<dataEntry offset="1758" parentId="globals" symbolId="SleepMainDelegate" type="class"/>
+<dataEntry offset="1877" parentId="globals" symbolId="SleepApp" type="class"/>
+</dataEntryOffsetMappings>
+</debugInfo>

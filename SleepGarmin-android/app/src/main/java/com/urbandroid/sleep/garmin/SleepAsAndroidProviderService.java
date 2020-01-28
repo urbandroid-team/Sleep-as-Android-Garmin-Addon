@@ -130,6 +130,7 @@ public class SleepAsAndroidProviderService extends Service {
 
     private Handler handler;
     private Context context;
+    private boolean launchAppPromptAlreadyShownInCurrentSession = false;
 
     @Override
     public void onCreate() {
@@ -340,6 +341,9 @@ public class SleepAsAndroidProviderService extends Service {
                         Logger.logDebug(TAG + "From watch: " + message.toString() + " with status " +status.toString());
                         String[] msgArray = message.toArray()[0].toString().replaceAll("\\[","").replaceAll("\\]", "").split(",");
                         String receivedMsgType = msgArray[0];
+
+                        // At this moment we are sure that app on the watch is running so we can reset the prompt latch
+                        launchAppPromptAlreadyShownInCurrentSession = false;
 
                         switch (receivedMsgType) {
                             case "DATA": {
@@ -698,6 +702,7 @@ public class SleepAsAndroidProviderService extends Service {
         if (action.equals(CHECK_CONNECTED)) {
             Logger.logDebug(TAG + "Checking watch connection...");
             messageQueue.remove(TO_WATCH_STOP);
+            if (launchAppPromptAlreadyShownInCurrentSession) { return; }
             try {
                 if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
                     Logger.logDebug(TAG + "Trying to open app on watch...");
@@ -706,6 +711,10 @@ public class SleepAsAndroidProviderService extends Service {
                         @Override
                         public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, IQOpenApplicationStatus iqOpenApplicationStatus) {
                             Logger.logDebug(TAG + "onOpenApplication response: " + iqOpenApplicationStatus);
+                            if (iqOpenApplicationStatus == IQOpenApplicationStatus.PROMPT_SHOWN_ON_DEVICE) {
+                                launchAppPromptAlreadyShownInCurrentSession = true;
+                            }
+
                             if (iqOpenApplicationStatus.equals(IQOpenApplicationStatus.APP_IS_ALREADY_RUNNING)) {
                                 Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
                                 sendExplicitBroadcastToSleep(startIntent);

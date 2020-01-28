@@ -13,18 +13,21 @@ import com.garmin.android.connectiq.IQDevice;
 import com.urbandroid.common.error.ErrorReporter;
 import com.urbandroid.common.logging.Logger;
 
+import static com.urbandroid.sleep.garmin.Constants.CHECK_CONNECTED;
+import static com.urbandroid.sleep.garmin.Constants.DO_HR_MONITORING;
+import static com.urbandroid.sleep.garmin.Constants.HINT;
+import static com.urbandroid.sleep.garmin.Constants.IQ_APP_ID;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
+import static com.urbandroid.sleep.garmin.Constants.REPORT;
+import static com.urbandroid.sleep.garmin.Constants.SET_BATCH_SIZE;
+import static com.urbandroid.sleep.garmin.Constants.SET_PAUSE;
+import static com.urbandroid.sleep.garmin.Constants.STARTED_ON_WATCH_NAME;
+import static com.urbandroid.sleep.garmin.Constants.START_ALARM;
+import static com.urbandroid.sleep.garmin.Constants.START_WATCH_APP;
+import static com.urbandroid.sleep.garmin.Constants.STOP_ALARM;
+import static com.urbandroid.sleep.garmin.Constants.STOP_WATCH_APP;
+import static com.urbandroid.sleep.garmin.Constants.UPDATE_ALARM;
 import static com.urbandroid.sleep.garmin.GlobalInitializer.debug;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.CHECK_CONNECTED;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.HINT;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.PACKAGE_SLEEP;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.REPORT;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.SET_BATCH_SIZE;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.SET_PAUSE;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.START_ALARM;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.START_WATCH_APP;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.STOP_ALARM;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.STOP_WATCH_APP;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.UPDATE_ALARM;
 
 /**
  * Created by artaud on 29.12.16.
@@ -69,7 +72,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                         startProviderServiceBecauseWatchSaidSo(context);
                     }
 
-                } else if (intent.hasExtra(ConnectIQ.EXTRA_APPLICATION_ID) && SleepAsAndroidProviderService.IQ_APP_ID.equals(intent.getStringExtra(ConnectIQ.EXTRA_APPLICATION_ID)) &&
+                } else if (intent.hasExtra(ConnectIQ.EXTRA_APPLICATION_ID) && IQ_APP_ID.equals(intent.getStringExtra(ConnectIQ.EXTRA_APPLICATION_ID)) &&
                         !SleepAsAndroidProviderService.RUNNING) {
                     startProviderServiceBecauseWatchSaidSo(context);
                 }
@@ -86,8 +89,8 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
         switch (action) {
             case START_WATCH_APP: {
                 Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                serviceIntent.setAction(SleepAsAndroidProviderService.START_WATCH_APP);
-                if (intent.hasExtra(SleepAsAndroidProviderService.DO_HR_MONITORING)) {
+                serviceIntent.setAction(START_WATCH_APP);
+                if (intent.hasExtra(DO_HR_MONITORING)) {
                     serviceIntent.putExtra("DO_HR_MONITORING", true);
                 }
                 ContextCompat.startForegroundService(context, serviceIntent);
@@ -97,14 +100,14 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                 Logger.logInfo("Received stop watch app, service running? " + serviceRunning);
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                    serviceIntent.setAction(SleepAsAndroidProviderService.STOP_WATCH_APP);
+                    serviceIntent.setAction(STOP_WATCH_APP);
                     ContextCompat.startForegroundService(context, serviceIntent);
                 }
                 break;
             case SET_PAUSE:
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                    serviceIntent.setAction(SleepAsAndroidProviderService.SET_PAUSE);
+                    serviceIntent.setAction(SET_PAUSE);
                     serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
                     ContextCompat.startForegroundService(context, serviceIntent);
                 }
@@ -120,7 +123,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
             case HINT:
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                    serviceIntent.setAction(SleepAsAndroidProviderService.HINT);
+                    serviceIntent.setAction(HINT);
                     serviceIntent.putExtra("REPEAT", intent.getLongExtra("REPEAT", 0));
                     ContextCompat.startForegroundService(context, serviceIntent);
                 }
@@ -128,7 +131,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
             case UPDATE_ALARM:
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                    serviceIntent.setAction(SleepAsAndroidProviderService.UPDATE_ALARM);
+                    serviceIntent.setAction(UPDATE_ALARM);
                     serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
                     ContextCompat.startForegroundService(context, serviceIntent);
                 }
@@ -137,21 +140,21 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.putExtra("DELAY", intent.getIntExtra("DELAY", 0));
-                    serviceIntent.setAction(SleepAsAndroidProviderService.START_ALARM);
+                    serviceIntent.setAction(START_ALARM);
                     ContextCompat.startForegroundService(context, serviceIntent);
                 }
                 break;
             case STOP_ALARM:
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                    serviceIntent.setAction(SleepAsAndroidProviderService.STOP_ALARM);
+                    serviceIntent.setAction(STOP_ALARM);
                     ContextCompat.startForegroundService(context, serviceIntent);
                 }
                 break;
             case CHECK_CONNECTED: {
                 Logger.logDebug("Receiver: Check connected");
                 Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
-                serviceIntent.setAction(SleepAsAndroidProviderService.CHECK_CONNECTED);
+                serviceIntent.setAction(CHECK_CONNECTED);
                 ContextCompat.startForegroundService(context, serviceIntent);
                 break;
             }
@@ -170,7 +173,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
     private void startProviderServiceBecauseWatchSaidSo(Context context) {
         Logger.logInfo(TAG + "ConnectIQ intent received, starting service...");
         ContextCompat.startForegroundService(context,new Intent(context, SleepAsAndroidProviderService.class));
-        Intent startIntent = new Intent(SleepAsAndroidProviderService.STARTED_ON_WATCH_NAME);
+        Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
         startIntent.setPackage(PACKAGE_SLEEP);
         context.sendBroadcast(startIntent);
     }

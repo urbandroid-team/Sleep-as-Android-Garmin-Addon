@@ -17,11 +17,11 @@ import com.urbandroid.common.logging.Logger;
 import java.util.List;
 
 import static com.garmin.android.connectiq.IQApp.IQAppStatus.INSTALLED;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.IQ_APP_ID;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.IQ_STORE_ID;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.PACKAGE_GCM;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.PACKAGE_SLEEP;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.PACKAGE_SLEEP_WATCH_STARTER;
+import static com.urbandroid.sleep.garmin.Constants.IQ_APP_ID;
+import static com.urbandroid.sleep.garmin.Constants.IQ_STORE_ID;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_GCM;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 
 public class MainActivity extends Activity {
 

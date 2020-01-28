@@ -28,6 +28,7 @@ public class GlobalInitializer {
         ErrorReporter.initialize(context, configuration);
 
         Notifications.createChannels(context);
+
     }
 
 

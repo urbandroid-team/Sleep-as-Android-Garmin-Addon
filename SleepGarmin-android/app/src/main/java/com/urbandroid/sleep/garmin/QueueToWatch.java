@@ -22,7 +22,7 @@ public class QueueToWatch {
 
     private QueueToWatch() { }
 
-    private static final String TAG = "Queue: ";
+    private static final String TAG = "QueueToWatch: ";
     private List<String> messageQueue = Collections.synchronizedList(new LinkedList<String>());
 
     private Handler handler = new Handler();
@@ -40,9 +40,9 @@ public class QueueToWatch {
 
 
     public void enqueue(final String message) {
-        if (!messageQueue.contains(message)) {
+        if (!contains(message)) {
             messageQueue.add(message);
-            Logger.logDebug(TAG + " Added msg to phone>watch queue: " + message);
+            Logger.logDebug(TAG + " Add to queue: " + message);
         }
         handler.removeCallbacks(sendMessageRunnable);
         handler.postDelayed(sendMessageRunnable, 1000);
@@ -96,17 +96,18 @@ public class QueueToWatch {
 
     private void doSendMessage(final String message){
         Logger.logDebug(TAG + "doSendMessage");
+
         try {
-            ConnectIQ.getInstance().sendMessage(CIQManager.getInstance().getDevice(), CIQManager.getInstance().getApp(), message, new ConnectIQ.IQSendMessageListener() {
+            CIQManager.getInstance().sendMessageToWatch(message, new ConnectIQ.IQSendMessageListener() {
                 @Override
                 public void onMessageStatus(IQDevice iqDevice, IQApp iqApp, ConnectIQ.IQMessageStatus status) {
+                    Logger.logDebug(TAG + "doSendMessage to watch, status " + status + ", " + message);
                     if (status != ConnectIQ.IQMessageStatus.SUCCESS) {
-                        Logger.logDebug(TAG + "doSendMessage MSG " + message + " failed to send to watch: " + status);
                         deliveryErrorCount++;
                     } else {
-                        Logger.logDebug(TAG + "doSendMessage Success sent to watch: " + message + " " + status);
                         remove(message);
                         if (message.equals("StopApp")) {
+                            // We won't schedule recovery if 'StopApp' cannot be delivered. We cannot do anything in this case as the user is usually present at this moment and won't be waiting for long enough for recovery. By not scheduling recovery, we prevent a persisten notification from popping up at a later time.
                             ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery();
                         }
                         deliveryErrorCount = 0;
@@ -120,13 +121,13 @@ public class QueueToWatch {
                 }
             });
         } catch (InvalidStateException e) {
-            Logger.logDebug(TAG,e);
+            Logger.logDebug(TAG, e);
         } catch (ServiceUnavailableException e) {
-            Logger.logDebug(TAG,e);
+            Logger.logDebug(TAG, e);
         }
     }
 
-    public void sendNextMessage() {
+    private void sendNextMessage() {
         if (!CIQManager.getInstance().connectIqReady) {
             handler.removeCallbacks(sendMessageRunnable);
             handler.postDelayed(sendMessageRunnable, MESSAGE_INTERVAL);
@@ -136,8 +137,12 @@ public class QueueToWatch {
         Logger.logDebug(TAG + "sendNextMessage, deliveryErrorCount: " + deliveryErrorCount + " delivery in progress " + deliveryInProgress.get());
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
             handler.removeCallbacks(sendMessageRunnable);
-            emptyQueue();
-            ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery();
+            if (next().equals(Constants.TO_WATCH_STOP)) {
+                ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery();
+            } else {
+                emptyQueue();
+                ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery();
+            }
         } else {
             if (size() < 1 || deliveryInProgress.get()) {
 

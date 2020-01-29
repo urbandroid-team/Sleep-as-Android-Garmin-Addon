@@ -35,12 +35,6 @@ public class MainActivity extends Activity {
     private ConnectIQ mConnectIQ;
     private IQDevice mDevice;
 
-    private ConnectIQ.IQDeviceEventListener mDeviceEventListener = new ConnectIQ.IQDeviceEventListener() {
-        @Override
-        public void onDeviceStatusChanged(IQDevice device, IQDevice.IQDeviceStatus status) {
-        }
-    };
-
     private ConnectIQ.ConnectIQListener mListener = new ConnectIQ.ConnectIQListener() {
 
         @Override
@@ -170,19 +164,20 @@ public class MainActivity extends Activity {
             mConnectIQ.initialize(this, true, mListener);
         } else {
             mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.WIRELESS);
-            mConnectIQ.initialize(this, false, new ConnectIQ.ConnectIQListener() {
-                @Override
-                public void onSdkReady() {
-                    Logger.logDebug("Yay we['re here");
-                }
-
-                @Override
-                public void onInitializeError(ConnectIQ.IQSdkErrorStatus iqSdkErrorStatus) {}
-
-                @Override
-                public void onSdkShutDown() {}
-            });
-            Logger.logDebug("ConnectIQ instance set to WIRELESS");
+            mConnectIQ.initialize(this, true, mListener);
+//            mConnectIQ.initialize(this, false, new ConnectIQ.ConnectIQListener() {
+//                @Override
+//                public void onSdkReady() {
+//                    Logger.logDebug("Yay we['re here");
+//                }
+//
+//                @Override
+//                public void onInitializeError(ConnectIQ.IQSdkErrorStatus iqSdkErrorStatus) {}
+//
+//                @Override
+//                public void onSdkShutDown() {}
+//            });
+//            Logger.logDebug("ConnectIQ instance set to WIRELESS");
         }
 
 

@@ -48,6 +48,8 @@ public class CIQManager {
 
     @Nullable
     private IQDevice getDevice(ConnectIQ connectIQ) {
+        // TODO: cache device!
+
         try {
             List<IQDevice> devices = connectIQ.getConnectedDevices();
             if (devices != null && devices.size() > 0) {
@@ -130,6 +132,10 @@ public class CIQManager {
 
     public void onOpenAppOnWatch(ConnectIQ.IQOpenApplicationListener listener) throws InvalidStateException, ServiceUnavailableException {
         connectIQ.openApplication(getDevice(), getApp(), listener);
+    }
+
+    public void sendMessageToWatch(String message, ConnectIQ.IQSendMessageListener listener) throws InvalidStateException, ServiceUnavailableException {
+        connectIQ.sendMessage(getDevice(), getApp(), message, listener);
     }
 
     private static Context initializeConnectIQWrapped(

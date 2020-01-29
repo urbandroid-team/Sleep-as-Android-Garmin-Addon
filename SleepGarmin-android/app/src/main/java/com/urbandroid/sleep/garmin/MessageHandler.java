@@ -203,28 +203,32 @@ class MessageHandler {
             queueToWatch.enqueue(TO_WATCH_HINT + param);
         }
         if (action.equals(CHECK_CONNECTED)) {
-            Logger.logDebug(TAG + "Checking watch connection...");
             queueToWatch.remove(TO_WATCH_STOP);
-            if (launchAppPromptAlreadyShownInCurrentSession) { return; }
             try {
                 if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
-                    Logger.logDebug(TAG + "Trying to open app on watch...");
                     watchAppOpenTime = System.currentTimeMillis();
 
-                    CIQManager.getInstance().onOpenAppOnWatch(new ConnectIQ.IQOpenApplicationListener() {
-                        @Override
-                        public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, ConnectIQ.IQOpenApplicationStatus iqOpenApplicationStatus) {
-                            Logger.logDebug(TAG + "onOpenAppOnWatch response: " + iqOpenApplicationStatus);
-                            if (iqOpenApplicationStatus == ConnectIQ.IQOpenApplicationStatus.PROMPT_SHOWN_ON_DEVICE) {
-                                launchAppPromptAlreadyShownInCurrentSession = true;
-                            }
+                    if (!launchAppPromptAlreadyShownInCurrentSession) {
+                        Logger.logDebug(TAG + "Checking watch connection...");
+                        Logger.logDebug(TAG + "Setting onOpenAppOnWatch listener");
+                        launchAppPromptAlreadyShownInCurrentSession = true;
+                        CIQManager.getInstance().onOpenAppOnWatch(new ConnectIQ.IQOpenApplicationListener() {
+                            @Override
+                            public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, ConnectIQ.IQOpenApplicationStatus iqOpenApplicationStatus) {
+                                Logger.logDebug(TAG + "onOpenAppOnWatch response: " + iqOpenApplicationStatus);
+                                if (iqOpenApplicationStatus == ConnectIQ.IQOpenApplicationStatus.PROMPT_SHOWN_ON_DEVICE) { }
 
-                            if (iqOpenApplicationStatus.equals(ConnectIQ.IQOpenApplicationStatus.APP_IS_ALREADY_RUNNING)) {
-                                Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
-                                sendExplicitBroadcastToSleep(startIntent, context);
+                                if (iqOpenApplicationStatus == ConnectIQ.IQOpenApplicationStatus.PROMPT_NOT_SHOWN_ON_DEVICE || iqOpenApplicationStatus == ConnectIQ.IQOpenApplicationStatus.UNKNOWN_FAILURE) {
+                                    launchAppPromptAlreadyShownInCurrentSession = false;
+                                }
+
+                                if (iqOpenApplicationStatus.equals(ConnectIQ.IQOpenApplicationStatus.APP_IS_ALREADY_RUNNING)) {
+                                    Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
+                                    sendExplicitBroadcastToSleep(startIntent, context);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             } catch (Exception e) {
                 Logger.logSevere(e);

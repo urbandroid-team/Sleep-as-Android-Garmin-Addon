@@ -17,6 +17,7 @@ import static com.urbandroid.sleep.garmin.Constants.DO_HR_MONITORING;
 import static com.urbandroid.sleep.garmin.Constants.HINT;
 import static com.urbandroid.sleep.garmin.Constants.NEW_DATA_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.NEW_HR_DATA_ACTION_NAME;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
 import static com.urbandroid.sleep.garmin.Constants.PAUSE_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.RESUME_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.SET_BATCH_SIZE;
@@ -38,7 +39,6 @@ import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_STOP;
 import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_TRACKING_START;
 import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_TRACKING_START_HR;
 import static com.urbandroid.sleep.garmin.Constants.UPDATE_ALARM;
-import static com.urbandroid.sleep.garmin.SleepAsAndroidProviderService.sendExplicitBroadcastToSleep;
 import static com.urbandroid.sleep.garmin.Utils.dumpIntent;
 
 
@@ -58,6 +58,11 @@ class MessageHandler {
     private long watchAppOpenTime = -1;
 
     private QueueToWatch queueToWatch = QueueToWatch.getInstance();
+
+    private static void sendExplicitBroadcastToSleep(Intent intent, Context context) {
+        intent.setPackage(PACKAGE_SLEEP);
+        context.sendBroadcast(intent);
+    }
 
     public void handleMessageFromWatch(List<Object> message, ConnectIQ.IQMessageStatus status, Context context) {
         Logger.logDebug(TAG + "From watch: " + message.toString() + " with status " +status.toString());

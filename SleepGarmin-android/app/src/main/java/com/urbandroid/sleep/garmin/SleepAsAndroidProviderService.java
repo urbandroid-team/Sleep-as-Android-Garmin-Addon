@@ -13,7 +13,6 @@ import com.urbandroid.common.logging.Logger;
 import org.jetbrains.annotations.Nullable;
 
 import static com.urbandroid.sleep.garmin.Constants.ACTION_STOP_SELF;
-import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
 
@@ -63,11 +62,6 @@ public class SleepAsAndroidProviderService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
-    }
-
-    public static void sendExplicitBroadcastToSleep(Intent intent, Context context) {
-        intent.setPackage(PACKAGE_SLEEP);
-        context.sendBroadcast(intent);
     }
 
     @Override

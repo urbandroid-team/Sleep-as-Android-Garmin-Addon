@@ -5,7 +5,6 @@ using Toybox.Graphics as Gfx;
 
 class SleepView extends Ui.View {
 
-    var bkg_night;
     var width;
     var height; var shape;
 
@@ -22,7 +21,6 @@ class SleepView extends Ui.View {
     //! the state of this View and prepare it to be shown. This includes
     //! loading resources into memory.
     function onShow() {
-    	// bkg_night = Ui.loadResource( Rez.Drawables.id_bkg_night );
     }
 
     //! Update the view
@@ -35,26 +33,22 @@ class SleepView extends Ui.View {
 
 
 		if(Sys.SCREEN_SHAPE_ROUND == shape) {
-	        // dc.drawBitmap(width/2-80, height/2-74, bkg_night);
             dc.drawText(width/2, height/3+10, Gfx.FONT_NUMBER_HOT, timecurrent, Gfx.TEXT_JUSTIFY_CENTER);
             if (beta == true) {
             	dc.drawText(width/2, height/1.2, Gfx.FONT_MEDIUM, "HR>>" + current_heartrate, Gfx.TEXT_JUSTIFY_CENTER);
         	}
 		} else if (Sys.SCREEN_SHAPE_RECTANGLE == shape) {
 			if (height > width) { //vivoactive HR
-				// dc.drawBitmap(width/2-80, height/2-74, bkg_night);
                 dc.drawText(width/2, 0, Gfx.FONT_NUMBER_HOT, timecurrent, Gfx.TEXT_JUSTIFY_CENTER);
                 if (beta == true) {
                 	dc.drawText(width/2, height/1.2, Gfx.FONT_MEDIUM, "HR>>" + current_heartrate, Gfx.TEXT_JUSTIFY_CENTER);
             	}
 			} else { //vivoactive
-				// dc.drawBitmap((width/2)-80, (height/2)-72, bkg_night);
                 dc.drawText(width-20, 10, Gfx.FONT_NUMBER_HOT, timecurrent, Gfx.TEXT_JUSTIFY_RIGHT);
                 if (beta == true) {
                 	dc.drawText(width/2, height/1.2, Gfx.FONT_MEDIUM, "HR>>" + current_heartrate, Gfx.TEXT_JUSTIFY_CENTER);
             	}			}
 		} else if (Sys.SCREEN_SHAPE_SEMI_ROUND == shape) {
-	        // dc.drawBitmap(width/2-80, height/2-74, bkg_night);           
             var timeText = new Ui.Text({
             		:text=>timecurrent,
             		:color=>Gfx.COLOR_WHITE,
@@ -78,8 +72,5 @@ class SleepView extends Ui.View {
     //! state of this View here. This includes freeing resources from
     //! memory.
     function onHide() {
-        if (bkg_night != null) {
-            bkg_night = null;
-        }
     }
 }

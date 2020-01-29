@@ -24,7 +24,7 @@ class SleepMainDelegate extends Ui.InputDelegate  {
     		case 2:
     			break;
     		case 3:
-    			if (trackingBool && messageQueue.size() < 50){
+    			if (!stoppingBool && trackingBool && messageQueue.size() < 50){
     				normalExit();
     			} else {
     				forceExit();

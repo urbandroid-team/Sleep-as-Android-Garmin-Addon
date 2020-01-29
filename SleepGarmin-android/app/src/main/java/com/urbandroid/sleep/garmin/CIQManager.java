@@ -114,7 +114,7 @@ public class CIQManager {
 
                     registerWatchMessagesReceiver();
                     registerDeviceStatusReceiver();
-                    checkAppIsAvailable();
+                    isWatchAppAvailable();
 
                     MessageHandler.getInstance().handleMessageFromSleep(initialIntent, context);
                 }
@@ -164,7 +164,7 @@ public class CIQManager {
         return wrappedContext;
     }
 
-    public void checkAppIsAvailable() {
+    private void isWatchAppAvailable() {
         try {
             connectIQ.getApplicationInfo(IQ_APP_ID, getDevice(), new ConnectIQ.IQApplicationInfoListener() {
 

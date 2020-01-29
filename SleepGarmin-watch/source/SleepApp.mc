@@ -149,6 +149,7 @@ class SleepApp extends App.AppBase {
     const SAMPLE_PERIOD = 200; //ms
     const AGG_PERIOD = 10000; //ms
     const MAX_AGG_COUNT = AGG_PERIOD/SAMPLE_PERIOD;
+    const MAX_STOPAPP_DELAY = 5;
 
     var info;
     var hrInfo;
@@ -246,7 +247,7 @@ class SleepApp extends App.AppBase {
 
         timerCount++;
 
-        if (stopAppDelay < 5) {
+        if (stopAppDelay < MAX_STOPAPP_DELAY) {
             stopAppDelay++;
         }
         if (timerCount % 10 == 0) {
@@ -278,7 +279,10 @@ class SleepApp extends App.AppBase {
         } else {
             checkIfAlarmScheduledForNow();
         }
-        sendNextMessage();
+
+        if (timerCount % 5 == 0) {
+            sendNextMessage();
+        }
     }
 
     // MESSAGES TO PHONE
@@ -292,8 +296,6 @@ class SleepApp extends App.AppBase {
         if (batch.size() > 0) {
             enqueue(toSend);
             enqueue(toSend_new);
-            //batch = null;
-            //batch_new = null;
             batch = [];
             batch_new = [];
         }
@@ -310,7 +312,7 @@ class SleepApp extends App.AppBase {
         log("In: " + mail);
         lastMessageReceived = Time.now().value();
 
-        if ( mail.equals("StopApp") && stopAppDelay == 5) {
+        if ( mail.equals("StopApp") && stopAppDelay == MAX_STOPAPP_DELAY) {
         	stopAlarm();
 			exitTimer(22);
         } else if ( mail.equals("Check") ) {

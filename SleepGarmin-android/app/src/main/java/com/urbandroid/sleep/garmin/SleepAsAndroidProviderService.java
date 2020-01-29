@@ -28,10 +28,11 @@ public class SleepAsAndroidProviderService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        GlobalInitializer.initializeIfRequired(mainContext);
+
         Logger.logDebug(TAG + "onCreate");
 
         mainContext = this;
-        GlobalInitializer.initializeIfRequired(mainContext);
         ServiceRecoveryManager.getInstance().init((Service)mainContext);
 
         if (!Utils.isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER, mainContext) && Build.VERSION.SDK_INT >= 26) {
@@ -70,7 +71,7 @@ public class SleepAsAndroidProviderService extends Service {
         queueToWatch.logQueue("onDestroy");
         queueToWatch.cleanup();
 
-        CIQManager.getInstance().shutdown(mainContext);
+        ciqManager.shutdown(mainContext);
         RUNNING = false;
     }
 

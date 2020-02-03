@@ -2,7 +2,6 @@ package com.urbandroid.sleep.garmin;
 
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
@@ -21,22 +20,21 @@ public class SleepAsAndroidProviderService extends Service {
     private static final String TAG = "ProviderService: ";
     public static Boolean RUNNING = false;
 
-    private Context mainContext;
     private QueueToWatch queueToWatch = QueueToWatch.getInstance();
     private CIQManager ciqManager = CIQManager.getInstance();
 
     @Override
     public void onCreate() {
         super.onCreate();
-        GlobalInitializer.initializeIfRequired(mainContext);
 
         Logger.logDebug(TAG + "onCreate");
 
-        mainContext = this;
-        ServiceRecoveryManager.getInstance().init((Service)mainContext);
+        GlobalInitializer.initializeIfRequired(this);
 
-        if (!Utils.isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER, mainContext) && Build.VERSION.SDK_INT >= 26) {
-            Notifications.showNotificationToInstallSleepWatchStarter(mainContext);
+        ServiceRecoveryManager.getInstance().init((Service)this);
+
+        if (!Utils.isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER, this) && Build.VERSION.SDK_INT >= 26) {
+            Notifications.showNotificationToInstallSleepWatchStarter(this);
         }
 
         ciqManager.resetState();
@@ -54,7 +52,7 @@ public class SleepAsAndroidProviderService extends Service {
             return START_NOT_STICKY;
         }
 
-        ciqManager.init(mainContext, intent);
+        ciqManager.init(this, intent);
 
         return START_STICKY;
     }
@@ -71,21 +69,21 @@ public class SleepAsAndroidProviderService extends Service {
         queueToWatch.logQueue("onDestroy");
         queueToWatch.cleanup();
 
-        ciqManager.shutdown(mainContext);
+        ciqManager.shutdown(this);
         RUNNING = false;
     }
 
     private void startForeground() {
-        final Intent stopIntent = new Intent(mainContext, SleepAsAndroidProviderService.class);
+        final Intent stopIntent = new Intent(this, SleepAsAndroidProviderService.class);
         stopIntent.setAction(ACTION_STOP_SELF);
 
-        PendingIntent pendingIntent = PendingIntent.getService(mainContext, 150, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 150, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Build.VERSION.SDK_INT >= 26) {
-            pendingIntent = PendingIntent.getForegroundService(mainContext, 150, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getForegroundService(this, 150, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
-        final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(mainContext, NOTIFICATION_CHANNEL_ID_TRACKING)
+        final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_TRACKING)
                 .setContentIntent(pendingIntent)
                 .setColor(getResources().getColor(R.color.tint_dark))
                 .addAction(R.drawable.ic_action_stop, getResources().getString(R.string.stop), pendingIntent)

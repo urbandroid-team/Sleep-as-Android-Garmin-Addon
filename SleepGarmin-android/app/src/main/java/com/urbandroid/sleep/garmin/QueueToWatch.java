@@ -68,7 +68,10 @@ public class QueueToWatch {
     }
 
     public String next() {
-        return messageQueue.get(0);
+        if (messageQueue.size() > 0) {
+            return messageQueue.get(0);
+        }
+        return null;
     }
 
     public int size() {
@@ -137,7 +140,7 @@ public class QueueToWatch {
         Logger.logDebug(TAG + "sendNextMessage, deliveryErrorCount: " + deliveryErrorCount + " delivery in progress " + deliveryInProgress.get());
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
             handler.removeCallbacks(sendMessageRunnable);
-            if (next().equals(Constants.TO_WATCH_STOP)) {
+            if (next() != null && next().equals(Constants.TO_WATCH_STOP)) {
                 ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery();
             } else {
                 emptyQueue();
@@ -157,8 +160,11 @@ public class QueueToWatch {
                 }
                 return;
             }
-            final String message = next();
 
+            final String message = next();
+            if (message == null) {
+                return;
+            }
             Logger.logDebug(TAG + "sendNextMessage: " + message.toString());
             deliveryInProgress.set(true);
 

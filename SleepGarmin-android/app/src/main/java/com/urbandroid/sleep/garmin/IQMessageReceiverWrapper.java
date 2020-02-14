@@ -25,7 +25,12 @@ public class IQMessageReceiverWrapper extends BroadcastReceiver {
         } else if ("com.garmin.android.connectiq.DEVICE_STATUS".equals(intent.getAction())) {
             replaceIQDeviceById(intent, "com.garmin.android.connectiq.EXTRA_REMOTE_DEVICE");
         }
-        receiver.onReceive(context, intent);
+
+        try {
+            receiver.onReceive(context, intent);
+        } catch (IllegalArgumentException e) {
+            Logger.logDebug(TAG, e);
+        }
     }
 
     private static void replaceIQDeviceById(Intent intent, String extraName) {

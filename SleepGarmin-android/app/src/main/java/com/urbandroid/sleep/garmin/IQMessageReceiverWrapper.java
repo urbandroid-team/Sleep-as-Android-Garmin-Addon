@@ -7,6 +7,8 @@ import android.content.Intent;
 import com.garmin.android.connectiq.IQDevice;
 import com.urbandroid.common.logging.Logger;
 
+import java.nio.BufferUnderflowException;
+
 public class IQMessageReceiverWrapper extends BroadcastReceiver {
     private final BroadcastReceiver receiver;
     private static String TAG = "IQMessageReceiverWrapper: ";
@@ -25,7 +27,12 @@ public class IQMessageReceiverWrapper extends BroadcastReceiver {
         } else if ("com.garmin.android.connectiq.DEVICE_STATUS".equals(intent.getAction())) {
             replaceIQDeviceById(intent, "com.garmin.android.connectiq.EXTRA_REMOTE_DEVICE");
         }
-        receiver.onReceive(context, intent);
+
+        try {
+            receiver.onReceive(context, intent);
+        } catch (IllegalArgumentException | BufferUnderflowException e) {
+            Logger.logDebug(TAG, e);
+        }
     }
 
     private static void replaceIQDeviceById(Intent intent, String extraName) {

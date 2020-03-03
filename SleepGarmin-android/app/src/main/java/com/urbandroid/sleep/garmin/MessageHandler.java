@@ -189,7 +189,7 @@ class MessageHandler {
             queueToWatch.enqueue(TO_WATCH_ALARM_START + param);
         }
         if (action.equals(STOP_ALARM)) {
-            Logger.logDebug(TAG + "TO_WATCH_ALARM_STROP");
+            Logger.logDebug(TAG + "TO_WATCH_ALARM_STOP");
             queueToWatch.enqueue(TO_WATCH_ALARM_STOP);
         }
         if (action.equals(UPDATE_ALARM)) {

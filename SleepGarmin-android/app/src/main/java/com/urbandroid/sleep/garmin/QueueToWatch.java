@@ -111,7 +111,7 @@ public class QueueToWatch {
                         remove(message);
                         if (message.equals("StopApp")) {
                             // We won't schedule recovery if 'StopApp' cannot be delivered. We cannot do anything in this case as the user is usually present at this moment and won't be waiting for long enough for recovery. By not scheduling recovery, we prevent a persisten notification from popping up at a later time.
-                            ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery();
+                            ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("Cannot deliver StopApp");
                         }
                         deliveryErrorCount = 0;
                     }
@@ -141,10 +141,10 @@ public class QueueToWatch {
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
             handler.removeCallbacks(sendMessageRunnable);
             if (next() != null && next().equals(Constants.TO_WATCH_STOP)) {
-                ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery();
+                ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("over max delivery error");
             } else {
                 emptyQueue();
-                ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery();
+                ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery("over max delivery error");
             }
         } else {
             if (size() < 1 || deliveryInProgress.get()) {

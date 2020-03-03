@@ -104,7 +104,7 @@ public class CIQManager {
                 public void onInitializeError(ConnectIQ.IQSdkErrorStatus errStatus) {
                     Logger.logDebug(TAG + " " + errStatus.toString());
                     connectIqReady = false;
-                    ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery();
+                    ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery("onInitializeError");
                 }
 
                 @Override
@@ -185,7 +185,7 @@ public class CIQManager {
                         Toast.makeText(context, "Sleep not installed on your Garmin watch", Toast.LENGTH_LONG).show();
                         Logger.logDebug(TAG + "Sleep watch app not installed.");
                     }
-                    ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery();
+                    ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("No watch available.");
                 }
             });
         } catch (InvalidStateException e) {
@@ -225,7 +225,7 @@ public class CIQManager {
                 });
             } else {
                 Logger.logDebug(TAG + "registerWatchMessagesReceiver: No device found.");
-                ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery();
+                ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery("No device found.");
             }
         } catch (InvalidStateException e) {
             Logger.logSevere(e);

@@ -34,19 +34,19 @@ public class ServiceRecoveryManager {
         this.service = service;
     }
 
-    public void stopSelfAndDontScheduleRecovery() { stopSelfAndDontScheduleRecovery(service); }
+    public void stopSelfAndDontScheduleRecovery(String reason) { stopSelfAndDontScheduleRecovery(service, reason); }
 
-    public void stopSelfAndScheduleRecovery() { stopSelfAndScheduleRecovery(service); }
+    public void stopSelfAndScheduleRecovery(String reason) { stopSelfAndScheduleRecovery(service, reason); }
 
-    private void stopSelfAndDontScheduleRecovery(Service service) {
-        Logger.logDebug(TAG + "stopSelfAndDontScheduleRecovery");
+    private void stopSelfAndDontScheduleRecovery(Service service, String reason) {
+        Logger.logDebug(TAG + "stopSelfAndDontScheduleRecovery, reason: " + reason);
         QueueToWatch.getInstance().emptyQueue();
         cancelRecovery(service);
         service.stopSelf();
     }
 
-    private void stopSelfAndScheduleRecovery(Service service) {
-        Logger.logDebug(TAG + "stopSelfAndScheduleRecovery");
+    private void stopSelfAndScheduleRecovery(Service service, String reason) {
+        Logger.logDebug(TAG + "stopSelfAndScheduleRecovery, reason: " + reason);
         service.stopSelf();
 
         PendingIntent pi = getRecoveryIntent(service);

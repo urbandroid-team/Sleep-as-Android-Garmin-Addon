@@ -48,7 +48,7 @@ public class SleepAsAndroidProviderService extends Service {
         RUNNING = true;
 
         if (intent != null && intent.getAction() != null && ACTION_STOP_SELF.equals(intent.getAction())) {
-            ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery();
+            ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("STOP_SELF intent received");
             return START_NOT_STICKY;
         }
 

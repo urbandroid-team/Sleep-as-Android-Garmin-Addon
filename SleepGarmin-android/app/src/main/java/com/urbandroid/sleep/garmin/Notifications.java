@@ -41,8 +41,8 @@ public class Notifications {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c, NOTIFICATION_CHANNEL_ID_WARNING)
                 .setSmallIcon(R.drawable.ic_action_watch)
-                .setStyle(new NotificationCompat.BigTextStyle().bigText(c.getString(R.string.install_watchsleepstarter)))
-                .setContentText(c.getString(R.string.install_watchsleepstarter))
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(c.getString(R.string.install_sleep_watch_starter)))
+                .setContentText(c.getString(R.string.install_sleep_watch_starter))
                 .setColor(c.getResources().getColor(R.color.tint_dark))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
@@ -55,6 +55,31 @@ public class Notifications {
 
         NotificationManagerCompat nM = NotificationManagerCompat.from(c);
         nM.notify(1348, notificationBuilder.build());
+    }
+
+    public static void showCannotStartFromPhoneNotification(Context c) {
+        Intent documentationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://docs.sleep.urbandroid.org/faqs/garmin_start_dialog_bug.html"));
+
+        documentationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, documentationIntent, 0);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c, NOTIFICATION_CHANNEL_ID_WARNING)
+                .setSmallIcon(R.drawable.ic_action_watch)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(c.getString(R.string.cannot_start_from_phone)))
+                .setContentText(c.getString(R.string.cannot_start_from_phone))
+                .setColor(c.getResources().getColor(R.color.tint_dark))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true);
+
+        if (Build.VERSION.SDK_INT < 24) {
+            notificationBuilder.setContentTitle(c.getResources().getString(R.string.app_name_long));
+        }
+
+        NotificationManagerCompat nM = NotificationManagerCompat.from(c);
+        nM.notify(1375, notificationBuilder.build());
     }
 
 }

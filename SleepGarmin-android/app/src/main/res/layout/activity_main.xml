@@ -163,7 +163,7 @@
                     android:textColor="@color/secondary"
                     style="?android:attr/textAppearanceMedium"
                     android:id="@+id/install_watchsleepstarter_text"
-                    android:text="@string/install_watchsleepstarter"
+                    android:text="@string/install_sleep_watch_starter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

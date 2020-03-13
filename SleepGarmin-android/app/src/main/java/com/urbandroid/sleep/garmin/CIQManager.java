@@ -131,7 +131,16 @@ public class CIQManager {
     }
 
     public void onOpenAppOnWatch(ConnectIQ.IQOpenApplicationListener listener) throws InvalidStateException, ServiceUnavailableException {
-        connectIQ.openApplication(getDevice(), getApp(), listener);
+        if (getDevice() == null) { return; }
+
+        Logger.logDebug("device" + getDevice().getFriendlyName());
+
+        if (getDevice().getFriendlyName().contains("vívoactive3")) {
+//            showNotification that vivo cannot open app from phone
+            Notifications.showCannotStartFromPhoneNotification(context);
+        } else {
+            connectIQ.openApplication(getDevice(), getApp(), listener);
+        }
     }
 
     public void sendMessageToWatch(String message, ConnectIQ.IQSendMessageListener listener) throws InvalidStateException, ServiceUnavailableException {

@@ -65,12 +65,12 @@ public class SleepAsAndroidProviderService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         queueToWatch.logQueue("onDestroy");
         queueToWatch.cleanup();
 
         ciqManager.shutdown(this);
         RUNNING = false;
+        super.onDestroy();
     }
 
     private void startForeground() {

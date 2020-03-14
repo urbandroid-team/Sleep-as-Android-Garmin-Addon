@@ -24,6 +24,7 @@ import static com.urbandroid.sleep.garmin.Constants.IQ_APP_ID;
 
 public class CIQManager {
     private static final CIQManager ourInstance = new CIQManager();
+    private IQDevice deviceCache;
 
     public static CIQManager getInstance() {
         return ourInstance;
@@ -48,19 +49,14 @@ public class CIQManager {
 
     @Nullable
     private IQDevice getDevice(ConnectIQ connectIQ) {
-        // TODO: cache device!
-
         try {
             List<IQDevice> devices = connectIQ.getConnectedDevices();
             if (devices != null && devices.size() > 0) {
                 Logger.logDebug(TAG + "getDevice connected: " + devices.get(0).toString() );
-                return devices.get(0);
+                deviceCache = devices.get(0);
+                return deviceCache;
             } else {
-                devices = connectIQ.getKnownDevices();
-                if (devices != null && devices.size() > 0) {
-                    Logger.logDebug(TAG + "getDevice known: " + devices.get(0).toString() );
-                    return devices.get(0);
-                }
+                return deviceCache;
             }
         } catch (InvalidStateException e) {
             Logger.logSevere(e);

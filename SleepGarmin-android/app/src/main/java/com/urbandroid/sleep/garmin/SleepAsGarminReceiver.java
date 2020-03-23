@@ -161,6 +161,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
             case REPORT:
                 Logger.logInfo("Generating on demand report");
                 Logger.logInfo(context.getPackageName());
+
                 String comment = "No comment";
                 if (intent.hasExtra("USER_COMMENT")) {
                     comment = intent.getStringExtra("USER_COMMENT");

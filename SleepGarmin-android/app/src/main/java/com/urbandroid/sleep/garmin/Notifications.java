@@ -16,6 +16,8 @@ public class Notifications {
 
     final static String NOTIFICATION_CHANNEL_ID_TRACKING = "garminTrackingChannel";
     final static String NOTIFICATION_CHANNEL_ID_WARNING = "garminWarningChannel";
+    private static final String NOTIFICATION_CHANNEL_ID_REPORT = "garminReportChannel";
+
 
     public static void createChannels(Context context) {
         if (Build.VERSION.SDK_INT >= 26) {
@@ -29,6 +31,10 @@ public class Notifications {
             CharSequence warningChannelTitle = context.getResources().getString(R.string.running);
             NotificationChannel warningNotificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID_WARNING, warningChannelTitle, NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(warningNotificationChannel);
+
+            CharSequence reportChannelTitle = context.getResources().getString(R.string.on_demand_report_title);
+            NotificationChannel reportNotificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID_REPORT, reportChannelTitle, NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(reportNotificationChannel);
         }
     }
 

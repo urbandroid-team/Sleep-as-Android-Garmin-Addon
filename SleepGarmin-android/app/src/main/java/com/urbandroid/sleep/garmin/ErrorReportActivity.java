@@ -9,16 +9,13 @@ import com.urbandroid.common.logging.Logger;
 
 public class ErrorReportActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_error_report);
+        GlobalInitializer.initializeIfRequired(this);
 
         Logger.logDebug("ErrorReportActivity onCreate");
-
-        GlobalInitializer.initializeIfRequired(this);
 
         sendReport(this.getIntent());
     }

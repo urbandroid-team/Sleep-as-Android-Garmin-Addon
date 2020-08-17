@@ -1,0 +1,7 @@
+<drawables>
+    <bitmap id="LauncherIcon" filename="launcher_icon.png" />
+    <bitmap id="DefaultSnoozeButton" filename="snooze_default.png" dithering="none" />
+    <bitmap id="PressedSnoozeButton" filename="snooze_pressed.png" dithering="none" />
+    <bitmap id="DefaultDismissButton" filename="dismiss_default.png" dithering="none" />
+    <bitmap id="PressedDismissButton" filename="dismiss_pressed.png" dithering="none" />
+</drawables>

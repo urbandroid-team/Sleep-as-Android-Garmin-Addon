@@ -1,0 +1,24 @@
+<strings>
+    <string id="AppName">Sleep</string>
+
+    <string id="alarm">Alarm</string>
+
+    <string id="init">Connecting to phone...</string>
+
+
+    <string id="lockedTouch">Tracking.\nScreen locked.\nUnlock by long touch on screen.</string>
+    <string id="lockedNoTouch">Tracking.\nScreen locked.\nUnlock by holding menu button.</string>
+
+    <string id="unlockedTouch">Tracking.\nFor options, long touch on screen.</string>
+    <string id="unlockedNoTouch">Tracking.\nFor options, hold menu button.</string>
+
+    <string id="mainAlarmTextTouch">Dismiss/snooze by long touch on screen.</string>
+    <string id="mainAlarmTextNoTouch">To dismiss/snooze, hold menu button.</string>
+
+
+    <string id="menu_label_stop_tracking">Stop tracking</string>
+    <string id="menu_label_pause_tracking">Pause tracking</string>
+
+    <string id="menu_label_snooze_alarm">Snooze alarm</string>
+    <string id="menu_label_dismiss_alarm">Dismiss alarm</string>    
+</strings>

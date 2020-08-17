@@ -1,0 +1,3 @@
+<drawable-list id="BgFill" x="0" y="0" foreground="Gfx.COLOR_YELLOW">
+	<shape type="rectangle" width="fill" height="fill" />
+</drawable-list>

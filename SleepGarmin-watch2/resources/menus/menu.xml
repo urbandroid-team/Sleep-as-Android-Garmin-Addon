@@ -1,0 +1,4 @@
+<menu id="MainMenu">
+    <menu-item id="item_1" label="@Strings.menu_label_pause_tracking" />
+    <menu-item id="item_2" label="@Strings.menu_label_stop_tracking" />
+</menu>

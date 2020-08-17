@@ -1,0 +1,10 @@
+<layout id="AlarmLayout">
+	<drawable id="BgFill" />    
+    
+    <text-area id="alarmText" x="center" y="10%" text="@Strings.alarm" font="Graphics.FONT_LARGE" width="70%" height="50%" color="Graphics.COLOR_RED" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+	
+	<text-area id="time" x="center" y="32%" text="--:--" font="Graphics.FONT_NUMBER_HOT" width="100%" height="100%" color="Graphics.COLOR_WHITE" justification="Graphics.TEXT_JUSTIFY_CENTER"></text-area>	
+
+    <text-area id="mainText" x="center" y="64%" text="@Strings.mainAlarmTextTouch" font="Graphics.FONT_XTINY" width="70%" height="50%" color="Graphics.COLOR_RED" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+
+</layout>

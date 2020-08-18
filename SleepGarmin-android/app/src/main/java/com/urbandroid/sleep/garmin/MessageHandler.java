@@ -52,6 +52,7 @@ class MessageHandler {
 
     private final static String TAG = "MessageHandler: ";
 
+    private float[] maxFloatValues = null;
     private float[] maxRawFloatValues = null;
     private Boolean launchAppPromptAlreadyShownInCurrentSession = false;
     private long watchAppOpenTime = -1;
@@ -72,6 +73,20 @@ class MessageHandler {
         launchAppPromptAlreadyShownInCurrentSession = false;
 
         switch (receivedMsgType) {
+            case "DATA": {
+                String[] values = Arrays.copyOfRange(msgArray, 1, msgArray.length);
+                maxFloatValues = new float[values.length];
+                for (int i = 0; i < values.length; i++) {
+                    String maxValue = values[i];
+
+                    try {
+                        maxFloatValues[i] = Float.valueOf(maxValue);
+                    } catch (NumberFormatException e) {
+                        maxFloatValues[i] = 0;
+                    }
+                }
+                break;
+            }
             case "DATA_NEW": {
                 String[] values = Arrays.copyOfRange(msgArray, 1, msgArray.length);
                 maxRawFloatValues = new float[values.length];
@@ -125,8 +140,14 @@ class MessageHandler {
         if (maxRawFloatValues != null) {
             Intent dataUpdateIntent = new Intent(NEW_DATA_ACTION_NAME);
             dataUpdateIntent.putExtra("MAX_RAW_DATA", maxRawFloatValues);
+            if (maxFloatValues != null) {
+                dataUpdateIntent.putExtra("MAX_DATA", maxFloatValues);
+            }
             sendExplicitBroadcastToSleep(dataUpdateIntent, context);
             maxRawFloatValues = null;
+            maxFloatValues = null;
+
+
         }
     }
 

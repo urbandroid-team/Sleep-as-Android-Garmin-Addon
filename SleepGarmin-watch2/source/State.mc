@@ -51,12 +51,5 @@ class State {
 		return self.doingAlarm;
 	}
 	
-	function switchToAlarmScreen() {
-		WatchUi.pushView(new AlarmView(self.ctx), new AlarmDelegate(self.ctx), WatchUi.SLIDE_UP);
-	}
-	
-	function backToMainScreen() {
-		WatchUi.popView(WatchUi.SLIDE_DOWN);
-	}
 
 }

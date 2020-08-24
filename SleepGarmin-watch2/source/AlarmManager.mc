@@ -9,7 +9,7 @@ class AlarmManager {
 	}
 	
 	function startAlarmNow() {
-		self.ctx.state.switchToAlarmScreen();
+		self.ctx.businessManager.switchToAlarmScreen();
 		self.ctx.attentionSeeker.startAlarmVibration();
 	}
 	
@@ -28,7 +28,7 @@ class AlarmManager {
 	
 	function stopAlarm() {
 		self.ctx.attentionSeeker.stopAlarmVibration();
-		self.ctx.state.backToMainScreen();
+		self.ctx.businessManager.backToMainScreen();
 	}
 	
 

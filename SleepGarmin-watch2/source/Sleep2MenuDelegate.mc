@@ -15,6 +15,8 @@ class Sleep2MenuDelegate extends WatchUi.MenuInputDelegate {
         	self.ctx.businessManager.sendPause();
         } else if (item == :item_2) {
         	self.ctx.businessManager.sendStop();
+        } else if (item == :item_3) {
+        	self.ctx.businessManager.forceStop();
         }
     }
 

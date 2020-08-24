@@ -58,6 +58,9 @@ class BusinessManager {
  	function sendDismissAlarm() {
  		self.ctx.commManager.enqueue(CommManager.MSG_DISMISS_ALARM); 	
  	}
+ 	function forceStop() {
+		System.exit();
+ 	}
  	
  	function startAlarm(delay) {
  		if (!self.ctx.state.isAlarmRunning()) {

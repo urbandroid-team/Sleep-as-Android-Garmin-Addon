@@ -18,7 +18,10 @@
 
     <string id="menu_label_stop_tracking">Stop tracking</string>
     <string id="menu_label_pause_tracking">Pause tracking</string>
+    <string id="menu_label_force_stop">Force stop app</string>    
 
     <string id="menu_label_snooze_alarm">Snooze alarm</string>
     <string id="menu_label_dismiss_alarm">Dismiss alarm</string>    
+    
+    
 </strings>

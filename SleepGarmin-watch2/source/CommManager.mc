@@ -3,7 +3,7 @@ using Toybox.Communications;
 class CommManager {
 
 	var ctx;
-	private var queue;
+	var queue;
 	private var commListener;
 
 	// From phone
@@ -40,7 +40,7 @@ class CommManager {
     public function start() {
         Communications.registerForPhoneAppMessages(method(:handleMessageReceived));
         self.queue = new MessageQueue();
-        self.commListener = new CommListener(self.queue, self.ctx.state);
+        self.commListener = new CommListener(self.queue, self.ctx);
         
         enqueue(CommManager.MSG_START_TRACKING);
     }

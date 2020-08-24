@@ -4,23 +4,24 @@ using Toybox.Communications as Comm;
 class CommListener extends Comm.ConnectionListener {
 
 	var queue;
-	var state;
+	var ctx;
 
-    function initialize(queue, state) {
+    function initialize(queue, ctx) {
        Comm.ConnectionListener.initialize();
        self.queue = queue;
-       self.state = state;
+       self.ctx = ctx;
     }
 
     function onComplete() {
     	DebugManager.log("CommListener onComplete");
 		queue.removeFirst();
-    	state.deliveryInProgress = false;
+    	self.ctx.state.deliveryInProgress = false;
+    	self.ctx.commManager.triggerSend();
     }
 
     function onError() {
     	DebugManager.log("CommListener onError");
-    	state.deliveryInProgress = false;
-    	state.deliveryErrorCount++;
+    	self.ctx.state.deliveryInProgress = false;
+    	self.ctx.state.deliveryErrorCount++;
     }
 }

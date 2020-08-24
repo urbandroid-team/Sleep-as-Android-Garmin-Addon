@@ -8,6 +8,11 @@ class AlarmManager {
 		self.ctx = ctx;
 	}
 	
+	function startAlarmNow() {
+		self.ctx.state.switchToAlarmScreen();
+		self.ctx.attentionSeeker.startAlarmVibration();
+	}
+	
 	function startAlarm(delay) {
 		if (delay == 0) {
 			startAlarmNow();
@@ -26,11 +31,7 @@ class AlarmManager {
 		self.ctx.state.backToMainScreen();
 	}
 	
-	private function startAlarmNow() {
-		self.ctx.state.switchToAlarmScreen();
-		self.ctx.attentionSeeker.startAlarmVibration();
-	}
-	
+
 	
 
 }

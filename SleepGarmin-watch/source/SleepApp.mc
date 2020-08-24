@@ -237,7 +237,7 @@ class SleepApp extends App.AppBase {
         }
 
         if (shouldExit) {
-        	if (targetExitTime == 0) {
+        	if (targetExitTime <= 0) {
        		 	Sys.exit();
     		}
         	targetExitTime = targetExitTime - 1;
@@ -489,8 +489,6 @@ class SleepApp extends App.AppBase {
         }
     }
 
-
-
     function sendNextMessage() {
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
             deliveryPauseCount++;
@@ -512,7 +510,6 @@ class SleepApp extends App.AppBase {
     }
 
     function store_max(currentValues) {
-
         if (last) {
         	//log("x" + currentValues[0] + "y" + currentValues[1] + "z" + currentValues[2]);
             var sum = ((lastValues[0] - currentValues[0]).abs() + (lastValues[1] - currentValues[1]).abs() + (lastValues[2] - currentValues[2]).abs());
@@ -524,7 +521,6 @@ class SleepApp extends App.AppBase {
             if (sum_new > max_sum_new) {
                 max_sum_new = sum_new;
             }
-
         }
 
         last = true;
@@ -540,7 +536,6 @@ class SleepApp extends App.AppBase {
         // messageQueue = null;
         betalog("usedMem" + Sys.getSystemStats().usedMemory + "freeMem" + Sys.getSystemStats().freeMemory + "totalMem" + Sys.getSystemStats().totalMemory);
 		// messageQueue = null;
-
     }
 
     //! Return the initial view of your application here

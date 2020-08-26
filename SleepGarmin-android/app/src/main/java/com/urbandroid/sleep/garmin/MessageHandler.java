@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.urbandroid.sleep.garmin.Constants.CHECK_CONNECTED;
+import static com.urbandroid.sleep.garmin.Constants.DATA_WITH_EXTRA;
 import static com.urbandroid.sleep.garmin.Constants.DISMISS_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.DO_HR_MONITORING;
 import static com.urbandroid.sleep.garmin.Constants.HINT;
@@ -23,6 +24,7 @@ import static com.urbandroid.sleep.garmin.Constants.RESUME_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.SET_BATCH_SIZE;
 import static com.urbandroid.sleep.garmin.Constants.SET_PAUSE;
 import static com.urbandroid.sleep.garmin.Constants.SNOOZE_ACTION_NAME;
+import static com.urbandroid.sleep.garmin.Constants.SPO2_DATA_EXTRA;
 import static com.urbandroid.sleep.garmin.Constants.STARTED_ON_WATCH_NAME;
 import static com.urbandroid.sleep.garmin.Constants.START_ALARM;
 import static com.urbandroid.sleep.garmin.Constants.START_WATCH_APP;
@@ -135,6 +137,12 @@ class MessageHandler {
                 queueToWatch.emptyQueue();
                 queueToWatch.enqueue(TO_WATCH_STOP);
                 break;
+            case "SPO2":
+                float[] spo2Data = new float[]{Float.parseFloat(msgArray[1])};
+                Logger.logInfo(TAG + ": received SpO2 data from watch " + spo2Data[0]);
+                Intent spo2Intent = new Intent(DATA_WITH_EXTRA);
+                spo2Intent.putExtra(SPO2_DATA_EXTRA, spo2Data);
+                sendExplicitBroadcastToSleep(spo2Intent, context);
         }
 
         if (maxRawFloatValues != null) {

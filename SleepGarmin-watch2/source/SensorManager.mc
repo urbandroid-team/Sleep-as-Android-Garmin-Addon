@@ -2,7 +2,8 @@ using Toybox.Sensor;
 
 class SensorManager {
 
-	const SENSOR_PERIOD_SEC = 4; 
+	const SENSOR_PERIOD_SEC = 4;
+	const OXI_READING_PERIOD_SEC = 60;
 
 	var ctx;
 	
@@ -12,6 +13,8 @@ class SensorManager {
 	var accBatch = [];
 	
 	var hrBuf = [];
+	
+	var lastOximeterReadingSec = 0;
 
     function initialize(ctx) {
         DebugManager.log("SensorManager initialized");
@@ -45,8 +48,19 @@ class SensorManager {
 	        
 	        if (sensorData has :heartRateData && sensorData.heartRateData != null) {
 	 	    	onHRData(sensorData.heartRateData.heartBeatIntervals);
-			}        
+			}	
+			
+			if (lastOximeterReadingSec > OXI_READING_PERIOD_SEC) {
+				lastOximeterReadingSec = 0;
+				var sensorInfo = Sensor.getInfo();
+			    if (sensorInfo has :oxygenSaturation && sensorInfo.oxygenSaturation != null) {
+		    	    onOxyData(oxygenSaturation);		    	    
+			    }
+			}
+			lastOximeterReadingSec = lastOximeterReadingSec + SENSOR_PERIOD_SEC;
         }
+        
+        
 		
 		self.ctx.businessManager.onDataHook();
     }
@@ -100,6 +114,12 @@ class SensorManager {
     		self.ctx.businessManager.sendHrData(DataUtil.median(hrBuf));
     		hrBuf = [];
     	}
+    }
+    
+    function onOxyData(oxygenSaturation) {
+    	DebugManager.log("onOxyData");
+    	
+    	self.ctx.businessManager.sendOxyData(oxygenSaturation);
     }
 
 }

@@ -26,6 +26,8 @@ public class Constants {
     public final static String STARTED_ON_WATCH_NAME = "com.urbandroid.sleep.watch.STARTED_ON_WATCH";
     public final static String STOP_SLEEP_TRACK_ACTION = "com.urbandroid.sleep.alarmclock.STOP_SLEEP_TRACK";
 //    private final static String WATCH_TYPE_EXTRA = "com.urbandroid.sleep.watch.WATCH_TIME_EXTRA";
+    public final static String DATA_WITH_EXTRA = "com.urbandroid.sleep.watch.ACTION_EXTRA_DATA_UPDATE";
+    public final static String SPO2_DATA_EXTRA = "com.urbandroid.sleep.EXTRA_DATA_SPO2"; // supposed to be float
 
     //    From sleep to plugin
     final static String START_WATCH_APP = "com.urbandroid.sleep.watch.START_TRACKING";

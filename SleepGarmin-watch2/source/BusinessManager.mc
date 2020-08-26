@@ -42,6 +42,9 @@ class BusinessManager {
  		DebugManager.log("sendHrData " + hr);
  		self.ctx.commManager.enqueue([CommManager.MSG_HR, hr]); 		
  	}
+ 	function sendOxyData(oxygenSaturation) {
+ 		self.ctx.commManager.enqueue([CommManager.MSG_OXY, oxygenSaturation]);
+ 	}
  	
  	function sendPause() {
  		self.ctx.commManager.enqueue(CommManager.MSG_PAUSE_TRACKING);

@@ -1,10 +1,12 @@
 using Toybox.System;
 using Toybox.WatchUi;
 using Toybox.Timer;
-
+using Toybox.Attention;
+		
 class BusinessManager {
  
  	var ctx;
+ 	var backlightTimer;
  
  	function initialize(ctx) {
  		self.ctx = ctx;
@@ -28,6 +30,21 @@ class BusinessManager {
  	function startTracking() {
  		self.ctx.state.tracking = true;
  		WatchUi.requestUpdate();
+ 		
+ 		startPreventBacklightWorkaround();
+ 	}
+
+	function startPreventBacklightWorkaround() {
+ 		backlightTimer = new Timer.Timer();
+ 		backlightTimer.start(method(:displayOff), 100, true);
+	}
+	
+	function stopPreventBacklightWorkaround() {
+		backlightTimer.stop();
+	}
+ 	 	
+ 	function displayOff() {
+ 		Attention.backlight(false); 	
  	}
  	
  	function confirmConnection() {
@@ -56,6 +73,7 @@ class BusinessManager {
  		self.ctx.commManager.enqueueAsFirst(CommManager.MSG_STOP_TRACKING);
  	}
  	function sendSnoozeAlarm() {
+ 		stopAlarm();
  		self.ctx.commManager.enqueue(CommManager.MSG_SNOOZE_ALARM);
  	}
  	function sendDismissAlarm() {
@@ -113,6 +131,8 @@ class BusinessManager {
  	}
 
  	function switchToAlarmScreen() {
+ 		stopPreventBacklightWorkaround();
+ 		Attention.backlight(true);
  		WatchUi.pushView(new AlarmView(self.ctx), new AlarmDelegate(self.ctx), WatchUi.SLIDE_UP);
  	}
 

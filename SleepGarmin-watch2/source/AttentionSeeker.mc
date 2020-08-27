@@ -3,7 +3,7 @@ using Toybox.Timer;
 
 class AttentionSeeker {
 
-    const shortPulse = [new Attention.VibeProfile(50, 200)];
+    const shortPulse = [new Attention.VibeProfile(100, 200)];
 
 	var ctx;
 	var alarmTimer;

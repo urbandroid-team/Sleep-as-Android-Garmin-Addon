@@ -80,7 +80,13 @@ class CommManager {
     	if (msg != null) {
 	    	self.ctx.state.deliveryInProgress = true;
     		DebugManager.log("CommManager transmit: " + msg);
-	    	Communications.transmit(msg, {}, self.commListener);
+    		
+    		if (self.ctx.state.isHttpCommunicationMode()) {
+    			// TODO: Transmit via makeWebRequest()
+    		} else {
+		    	Communications.transmit(msg, {}, self.commListener);		
+    		}
+    		
     	}
     }
 

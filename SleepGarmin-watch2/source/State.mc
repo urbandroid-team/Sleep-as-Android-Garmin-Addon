@@ -19,6 +19,8 @@ class State {
 	var currentTime;
 	var alarmTime = "--:--";
 	
+	var httpCommunicationMode = false; // Tracks how we currently communicate with the phone
+	
 	function initialize(ctx) {
 		DebugManager.log("State initialized");
 		self.ctx = ctx;
@@ -51,5 +53,8 @@ class State {
 		return self.doingAlarm;
 	}
 	
+	function isHttpCommunicationMode() {
+		return self.httpCommunicationMode;
+	}
 
 }

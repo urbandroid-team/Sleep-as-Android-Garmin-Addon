@@ -14,6 +14,8 @@ class AlarmManager {
 	}
 	
 	function startAlarm(delay) {
+		self.ctx.businessManager.stopPreventBacklightWorkaround();
+	
 		if (delay == 0) {
 			startAlarmNow();
 			return;
@@ -27,6 +29,8 @@ class AlarmManager {
 	}
 	
 	function stopAlarm() {
+		self.ctx.businessManager.startPreventBacklightWorkaround();
+
 		self.ctx.attentionSeeker.stopAlarmVibration();
 		self.ctx.businessManager.backToMainScreen();
 	}

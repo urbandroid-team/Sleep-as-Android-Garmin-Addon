@@ -17,5 +17,12 @@ class AlarmDelegate extends WatchUi.BehaviorDelegate {
     function onBack() {
     	return true;
 	}
+	
+    function onKey(keyEvent){
+    	var k = keyEvent.getKey();
+    	if (k == WatchUi.KEY_ESC || k == WatchUi.KEY_ENTER) { return true; }
+    	return false;
+    }
+	
 
 }

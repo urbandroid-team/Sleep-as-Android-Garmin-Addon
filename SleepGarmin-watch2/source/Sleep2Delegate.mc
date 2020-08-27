@@ -26,7 +26,6 @@ class Sleep2Delegate extends WatchUi.BehaviorDelegate {
     
     function onKey(keyEvent){
     	var k = keyEvent.getKey();
-//    	DebugManager.log("Got key event: " + k);
     	if (k == WatchUi.KEY_ESC || k == WatchUi.KEY_ENTER) { return true; }
     	return false;
     }

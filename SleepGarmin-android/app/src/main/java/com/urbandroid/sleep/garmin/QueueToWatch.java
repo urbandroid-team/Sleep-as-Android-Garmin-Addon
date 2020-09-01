@@ -147,41 +147,44 @@ public class QueueToWatch {
                 emptyQueue();
                 ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery("over max delivery error");
             }
-        } else {
-            if (size() < 1 || deliveryInProgress.get()) {
+            return;
+        }
 
-                if (deliveryInProgress.get()) {
-                    deliveryInProgressCount++;
-                    if (deliveryInProgressCount > MAX_DELIVERY_IN_PROGRESS) {
-                        deliveryInProgressCount = 0;
-                        deliveryInProgress.set(false);
-                        handler.removeCallbacks(sendMessageRunnable);
-                        handler.postDelayed(sendMessageRunnable, MESSAGE_INTERVAL);
-                    }
+        if (size() < 1 || deliveryInProgress.get()) {
+            if (size() > 0 && messageQueue.get(0).equals("StopApp")) {
+                ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("Stuck while sending StopApp, watch app probably not running");
+            }
+            if (deliveryInProgress.get()) {
+                deliveryInProgressCount++;
+                if (deliveryInProgressCount > MAX_DELIVERY_IN_PROGRESS) {
+                    deliveryInProgressCount = 0;
+                    deliveryInProgress.set(false);
+                    handler.removeCallbacks(sendMessageRunnable);
+                    handler.postDelayed(sendMessageRunnable, MESSAGE_INTERVAL);
                 }
-                return;
             }
+            return;
+        }
 
-            final String message = next();
-            if (message == null) {
-                return;
-            }
-            Logger.logDebug(TAG + "sendNextMessage: " + message.toString());
-            deliveryInProgress.set(true);
+        final String message = next();
+        if (message == null) {
+            return;
+        }
+        Logger.logDebug(TAG + "sendNextMessage: " + message.toString());
+        deliveryInProgress.set(true);
 
-            handler.removeCallbacks(sendMessageRunnable);
-            handler.postDelayed(sendMessageRunnable, MESSAGE_TIMEOUT);
+        handler.removeCallbacks(sendMessageRunnable);
+        handler.postDelayed(sendMessageRunnable, MESSAGE_TIMEOUT);
 
-            if (GlobalInitializer.debug){
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        doSendMessage(message);
-                    }
-                }).start();
-            }else{
-                doSendMessage(message);
-            }
+        if (GlobalInitializer.debug){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    doSendMessage(message);
+                }
+            }).start();
+        }else{
+            doSendMessage(message);
         }
     }
 

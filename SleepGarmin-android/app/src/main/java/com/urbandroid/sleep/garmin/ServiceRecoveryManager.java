@@ -6,7 +6,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v4.app.AlarmManagerCompat;
+
+import androidx.core.app.AlarmManagerCompat;
 
 import com.urbandroid.common.logging.Logger;
 

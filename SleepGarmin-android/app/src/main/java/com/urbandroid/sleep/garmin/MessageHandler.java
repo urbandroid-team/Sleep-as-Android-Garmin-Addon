@@ -208,7 +208,7 @@ class MessageHandler {
             queueToWatch.enqueue(TO_WATCH_ALARM_SET + param);
         }
         if (action.equals(HINT)) {
-            long param = intent.getLongExtra("REPEAT", 0);
+            long param = intent.getIntExtra("REPEAT", 0);
             Logger.logDebug(TAG + "Sending hint to watch, with repeat " + param);
             queueToWatch.enqueue(TO_WATCH_HINT + param);
         }

@@ -138,6 +138,8 @@ public class MainActivity extends Activity {
             }
         } catch (InvalidStateException e) {
             Logger.logSevere(e);
+        } catch (IllegalArgumentException e) {
+            Logger.logSevere(e);
         }
         try {
             mConnectIQ.shutdown(this);

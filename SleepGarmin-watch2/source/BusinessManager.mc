@@ -10,6 +10,10 @@ class BusinessManager {
  
  	function initialize(ctx) {
  		self.ctx = ctx;
+ 		
+ 		if (self.ctx.featureFlags.backlightTurnOffWorkaround) {
+ 			self.backlightTimer = new Timer.Timer();
+ 		}
  	}
  	
  	// Hook that is called on every data received callback - we use this so that we do not have to have our own Timer, which is presumably battery intensive.
@@ -35,12 +39,15 @@ class BusinessManager {
  	}
 
 	function startPreventBacklightWorkaround() {
- 		backlightTimer = new Timer.Timer();
- 		backlightTimer.start(method(:displayOff), 100, true);
+		if (self.ctx.featureFlags.backlightTurnOffWorkaround) {
+	 		backlightTimer.start(method(:displayOffWhenOnTrackingScreen), 100, true);	
+		}
 	}
 	
 	function stopPreventBacklightWorkaround() {
-		backlightTimer.stop();
+		if (self.ctx.featureFlags.backlightTurnOffWorkaround) {
+			backlightTimer.stop();
+		}
 	}
  	 	
  	function displayOff() {

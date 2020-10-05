@@ -121,7 +121,12 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void onDeviceStatusChanged(IQDevice device, IQDevice.IQDeviceStatus status) {
-                    Logger.logInfo("Device " + device.getDeviceIdentifier() + "  " + status);
+                    if (device != null) {
+                        Logger.logInfo("Status changed for device: " + device.getDeviceIdentifier());
+                    }
+                    if (status != null) {
+                        Logger.logInfo("Device status changed to: " + status);
+                    }
                 }
             });
         } catch (InvalidStateException e) {

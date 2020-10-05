@@ -50,8 +50,10 @@ class BusinessManager {
 		}
 	}
  	 	
- 	function displayOff() {
- 		Attention.backlight(false); 	
+ 	function displayOffWhenOnTrackingScreen() {
+ 		if (ctx.state.onTrackingScreen) {	
+	 		Attention.backlight(false); 	
+ 		}
  	}
  	
  	function confirmConnection() {
@@ -123,12 +125,15 @@ class BusinessManager {
 
  		var screenLockTimer = new Timer.Timer();
         screenLockTimer.start(method(:lockScreen), 5000, false);
+        
+        self.stopPreventBacklightWorkaround();
  		
  		WatchUi.requestUpdate();
  	}
  	
  	function lockScreen() {
  		self.ctx.state.screenLocked = true;
+ 		self.startPreventBacklightWorkaround();
  		WatchUi.requestUpdate(); 	
  	}
  	

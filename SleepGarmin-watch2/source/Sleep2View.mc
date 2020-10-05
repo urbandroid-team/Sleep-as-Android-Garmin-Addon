@@ -22,6 +22,7 @@ class Sleep2View extends WatchUi.View {
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() {
+    	self.ctx.state.onTrackingScreen = true;
     }
 
     // Update the view
@@ -42,6 +43,7 @@ class Sleep2View extends WatchUi.View {
     // state of this View here. This includes freeing resources from
     // memory.
     function onHide() {
+    	self.ctx.state.onTrackingScreen = false;
     }
     
     private function updateMainText(isScreenLocked) {

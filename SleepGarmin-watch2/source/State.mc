@@ -15,6 +15,7 @@ class State {
 	var tracking = false;
 	
 	var screenLocked = true;
+	var onTrackingScreen = true;
 	
 	var currentTime;
 	var alarmTime = "--:--";

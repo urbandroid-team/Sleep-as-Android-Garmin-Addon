@@ -54,7 +54,7 @@ class SensorManager {
 				lastOximeterReadingSec = 0;
 				var sensorInfo = Sensor.getInfo();
 			    if (sensorInfo has :oxygenSaturation && sensorInfo.oxygenSaturation != null) {
-		    	    onOxyData(oxygenSaturation);		    	    
+		    	    onOxyData(sensorInfo.oxygenSaturation);		    	    
 			    }
 			}
 			lastOximeterReadingSec = lastOximeterReadingSec + SENSOR_PERIOD_SEC;

@@ -3,7 +3,7 @@ using Toybox.Sensor;
 class SensorManager {
 
 	const SENSOR_PERIOD_SEC = 4;
-	const OXI_READING_PERIOD_SEC = 60;
+	const OXI_READING_PERIOD_SEC = 4;
 
 	var ctx;
 	

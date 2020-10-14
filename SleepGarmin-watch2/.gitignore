@@ -1,4 +1,4 @@
 Release.key
-/.idea/
-/build/
-/bin/
+.idea/
+build/
+bin/

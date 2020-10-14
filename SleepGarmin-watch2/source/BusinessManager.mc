@@ -151,5 +151,9 @@ class BusinessManager {
  	function backToMainScreen() {
  		WatchUi.popView(WatchUi.SLIDE_DOWN);
  	}
+ 	
+ 	function doHint(repeat) {
+		self.ctx.attentionSeeker.doHint(repeat);
+ 	}
 
  }

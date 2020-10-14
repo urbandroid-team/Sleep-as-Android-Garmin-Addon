@@ -6,14 +6,9 @@ using Toybox.Attention;
 class BusinessManager {
  
  	var ctx;
- 	var backlightTimer;
- 
+
  	function initialize(ctx) {
  		self.ctx = ctx;
- 		
- 		if (self.ctx.featureFlags.backlightTurnOffWorkaround) {
- 			self.backlightTimer = new Timer.Timer();
- 		}
  	}
  	
  	// Hook that is called on every data received callback - we use this so that we do not have to have our own Timer, which is presumably battery intensive.
@@ -35,21 +30,8 @@ class BusinessManager {
  		self.ctx.state.tracking = true;
  		WatchUi.requestUpdate();
  		
- 		startPreventBacklightWorkaround();
  	}
 
-	function startPreventBacklightWorkaround() {
-		if (self.ctx.featureFlags.backlightTurnOffWorkaround) {
-	 		backlightTimer.start(method(:displayOffWhenOnTrackingScreen), 100, true);	
-		}
-	}
-	
-	function stopPreventBacklightWorkaround() {
-		if (self.ctx.featureFlags.backlightTurnOffWorkaround) {
-			backlightTimer.stop();
-		}
-	}
- 	 	
  	function displayOffWhenOnTrackingScreen() {
  		if (ctx.state.onTrackingScreen) {	
 	 		Attention.backlight(false); 	
@@ -126,15 +108,12 @@ class BusinessManager {
  		var screenLockTimer = new Timer.Timer();
         screenLockTimer.start(method(:lockScreen), 5000, false);
         
-        self.stopPreventBacklightWorkaround();
- 		
  		WatchUi.requestUpdate();
  	}
  	
  	function lockScreen() {
  		self.ctx.state.screenLocked = true;
- 		self.startPreventBacklightWorkaround();
- 		WatchUi.requestUpdate(); 	
+ 		WatchUi.requestUpdate();
  	}
  	
  	function exit() {
@@ -143,7 +122,6 @@ class BusinessManager {
  	}
 
  	function switchToAlarmScreen() {
- 		stopPreventBacklightWorkaround();
  		Attention.backlight(true);
  		WatchUi.pushView(new AlarmView(self.ctx), new AlarmDelegate(self.ctx), WatchUi.SLIDE_UP);
  	}

@@ -1,4 +1,5 @@
 using Toybox.Communications;
+using Toybox.System;
 
 class CommManager {
 
@@ -31,6 +32,7 @@ class CommManager {
 	
     const MAX_DELIVERY_ERROR = 3;
     const MAX_DELIVERY_PAUSE = 3;
+    const MAX_WAITING_TIME_IN_TRANSMIT_MS = 60000;
 
     function initialize(ctx) {
         DebugManager.log("CommManager initialized");
@@ -61,7 +63,14 @@ class CommManager {
     
     public function triggerSend() {
     	DebugManager.log("Comm TriggerSend, inprogress: " + self.ctx.state.deliveryInProgress);
-    	if (self.ctx.state.deliveryInProgress) { return; }
+    	if (self.ctx.state.deliveryInProgress && ((System.getTimer() - self.ctx.state.lastTransmitTs) < MAX_WAITING_TIME_IN_TRANSMIT_MS)) { 
+    		return; 
+    	}
+    	
+    	if (self.ctx.state.deliveryInProgress) {
+    		DebugManager.log("TriggerSend overriding deliveryInProgress");
+    	}
+    	
     	
     	if (self.ctx.state.deliveryErrorCount > MAX_DELIVERY_ERROR) {
     		self.ctx.state.deliveryPauseCount++;
@@ -80,6 +89,7 @@ class CommManager {
     	if (msg != null) {
 	    	self.ctx.state.deliveryInProgress = true;
     		DebugManager.log("CommManager transmit: " + msg);
+    		self.ctx.state.lastTransmitTs = System.getTimer();
     		
     		if (self.ctx.state.isHttpCommunicationMode()) {
     			// TODO: Transmit via makeWebRequest()

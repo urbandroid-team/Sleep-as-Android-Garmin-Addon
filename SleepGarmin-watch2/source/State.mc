@@ -9,6 +9,7 @@ class State {
 	var deliveryInProgress = false;
     var deliveryErrorCount = 0;
     var deliveryPauseCount = 0;
+	var lastTransmitTs = 0;
 		
 	var doingHint = false;
 	var doingAlarm = false;

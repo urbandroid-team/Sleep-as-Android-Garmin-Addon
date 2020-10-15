@@ -29,6 +29,7 @@ class CommManager {
 	static const MSG_DATA = "DATA_NEW";
 	static const MSG_HR = "HR";
 	static const MSG_OXY = "SPO2";
+	static const MSG_RR = "RR";
 	
     const MAX_DELIVERY_ERROR = 3;
     const MAX_DELIVERY_PAUSE = 3;

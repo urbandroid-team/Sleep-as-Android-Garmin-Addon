@@ -26,7 +26,10 @@ class Sleep2Delegate extends WatchUi.BehaviorDelegate {
     
     function onKey(keyEvent){
     	var k = keyEvent.getKey();
+
+    	// Prevents exiting from the app
     	if (k == WatchUi.KEY_ESC || k == WatchUi.KEY_ENTER) { return true; }
+
     	return false;
     }
 

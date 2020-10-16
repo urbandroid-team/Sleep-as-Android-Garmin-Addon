@@ -140,8 +140,7 @@ public class CIQManager {
         connectIQ.sendMessage(getDevice(), getApp(), message, listener);
     }
 
-    private static Context initializeConnectIQWrapped(
-            Context context, ConnectIQ connectIQ, boolean autoUI, ConnectIQ.ConnectIQListener listener) {
+    private static Context initializeConnectIQWrapped(Context context, ConnectIQ connectIQ, boolean autoUI, ConnectIQ.ConnectIQListener listener) {
         if (connectIQ instanceof ConnectIQAdbStrategy) {
             connectIQ.initialize(context, autoUI, listener);
             return context;

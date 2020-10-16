@@ -15,6 +15,10 @@ import static com.urbandroid.sleep.garmin.Constants.CHECK_CONNECTED;
 import static com.urbandroid.sleep.garmin.Constants.DATA_WITH_EXTRA;
 import static com.urbandroid.sleep.garmin.Constants.DISMISS_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.DO_HR_MONITORING;
+import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_BATCH;
+import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_RR;
+import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_SPO2;
+import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_TIMESTAMP;
 import static com.urbandroid.sleep.garmin.Constants.HINT;
 import static com.urbandroid.sleep.garmin.Constants.NEW_DATA_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.NEW_HR_DATA_ACTION_NAME;
@@ -24,7 +28,6 @@ import static com.urbandroid.sleep.garmin.Constants.RESUME_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.SET_BATCH_SIZE;
 import static com.urbandroid.sleep.garmin.Constants.SET_PAUSE;
 import static com.urbandroid.sleep.garmin.Constants.SNOOZE_ACTION_NAME;
-import static com.urbandroid.sleep.garmin.Constants.SPO2_DATA_EXTRA;
 import static com.urbandroid.sleep.garmin.Constants.STARTED_ON_WATCH_NAME;
 import static com.urbandroid.sleep.garmin.Constants.START_ALARM;
 import static com.urbandroid.sleep.garmin.Constants.START_WATCH_APP;
@@ -70,6 +73,7 @@ class MessageHandler {
         Logger.logDebug(TAG + "From watch: " + message.toString() + " with status " +status.toString());
         String[] msgArray = message.toArray()[0].toString().replaceAll("\\[","").replaceAll("\\]", "").split(",");
         String receivedMsgType = msgArray[0];
+        String[] receivedData = Arrays.copyOfRange(msgArray, 1, msgArray.length);
 
         // At this moment we are sure that app on the watch is running so we can reset the prompt latch
         launchAppPromptAlreadyShownInCurrentSession = false;
@@ -138,11 +142,29 @@ class MessageHandler {
                 queueToWatch.enqueue(TO_WATCH_STOP);
                 break;
             case "SPO2":
-                float[] spo2Data = new float[]{Float.parseFloat(msgArray[1])};
-                Logger.logInfo(TAG + ": received SpO2 data from watch " + spo2Data[0]);
+                float[] spo2 = Utils.stringArrayToFloatArray(Arrays.copyOfRange(receivedData, 0, receivedData.length - 2));
+                int spo2Timestamp = Integer.parseInt(receivedData[receivedData.length - 1]);
+
+                Logger.logInfo(TAG + ": received SpO2 data from watch " + receivedMsgType + " " + spo2Timestamp + ": " + spo2);
                 Intent spo2Intent = new Intent(DATA_WITH_EXTRA);
-                spo2Intent.putExtra(SPO2_DATA_EXTRA, spo2Data);
+                spo2Intent.putExtra(EXTRA_DATA_SPO2, true);
+                spo2Intent.putExtra(EXTRA_DATA_TIMESTAMP, spo2Timestamp);
+                spo2Intent.putExtra(EXTRA_DATA_BATCH, spo2);
+
                 sendExplicitBroadcastToSleep(spo2Intent, context);
+                break;
+            case "RR":
+                float[] rrData = Utils.stringArrayToFloatArray(Arrays.copyOfRange(receivedData, 0, receivedData.length - 2));
+                int rrTimestamp = Integer.parseInt(receivedData[receivedData.length - 1]);
+
+                Logger.logInfo(TAG + ": received RR data from watch " + receivedMsgType + " " + rrTimestamp + ": " + rrData);
+                Intent rrDataIntent = new Intent(DATA_WITH_EXTRA);
+                rrDataIntent.putExtra(EXTRA_DATA_RR, true);
+                rrDataIntent.putExtra(EXTRA_DATA_TIMESTAMP, rrTimestamp);
+                rrDataIntent.putExtra(EXTRA_DATA_BATCH, rrData);
+
+                sendExplicitBroadcastToSleep(rrDataIntent, context);
+                break;
         }
 
         if (maxRawFloatValues != null) {
@@ -226,7 +248,9 @@ class MessageHandler {
                             @Override
                             public void onOpenApplicationResponse(IQDevice iqDevice, IQApp iqApp, ConnectIQ.IQOpenApplicationStatus iqOpenApplicationStatus) {
                                 Logger.logDebug(TAG + "onOpenAppOnWatch response: " + iqOpenApplicationStatus);
-                                if (iqOpenApplicationStatus == ConnectIQ.IQOpenApplicationStatus.PROMPT_SHOWN_ON_DEVICE) { }
+                                if (iqOpenApplicationStatus == ConnectIQ.IQOpenApplicationStatus.PROMPT_SHOWN_ON_DEVICE) {
+                                    // TODO: bug here - if nothing else comes through to the watch, the service foreground notification stays hanging, for example on alarm without tracking???
+                                }
 
                                 if (iqOpenApplicationStatus == ConnectIQ.IQOpenApplicationStatus.PROMPT_NOT_SHOWN_ON_DEVICE || iqOpenApplicationStatus == ConnectIQ.IQOpenApplicationStatus.UNKNOWN_FAILURE) {
                                     launchAppPromptAlreadyShownInCurrentSession = false;

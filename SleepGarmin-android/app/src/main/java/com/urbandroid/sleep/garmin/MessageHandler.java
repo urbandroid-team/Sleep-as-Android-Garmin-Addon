@@ -16,6 +16,7 @@ import static com.urbandroid.sleep.garmin.Constants.DATA_WITH_EXTRA;
 import static com.urbandroid.sleep.garmin.Constants.DISMISS_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.DO_HR_MONITORING;
 import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_BATCH;
+import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_FRAMERATE;
 import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_RR;
 import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_SPO2;
 import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_TIMESTAMP;
@@ -142,13 +143,15 @@ class MessageHandler {
                 queueToWatch.enqueue(TO_WATCH_STOP);
                 break;
             case "SPO2":
-                float[] spo2 = Utils.stringArrayToFloatArray(Arrays.copyOfRange(receivedData, 0, receivedData.length - 2));
+                float[] spo2 = Utils.stringArrayToFloatArray(Arrays.copyOfRange(receivedData, 0, receivedData.length - 3));
+                int spo2Framerate = Integer.parseInt(receivedData[receivedData.length - 2]);
                 int spo2Timestamp = Integer.parseInt(receivedData[receivedData.length - 1]);
 
                 Logger.logInfo(TAG + ": received SpO2 data from watch " + receivedMsgType + " " + spo2Timestamp + ": " + spo2);
                 Intent spo2Intent = new Intent(DATA_WITH_EXTRA);
                 spo2Intent.putExtra(EXTRA_DATA_SPO2, true);
                 spo2Intent.putExtra(EXTRA_DATA_TIMESTAMP, spo2Timestamp);
+                spo2Intent.putExtra(EXTRA_DATA_FRAMERATE, spo2Framerate);
                 spo2Intent.putExtra(EXTRA_DATA_BATCH, spo2);
 
                 sendExplicitBroadcastToSleep(spo2Intent, context);

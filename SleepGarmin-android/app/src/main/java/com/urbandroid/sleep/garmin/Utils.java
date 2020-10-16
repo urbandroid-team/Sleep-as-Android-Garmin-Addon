@@ -39,4 +39,20 @@ public class Utils {
         return false;
     }
 
+    public static float[] stringArrayToFloatArray(String[] ar) {
+        float[] floatAr = new float[ar.length];
+
+        for (int i = 0; i < ar.length; i++) {
+            String maxRawValue = ar[i];
+
+            try {
+                floatAr[i] = Float.parseFloat(maxRawValue);
+            } catch (NumberFormatException e) {
+                floatAr[i] = 0;
+            }
+        }
+
+        return floatAr;
+    }
+
 }

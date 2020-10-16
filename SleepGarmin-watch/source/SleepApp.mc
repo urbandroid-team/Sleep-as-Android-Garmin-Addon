@@ -259,6 +259,7 @@ class SleepApp extends App.AppBase {
         gatherData(info);
 
         if (alarm_currently_active) {
+            Attention.backlight(true);
             alarmCount++;
             if (delay <= 0) {
                 if (alarmViewActive != true) {

@@ -1,4 +1,5 @@
 using Toybox.Sensor;
+using Toybox.System;
 
 class SensorManager {
 
@@ -13,6 +14,9 @@ class SensorManager {
 	var accBatch = [];
 	
 	var hrBuf = [];
+	var rrIntervalsBuf = [];
+	
+	var spo2buf = [];
 	
 	var lastOximeterReadingSec = 0;
 
@@ -50,7 +54,7 @@ class SensorManager {
 	 	    	onHRData(sensorData.heartRateData.heartBeatIntervals);
 			}	
 			
-			if (lastOximeterReadingSec > OXI_READING_PERIOD_SEC) {
+			if (lastOximeterReadingSec >= OXI_READING_PERIOD_SEC) {
 				lastOximeterReadingSec = 0;
 				var sensorInfo = Sensor.getInfo();
 			    if (sensorInfo has :oxygenSaturation && sensorInfo.oxygenSaturation != null) {
@@ -100,6 +104,7 @@ class SensorManager {
     	}
     }
     
+    // Gathers both rr intervals and computes hr
     function onHRData(heartBeatIntervalsArray) {
     	DebugManager.log("OnHRData");
 //    	DebugManager.log("HeartIntervals " + heartBeatIntervalsArray);
@@ -109,6 +114,13 @@ class SensorManager {
     	if (latestHr == null) { return; }
 //        DebugManager.log("hr " + latestHr);
         
+        rrIntervalsBuf.addAll(heartBeatIntervalsArray);
+        if (rrIntervalsBuf.size() > 120) {
+        	rrIntervalsBuf.add(System.getTimer());
+    		self.ctx.businessManager.sendRrIntervalsData(rrIntervalsBuf);
+    		rrIntervalsBuf = [];        
+        }
+        
     	hrBuf.add(latestHr);
     	if (hrBuf.size() > (60 / SENSOR_PERIOD_SEC)) { // Minute divided by period 
     		self.ctx.businessManager.sendHrData(DataUtil.median(hrBuf));
@@ -116,10 +128,17 @@ class SensorManager {
     	}
     }
     
-    function onOxyData(oxygenSaturation) {
+    function onOxyData(spo2) {
     	DebugManager.log("onOxyData");
     	
-    	self.ctx.businessManager.sendOxyData(oxygenSaturation);
+        spo2buf.add(spo2);
+        if (spo2buf.size() > 120 / OXI_READING_PERIOD_SEC) {
+        	spo2buf.add(OXI_READING_PERIOD_SEC); // add framerate at the end-1 of array
+        	spo2buf.add(System.getTimer()); // add timestamp at the end of array
+        	
+    		self.ctx.businessManager.sendOxyData(spo2buf);
+    		spo2buf = [];        
+        }
     }
 
 }

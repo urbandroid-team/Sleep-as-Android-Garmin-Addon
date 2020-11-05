@@ -72,7 +72,7 @@ class MessageHandler {
 
     public void handleMessageFromWatch(List<Object> message, ConnectIQ.IQMessageStatus status, Context context) {
         Logger.logDebug(TAG + "From watch: " + message.toString() + " with status " +status.toString());
-        String[] msgArray = message.toArray()[0].toString().replaceAll("\\[","").replaceAll("\\]", "").split(",");
+        String[] msgArray = message.toArray()[0].toString().replaceAll("\\[","").replaceAll("\\]", "").replaceAll(" ",  "").split(",");
         String receivedMsgType = msgArray[0];
         String[] receivedData = Arrays.copyOfRange(msgArray, 1, msgArray.length);
 

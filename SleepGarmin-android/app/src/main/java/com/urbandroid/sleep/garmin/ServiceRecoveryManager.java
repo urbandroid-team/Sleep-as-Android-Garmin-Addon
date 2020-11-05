@@ -65,7 +65,7 @@ public class ServiceRecoveryManager {
             m.set(AlarmManager.RTC_WAKEUP, alarmTime, pi);
         }
 
-        Logger.logInfo("Restart alarm scheduled " + new Date(alarmTime));
+        Logger.logInfo(TAG + "recovery alarm scheduled for " + new Date(alarmTime));
     }
 
     private PendingIntent getRecoveryIntent(Service service) {

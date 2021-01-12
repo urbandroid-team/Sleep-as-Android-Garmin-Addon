@@ -3,6 +3,7 @@ using Toybox.Timer;
 class AlarmManager {
 
 	var ctx;
+	var alarmDelayTimer;
 
 	function initialize(ctx) {
 		self.ctx = ctx;
@@ -20,7 +21,7 @@ class AlarmManager {
 		}
 		
 		if (delay > 0) {
-			var alarmDelayTimer = new Timer.Timer();
+			alarmDelayTimer = new Timer.Timer();
             alarmDelayTimer.start(method(:startAlarmNow), delay, false);
 		}
 	

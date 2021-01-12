@@ -6,13 +6,17 @@ class AttentionSeeker {
     const shortPulse = [new Attention.VibeProfile(100, 200)];
 
 	var ctx;
-	var alarmTimer;
+	var alarmTimer = new Timer.Timer();
 	var alarmTimerRunning = false;
+
+	var vibrTimer = new Timer.Timer();
+	var vibrTimerRunning = false;
 
 	function initialize(ctx) { self.ctx = ctx; }
 	
 	function hintVibrCallback() {
 		self.ctx.state.doingHint = false;
+		vibrTimerRunning = false;
 	}
 	
     function doHint(repeat) {
@@ -34,8 +38,10 @@ class AttentionSeeker {
                 vibrateData.add(new Attention.VibeProfile(  0, 1000));
             }
             Attention.vibrate(vibrateData);
-            var vibrTimer = new Timer.Timer();
-            vibrTimer.start(method(:hintVibrCallback), 2000 * repeat, false);
+            if (!vibrTimerRunning) {            
+	            vibrTimer.start(method(:hintVibrCallback), 2000 * repeat, false);
+	            vibrTimerRunning = true;
+            }
         }
     }
     
@@ -47,7 +53,6 @@ class AttentionSeeker {
     
     function startAlarmVibration() {
     	if (!alarmTimerRunning) {
-	    	alarmTimer = new Timer.Timer();
 	    	alarmTimer.start(method(:vibrateForAlarmOnce), 1000, true);
 	    	alarmTimerRunning = true;    	
     	}

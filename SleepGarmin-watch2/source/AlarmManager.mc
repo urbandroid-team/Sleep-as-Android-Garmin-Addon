@@ -20,8 +20,8 @@ class AlarmManager {
 		}
 		
 		if (delay > 0) {
-			var alarmTimer = new Timer.Timer();
-            alarmTimer.start(method(:startAlarmNow), delay, false);
+			var alarmDelayTimer = new Timer.Timer();
+            alarmDelayTimer.start(method(:startAlarmNow), delay, false);
 		}
 	
 	}

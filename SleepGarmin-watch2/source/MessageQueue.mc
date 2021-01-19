@@ -25,7 +25,7 @@ class MessageQueue {
 
         DebugManager.log("free: " + Sys.getSystemStats().freeMemory + " ratio:" + freeMemRatio);
 
-        if (((freeMemRatio <= 7) && (queue.size() > 0)) || (queue.size() > 50)) {
+        if (((freeMemRatio <= 15) && (queue.size() > 0)) || (queue.size() > 50)) {
             DebugManager.log("Rem from q, freeRatio:" + freeMemRatio + ",q:" + queue.size());
             queue.remove(queue[0]);
         }

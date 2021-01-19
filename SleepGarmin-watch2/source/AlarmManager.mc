@@ -3,13 +3,15 @@ using Toybox.Timer;
 class AlarmManager {
 
 	var ctx;
-	var alarmDelayTimer;
+	var alarmDelayTimer = new Timer.Timer();
+	var alarmDelayTimerRunning = false;
 
 	function initialize(ctx) {
 		self.ctx = ctx;
 	}
 	
 	function startAlarmNow() {
+	    alarmDelayTimerRunning = false;
 		self.ctx.businessManager.switchToAlarmScreen();
 		self.ctx.attentionSeeker.startAlarmVibration();
 	}
@@ -21,7 +23,7 @@ class AlarmManager {
 		}
 		
 		if (delay > 0) {
-			alarmDelayTimer = new Timer.Timer();
+		    alarmDelayTimerRunning = true;
             alarmDelayTimer.start(method(:startAlarmNow), delay, false);
 		}
 	

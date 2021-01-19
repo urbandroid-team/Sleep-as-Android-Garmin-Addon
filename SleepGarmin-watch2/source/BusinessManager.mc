@@ -69,10 +69,10 @@ class BusinessManager {
  	}
  	function sendSnoozeAlarm() {
  		stopAlarm();
- 		self.ctx.commManager.enqueue(CommManager.MSG_SNOOZE_ALARM);
+ 		self.ctx.commManager.enqueueAsFirst(CommManager.MSG_SNOOZE_ALARM);
  	}
  	function sendDismissAlarm() {
- 		self.ctx.commManager.enqueue(CommManager.MSG_DISMISS_ALARM); 	
+ 		self.ctx.commManager.enqueueAsFirst(CommManager.MSG_DISMISS_ALARM); 	
  	}
  	function forceStop() {
 		System.exit();

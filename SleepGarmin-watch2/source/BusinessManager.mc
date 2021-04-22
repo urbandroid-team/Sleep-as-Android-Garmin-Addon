@@ -16,6 +16,7 @@ class BusinessManager {
  		DebugManager.log("BusinessManager onDataHook");
  		self.ctx.commManager.triggerSend();
  		updateTime(true);
+ 		lockScreen();
  	}
  	
  	
@@ -106,18 +107,19 @@ class BusinessManager {
  	}
  	
  	function unlockScreen() {
- 		self.ctx.state.screenLocked = false;
- 		DebugManager.log("UnlockScreen");
-
- 		var screenLockTimer = new Timer.Timer();
-        screenLockTimer.start(method(:lockScreen), 5000, false);
-        
- 		WatchUi.requestUpdate();
+ 		if (self.ctx.state.screenLocked) {
+			self.ctx.state.screenLocked = false;
+			self.ctx.state.screenLockedAt = System.getTimer();
+	 		DebugManager.log("UnlockScreen");
+	 		WatchUi.requestUpdate();
+	 	}
  	}
  	
  	function lockScreen() {
- 		self.ctx.state.screenLocked = true;
- 		WatchUi.requestUpdate();
+ 		if (!self.ctx.state.screenLocked && (System.getTimer() - self.ctx.state.screenLockedAt > 5000)) {
+	 		self.ctx.state.screenLocked = true;
+	 		WatchUi.requestUpdate(); 		
+ 		}
  	}
  	
  	function exit() {

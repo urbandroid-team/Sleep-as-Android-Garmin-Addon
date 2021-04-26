@@ -50,6 +50,10 @@ class CommManager {
         
         if (DebugManager.commDebug) {
 	        self.ctx.businessManager.startTracking();
+	        
+	        var msg = new Communications.PhoneAppMessage();
+	        msg.data = CommManager.MSG_SET_ALARM + "1619444185000";
+	        handleMessageReceived(msg);
         }
     }
     

@@ -23,7 +23,7 @@ class DateUtil {
 			return DateUtil.momentToHHMM(mom);
 		} else {		
 			DebugManager.log("msTimestampToHHMM NOT: " + timestampMs);
-			return "??";
+			return timestampMs;
 		}
 	}
 }

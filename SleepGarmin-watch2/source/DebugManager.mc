@@ -4,8 +4,8 @@ using Toybox.Time;
 using Toybox.Time.Gregorian;
 
 class DebugManager {
-    const debug = true; // must be false for production
-    const commDebug = true;
+    const debug = false; // must be false for production
+    const commDebug = false;
     
     static function log(message) {
     	if (DebugManager.debug) {

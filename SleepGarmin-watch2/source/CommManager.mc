@@ -49,15 +49,16 @@ class CommManager {
         enqueue(CommManager.MSG_START_TRACKING);
         
         if (DebugManager.commDebug) {
-	        self.ctx.businessManager.startTracking();
-	        
 	        var msg = new Communications.PhoneAppMessage();
-	        msg.data = CommManager.MSG_SET_ALARM + "1619444185000";
+			msg.data = CommManager.MSG_START;
 	        handleMessageReceived(msg);
+	        
+	        var msg2 = new Communications.PhoneAppMessage();
+			msg2.data = CommManager.MSG_START_ALARM + "0";
+	        handleMessageReceived(msg2);
         }
     }
-    
-    
+        
     public function enqueue(msg) {
     	DebugManager.log("CommManager enqueue " + msg);
     	self.queue.enqueue(msg);

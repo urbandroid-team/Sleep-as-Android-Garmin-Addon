@@ -5,7 +5,12 @@ using Toybox.Lang;
 class DateUtil {
 	static function convertMsTsToMoment(timestampMs) {
 //		DebugManager.log("convertMsTsToMoment: " + timestampMs);
-		return new Time.Moment(Math.floor(timestampMs/1000));
+		try {
+			var mom = new Time.Moment(Math.floor(timestampMs/1000));
+			return mom;
+		} catch( ex instanceof Lang.UnexpectedTypeException) {
+			return timestampMs;
+		}
 	}
 	
 	static function momentToHHMM(moment) {

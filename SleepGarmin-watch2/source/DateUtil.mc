@@ -5,12 +5,8 @@ using Toybox.Lang;
 class DateUtil {
 	static function convertMsTsToMoment(timestampMs) {
 //		DebugManager.log("convertMsTsToMoment: " + timestampMs);
-		try {
 			var mom = new Time.Moment(Math.floor(timestampMs/1000));
 			return mom;
-		} catch( ex instanceof Lang.UnexpectedTypeException) {
-			return timestampMs;
-		}
 	}
 	
 	static function momentToHHMM(moment) {
@@ -21,13 +17,13 @@ class DateUtil {
 	}
 	
 	static function msTimestampToHHMM(timestampMs) {
-//		DebugManager.log("msTimestampToHHMM: " + timestampMs);
-		try {
+		if (timestampMs instanceof Lang.Long) {
+			DebugManager.log("msTimestampToHHMM: " + timestampMs);
 			var mom = DateUtil.convertMsTsToMoment(timestampMs);
-//			DebugManager.log("msTimestampToHHMM, mom ready");
 			return DateUtil.momentToHHMM(mom);
-		} catch( ex instanceof Lang.UnexpectedTypeException ) {
-			return timestampMs;
+		} else {		
+			DebugManager.log("msTimestampToHHMM NOT: " + timestampMs);
+			return "??";
 		}
 	}
 }

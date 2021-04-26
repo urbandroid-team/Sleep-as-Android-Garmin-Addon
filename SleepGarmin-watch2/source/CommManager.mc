@@ -47,6 +47,10 @@ class CommManager {
         self.commListener = new CommListener(self.queue, self.ctx);
         
         enqueue(CommManager.MSG_START_TRACKING);
+        
+        if (DebugManager.commDebug) {
+	        self.ctx.businessManager.startTracking();
+        }
     }
     
     
@@ -92,7 +96,10 @@ class CommManager {
     		DebugManager.log("CommManager transmit: " + msg);
     		self.ctx.state.lastTransmitTs = System.getTimer();
     		
-    		if (self.ctx.state.isHttpCommunicationMode()) {
+    		if (DebugManager.commDebug) {
+    			DebugManager.log("Transmitted");
+    			self.commListener.onComplete();
+    		} else if (self.ctx.state.isHttpCommunicationMode()) {
     			// TODO: Transmit via makeWebRequest()
     		} else {
 		    	Communications.transmit(msg, {}, self.commListener);		

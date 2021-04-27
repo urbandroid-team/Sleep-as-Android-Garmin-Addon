@@ -20,7 +20,7 @@ public class ServiceRecoveryManager {
 
     private static final ServiceRecoveryManager ourInstance = new ServiceRecoveryManager();
     private static final String TAG = "ServiceRecoveryManager: ";
-    private final static long TIME_TO_RECOVER = TimeUnit.MINUTES.toMillis(15);
+    private final static long TIME_TO_RECOVER = TimeUnit.MINUTES.toMillis(5);
 
     public static ServiceRecoveryManager getInstance() {
         return ourInstance;

@@ -116,7 +116,7 @@ class BusinessManager {
  	}
  	
  	function lockScreen() {
- 		if (!self.ctx.state.screenLocked && (System.getTimer() - self.ctx.state.screenLockedAt > 5000)) {
+ 		if (self.ctx.state.tracking && !self.ctx.state.screenLocked && (System.getTimer() - self.ctx.state.screenLockedAt > 5000)) {
 	 		self.ctx.state.screenLocked = true;
 	 		WatchUi.requestUpdate(); 		
  		}

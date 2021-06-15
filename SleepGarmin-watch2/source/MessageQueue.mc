@@ -16,6 +16,7 @@ class MessageQueue {
 		var newQ = [msg];
 		newQ.addAll(queue);
 		queue = newQ;
+		newQ = null;
 	}
 	
 	function enqueue(msg) {
@@ -23,9 +24,9 @@ class MessageQueue {
 
         var freeMemRatio = Sys.getSystemStats().freeMemory*100/Sys.getSystemStats().totalMemory;
 
-        DebugManager.log("free: " + Sys.getSystemStats().freeMemory + " ratio:" + freeMemRatio);
+        DebugManager.log("free: " + Sys.getSystemStats().freeMemory + " ratio:" + freeMemRatio + " q size:" + queue.size());
 
-        if (((freeMemRatio <= 15) && (queue.size() > 0)) || (queue.size() > 50)) {
+        if (((freeMemRatio <= 65) && (queue.size() > 0)) || (queue.size() > 30)) {
             DebugManager.log("Rem from q, freeRatio:" + freeMemRatio + ",q:" + queue.size());
             queue.remove(queue[0]);
         }

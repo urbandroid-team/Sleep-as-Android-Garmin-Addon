@@ -53,9 +53,12 @@ class CommManager {
 			msg.data = CommManager.MSG_START;
 	        handleMessageReceived(msg);
 	        
-	        var msg2 = new Communications.PhoneAppMessage();
-			msg2.data = CommManager.MSG_START_ALARM + "0";
-	        handleMessageReceived(msg2);
+	        msg.data = CommManager.MSG_BATCH_SIZE + "12";
+	        handleMessageReceived(msg);
+	        
+//	        var msg2 = new Communications.PhoneAppMessage();
+//			msg2.data = CommManager.MSG_START_ALARM + "0";
+//	        handleMessageReceived(msg2);
         }
     }
         
@@ -102,8 +105,9 @@ class CommManager {
     		self.ctx.state.lastTransmitTs = System.getTimer();
     		
     		if (DebugManager.commDebug) {
-    			DebugManager.log("Transmitted");
-    			self.commListener.onComplete();
+    			DebugManager.log("NOT Transmitted");
+//    			self.commListener.onComplete();
+				self.commListener.onError();
     		} else if (self.ctx.state.isHttpCommunicationMode()) {
     			// TODO: Transmit via makeWebRequest()
     		} else {

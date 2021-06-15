@@ -174,7 +174,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
     }
 
     private void startProviderServiceBecauseWatchSaidSo(Context context) {
-        Logger.logInfo(TAG + "ConnectIQ intent received, starting service...");
+        Logger.logInfo(TAG + " ConnectIQ intent received, starting service...");
         ContextCompat.startForegroundService(context,new Intent(context, SleepAsAndroidProviderService.class));
         Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
         startIntent.setPackage(PACKAGE_SLEEP);

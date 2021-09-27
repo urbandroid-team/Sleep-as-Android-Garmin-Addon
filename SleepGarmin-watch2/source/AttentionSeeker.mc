@@ -53,8 +53,8 @@ class AttentionSeeker {
     
     function startAlarmVibration() {
     	if (!alarmTimerRunning) {
-	    	alarmTimer.start(method(:vibrateForAlarmOnce), 1000, true);
 	    	alarmTimerRunning = true;    	
+	    	alarmTimer.start(method(:vibrateForAlarmOnce), 1000, true);
     	}
     }
     

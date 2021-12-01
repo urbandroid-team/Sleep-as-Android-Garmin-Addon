@@ -15,7 +15,6 @@ class Sleep2View extends WatchUi.View {
     // Load your resources here
     function onLayout(dc) {
         setLayout(Rez.Layouts.MainLayout(dc));
-		
     }
 
     // Called when this View is brought to the foreground. Restore
@@ -50,14 +49,14 @@ class Sleep2View extends WatchUi.View {
 	    var textArea = View.findDrawableById("lockedTextArea");
     
 		if (isScreenLocked) {
-			if (self.ctx.hasMenuButton()) {
+			if (SystemUtil.hasMenuButton()) {
 				textArea.setText(Rez.Strings.lockedNoTouch);		
 			} else {			
 				textArea.setText(Rez.Strings.lockedTouch);		
 			}
 
 		} else {				
-			if (self.ctx.hasMenuButton()) {
+			if (SystemUtil.hasMenuButton()) {
 				textArea.setText(Rez.Strings.unlockedNoTouch);					
 			} else {
 				textArea.setText(Rez.Strings.unlockedTouch);		

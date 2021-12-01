@@ -51,12 +51,11 @@ class AlarmView extends WatchUi.View {
     private function updateMainText() {
 	    var textArea = View.findDrawableById("mainText");
     
-		if (self.ctx.hasMenuButton()) {
+		if (SystemUtil.hasMenuButton()) {
 			textArea.setText(Rez.Strings.mainAlarmTextNoTouch);					
 		} else {
 			textArea.setText(Rez.Strings.mainAlarmTextTouch);		
 		}
-
     }
     
     private function updateTimeText() {

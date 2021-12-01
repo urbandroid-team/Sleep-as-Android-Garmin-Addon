@@ -137,7 +137,7 @@ class BusinessManager {
  	}
  	
  	function doHint(repeat) {
-		self.ctx.attentionSeeker.doHint(repeat);
+		self.ctx.alarmManager.doHint(repeat);
  	}
 
  }

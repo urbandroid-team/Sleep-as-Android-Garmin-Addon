@@ -117,7 +117,7 @@ class CommManager {
     	}
     }
 
-    // msg is of type PhoneAppMessage
+    // message is of type PhoneAppMessage
     function handleMessageReceived(message) {
     	var msg = message.data;
     

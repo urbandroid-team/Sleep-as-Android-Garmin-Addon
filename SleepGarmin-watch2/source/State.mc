@@ -3,8 +3,6 @@ using Toybox.WatchUi;
 
 class State {
 
-	var ctx;
-	
 	private var batchSize = 1;
 	var deliveryInProgress = false;
     var deliveryErrorCount = 0;
@@ -25,10 +23,8 @@ class State {
 	
 	var httpCommunicationMode = false; // Tracks how we currently communicate with the phone
 	
-	function initialize(ctx) {
+	function initialize() {
 		DebugManager.log("State initialized");
-		self.ctx = ctx;
-		
 		updateTime();
 	}
 	
@@ -60,5 +56,4 @@ class State {
 	function isHttpCommunicationMode() {
 		return self.httpCommunicationMode;
 	}
-
 }

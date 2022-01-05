@@ -1,5 +1,7 @@
 package com.urbandroid.sleep.garmin;
 
+import static com.urbandroid.sleep.garmin.Constants.IQ_APP_ID;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.ContextWrapper;
@@ -19,8 +21,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
-
-import static com.urbandroid.sleep.garmin.Constants.IQ_APP_ID;
 
 public class CIQManager {
     private static final CIQManager ourInstance = new CIQManager();
@@ -226,7 +226,7 @@ public class CIQManager {
                 });
             } else {
                 Logger.logDebug(TAG + "registerWatchMessagesReceiver: No device found.");
-                ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery("No device found.");
+                ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("No device found.");
             }
         } catch (InvalidStateException e) {
             Logger.logSevere(e);

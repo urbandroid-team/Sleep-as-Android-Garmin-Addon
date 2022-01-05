@@ -221,7 +221,11 @@ public class CIQManager {
                 connectIQ.registerForAppEvents(device, getApp(), new ConnectIQ.IQApplicationEventListener() {
                     @Override
                     public void onMessageReceived(IQDevice device, IQApp app, List<Object> message, ConnectIQ.IQMessageStatus status) {
-                        MessageHandler.getInstance().handleMessageFromWatch(message, status, context);
+                        if (status == ConnectIQ.IQMessageStatus.SUCCESS) {
+                            MessageHandler.getInstance().handleMessageFromWatch(message, status, context);
+                        } else {
+                            Logger.logDebug(TAG + "onMessageReceived error, status: " + status.toString());
+                        }
                     }
                 });
             } else {

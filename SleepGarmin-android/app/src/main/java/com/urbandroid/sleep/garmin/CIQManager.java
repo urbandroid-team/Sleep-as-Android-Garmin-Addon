@@ -98,7 +98,7 @@ public class CIQManager {
 
                 @Override
                 public void onInitializeError(ConnectIQ.IQSdkErrorStatus errStatus) {
-                    Logger.logDebug(TAG + " " + errStatus.toString());
+                    Logger.logSevere(TAG + " " + errStatus.toString());
                     connectIqReady = false;
                     ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery("onInitializeError");
                 }

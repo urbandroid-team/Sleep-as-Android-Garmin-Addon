@@ -144,8 +144,7 @@ public class QueueToWatch {
             if (next() != null && next().equals(Constants.TO_WATCH_STOP)) {
                 ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("over max delivery error");
             } else {
-                emptyQueue();
-                ServiceRecoveryManager.getInstance().stopSelfAndScheduleRecovery("over max delivery error");
+                Logger.logSevere("App went bust. FAILURE_DURING_TRANSFER. No reason to go on like this.");
             }
             return;
         }

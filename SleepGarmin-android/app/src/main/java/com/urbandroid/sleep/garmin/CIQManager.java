@@ -222,7 +222,7 @@ public class CIQManager {
                     @Override
                     public void onMessageReceived(IQDevice device, IQApp app, List<Object> message, ConnectIQ.IQMessageStatus status) {
                         if (status == ConnectIQ.IQMessageStatus.SUCCESS) {
-                            MessageHandler.getInstance().handleMessageFromWatch(message, status, context);
+                            MessageHandler.getInstance().handleMessageFromWatchUsingCIQ(message, status, context);
                         } else {
                             Logger.logDebug(TAG + "onMessageReceived error, status: " + status.toString());
                         }

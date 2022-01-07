@@ -23,7 +23,7 @@ public class QueueToWatch {
     private QueueToWatch() { }
 
     private static final String TAG = "QueueToWatch: ";
-    private List<String> messageQueue = Collections.synchronizedList(new LinkedList<String>());
+    private List<MessageToWatch> messageQueue = Collections.synchronizedList(new LinkedList<MessageToWatch>());
 
     private Handler handler = new Handler();
 
@@ -38,8 +38,7 @@ public class QueueToWatch {
 
     private AtomicBoolean deliveryInProgress = new AtomicBoolean(false);
 
-
-    public void enqueue(final String message) {
+    public void enqueue(final MessageToWatch message) {
         if (!contains(message)) {
             messageQueue.add(message);
             Logger.logDebug(TAG + " Add to queue: " + message);
@@ -47,6 +46,14 @@ public class QueueToWatch {
         handler.removeCallbacks(sendMessageRunnable);
         handler.postDelayed(sendMessageRunnable, 1000);
         this.logQueue();
+    }
+
+    public String getQueueAsJson() {
+        Map<String, String> map = new HashMap<>();
+        for (MessageToWatch msg: messageQueue) {
+            map.put(msg.command, msg.param.toString());
+        }
+        return new JSONObject(map).toString();
     }
 
     public void logQueue() {
@@ -67,7 +74,7 @@ public class QueueToWatch {
         deliveryInProgress.set(false);
     }
 
-    public String next() {
+    public MessageToWatch next() {
         if (messageQueue.size() > 0) {
             return messageQueue.get(0);
         }
@@ -82,7 +89,7 @@ public class QueueToWatch {
         return messageQueue.contains(message);
     }
 
-    public void remove(String message) {
+    public void remove(MessageToWatch message) {
         messageQueue.remove(message);
     }
 
@@ -97,11 +104,11 @@ public class QueueToWatch {
         }
     };
 
-    private void doSendMessage(final String message){
+    private void doSendMessage(final MessageToWatch message){
         Logger.logDebug(TAG + "doSendMessage");
 
         try {
-            CIQManager.getInstance().sendMessageToWatch(message, new ConnectIQ.IQSendMessageListener() {
+            CIQManager.getInstance().sendMessageToWatch(message.toString(), new ConnectIQ.IQSendMessageListener() {
                 @Override
                 public void onMessageStatus(IQDevice iqDevice, IQApp iqApp, ConnectIQ.IQMessageStatus status) {
                     Logger.logDebug(TAG + "doSendMessage to watch, status " + status + ", " + message);
@@ -165,7 +172,7 @@ public class QueueToWatch {
             return;
         }
 
-        final String message = next();
+        final MessageToWatch message = next();
         if (message == null) {
             return;
         }

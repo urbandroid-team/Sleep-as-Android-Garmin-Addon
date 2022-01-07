@@ -7,12 +7,12 @@ public class Constants {
 
     // To watch
     public final static String TO_WATCH_STOP = "StopApp";
-    public final static String TO_WATCH_PAUSE = "Pause;";
-    public final static String TO_WATCH_BATCH_SIZE = "BatchSize;";
-    public final static String TO_WATCH_ALARM_START = "StartAlarm;";
-    public final static String TO_WATCH_ALARM_STOP = "StopAlarm;";
-    public final static String TO_WATCH_ALARM_SET = "SetAlarm;";
-    public final static String TO_WATCH_HINT = "Hint;";
+    public final static String TO_WATCH_PAUSE = "Pause";
+    public final static String TO_WATCH_BATCH_SIZE = "BatchSize";
+    public final static String TO_WATCH_ALARM_START = "StartAlarm";
+    public final static String TO_WATCH_ALARM_STOP = "StopAlarm";
+    public final static String TO_WATCH_ALARM_SET = "SetAlarm";
+    public final static String TO_WATCH_HINT = "Hint";
     public final static String TO_WATCH_TRACKING_START_HR = "StartHRTracking";
     public final static String TO_WATCH_TRACKING_START = "StartTracking";
 

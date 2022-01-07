@@ -1,16 +1,5 @@
 package com.urbandroid.sleep.garmin;
 
-import android.content.Context;
-import android.content.Intent;
-
-import com.garmin.android.connectiq.ConnectIQ;
-import com.garmin.android.connectiq.IQApp;
-import com.garmin.android.connectiq.IQDevice;
-import com.urbandroid.common.logging.Logger;
-
-import java.util.Arrays;
-import java.util.List;
-
 import static com.urbandroid.sleep.garmin.Constants.CHECK_CONNECTED;
 import static com.urbandroid.sleep.garmin.Constants.DATA_WITH_EXTRA;
 import static com.urbandroid.sleep.garmin.Constants.DISMISS_ACTION_NAME;
@@ -47,6 +36,17 @@ import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_TRACKING_START_HR;
 import static com.urbandroid.sleep.garmin.Constants.UPDATE_ALARM;
 import static com.urbandroid.sleep.garmin.Utils.dumpIntent;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.garmin.android.connectiq.ConnectIQ;
+import com.garmin.android.connectiq.IQApp;
+import com.garmin.android.connectiq.IQDevice;
+import com.urbandroid.common.logging.Logger;
+
+import java.util.Arrays;
+import java.util.List;
+
 
 class MessageHandler {
     private static final MessageHandler ourInstance = new MessageHandler();
@@ -70,18 +70,28 @@ class MessageHandler {
         context.sendBroadcast(intent);
     }
 
-    public void handleMessageFromWatch(List<Object> message, ConnectIQ.IQMessageStatus status, Context context) {
-        Logger.logDebug(TAG + "From watch: " + message.toString() + " with status " +status.toString());
+    public void handleMessageFromWatchUsingCIQ(List<Object> message, ConnectIQ.IQMessageStatus status, Context context) {
         String[] msgArray = message.toArray()[0].toString().replaceAll("\\[","").replaceAll("\\]", "").replaceAll(" ",  "").split(",");
-        String receivedMsgType = msgArray[0];
-        String[] receivedData = Arrays.copyOfRange(msgArray, 1, msgArray.length);
+        String command = msgArray[0];
+        String[] data = Arrays.copyOfRange(msgArray, 1, msgArray.length);
+
+        handleMessageFromWatch(command, data, context);
+    }
+
+    public void handleMessageFromWatchUsingHTTP(String command, String data, Context context) {
+        Logger.logDebug(TAG + "handleMessageFromWatchUsingHTTP: " + command + " " + data);
+        handleMessageFromWatch(command, data.split(","), context);
+    }
+
+    public void handleMessageFromWatch(String command, String[] data, Context context) {
+        Logger.logDebug(TAG + "From watch: " + command + "/" + Arrays.toString(data));
 
         // At this moment we are sure that app on the watch is running so we can reset the prompt latch
         launchAppPromptAlreadyShownInCurrentSession = false;
 
-        switch (receivedMsgType) {
+        switch (command) {
             case "DATA": {
-                String[] values = Arrays.copyOfRange(msgArray, 1, msgArray.length);
+                String[] values = Arrays.copyOfRange(data, 1, data.length);
                 maxFloatValues = new float[values.length];
                 for (int i = 0; i < values.length; i++) {
                     String maxValue = values[i];
@@ -95,7 +105,7 @@ class MessageHandler {
                 break;
             }
             case "DATA_NEW": {
-                String[] values = Arrays.copyOfRange(msgArray, 1, msgArray.length);
+                String[] values = Arrays.copyOfRange(data, 1, data.length);
                 maxRawFloatValues = new float[values.length];
                 for (int i = 0; i < values.length; i++) {
                     String maxRawValue = values[i];
@@ -130,7 +140,7 @@ class MessageHandler {
                 sendExplicitBroadcastToSleep(startIntent, context);
                 break;
             case "HR":
-                float[] hrData = new float[]{Float.valueOf(msgArray[1])};
+                float[] hrData = new float[]{Float.valueOf(data[1])};
                 Logger.logInfo(TAG + ": received HR data from watch " + hrData[0]);
                 Intent hrDataIntent = new Intent(NEW_HR_DATA_ACTION_NAME);
                 hrDataIntent.putExtra("DATA", hrData);
@@ -140,14 +150,14 @@ class MessageHandler {
                 Intent stopIntent = new Intent(STOP_SLEEP_TRACK_ACTION);
                 sendExplicitBroadcastToSleep(stopIntent, context);
                 queueToWatch.emptyQueue();
-                queueToWatch.enqueue(TO_WATCH_STOP);
+                queueToWatch.enqueue(new MessageToWatch(TO_WATCH_STOP));
                 break;
             case "SPO2":
-                float[] spo2 = Utils.stringArrayToFloatArray(Arrays.copyOfRange(receivedData, 0, receivedData.length - 3));
-                int spo2Framerate = Integer.parseInt(receivedData[receivedData.length - 2]);
-                int spo2Timestamp = Integer.parseInt(receivedData[receivedData.length - 1]);
+                float[] spo2 = Utils.stringArrayToFloatArray(Arrays.copyOfRange(data, 0, data.length - 3));
+                int spo2Framerate = Integer.parseInt(data[data.length - 2]);
+                int spo2Timestamp = Integer.parseInt(data[data.length - 1]);
 
-                Logger.logInfo(TAG + ": received SpO2 data from watch " + receivedMsgType + " " + spo2Timestamp + ": " + spo2);
+                Logger.logInfo(TAG + ": received SpO2 data from watch " + command + " " + spo2Timestamp + ": " + spo2);
                 Intent spo2Intent = new Intent(DATA_WITH_EXTRA);
                 spo2Intent.putExtra(EXTRA_DATA_SPO2, true);
                 spo2Intent.putExtra(EXTRA_DATA_TIMESTAMP, spo2Timestamp);
@@ -157,10 +167,10 @@ class MessageHandler {
                 sendExplicitBroadcastToSleep(spo2Intent, context);
                 break;
             case "RR":
-                float[] rrData = Utils.stringArrayToFloatArray(Arrays.copyOfRange(receivedData, 0, receivedData.length - 2));
-                int rrTimestamp = Integer.parseInt(receivedData[receivedData.length - 1]);
+                float[] rrData = Utils.stringArrayToFloatArray(Arrays.copyOfRange(data, 0, data.length - 2));
+                int rrTimestamp = Integer.parseInt(data[data.length - 1]);
 
-                Logger.logInfo(TAG + ": received RR data from watch " + receivedMsgType + " " + rrTimestamp + ": " + rrData);
+                Logger.logInfo(TAG + ": received RR data from watch " + command + " " + rrTimestamp + ": " + rrData);
                 Intent rrDataIntent = new Intent(DATA_WITH_EXTRA);
                 rrDataIntent.putExtra(EXTRA_DATA_RR, true);
                 rrDataIntent.putExtra(EXTRA_DATA_TIMESTAMP, rrTimestamp);
@@ -195,50 +205,50 @@ class MessageHandler {
             dumpIntent(intent);
 
             if (intent.hasExtra(DO_HR_MONITORING)) {
-                queueToWatch.enqueue(TO_WATCH_TRACKING_START_HR);
+                queueToWatch.enqueue(new MessageToWatch(TO_WATCH_TRACKING_START_HR));
                 Logger.logInfo(TAG + "TO_WATCH_TRACKING_START_HR");
             }
 
-            queueToWatch.enqueue(TO_WATCH_TRACKING_START);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_TRACKING_START));
             Logger.logDebug(TAG + "TO_WATCH_TRACKING_START");
         }
 
         if (action.equals(STOP_WATCH_APP)) {
             Logger.logDebug(TAG + "TO_WATCH_STOP");
             queueToWatch.emptyQueue();
-            queueToWatch.enqueue(TO_WATCH_STOP);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_STOP));
         }
         if (action.equals(SET_PAUSE)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
             Logger.logDebug(TAG + "TO_WATCH_PAUSE " + param);
-            queueToWatch.enqueue(TO_WATCH_PAUSE + param);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_PAUSE, param));
         }
         if (action.equals(SET_BATCH_SIZE)) {
             long param = intent.getLongExtra("SIZE", 0);
             Logger.logDebug(TAG + "TO_WATCH_BATCH_SIZE " + param);
-            queueToWatch.enqueue(TO_WATCH_BATCH_SIZE + param);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_BATCH_SIZE, param));
         }
         if (action.equals(START_ALARM)) {
             long param = intent.getIntExtra("DELAY", 0);
             Logger.logDebug(TAG + "TO_WATCH_ALARM_START, delay " + param);
-            queueToWatch.enqueue(TO_WATCH_ALARM_START + param);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_ALARM_START, param));
         }
         if (action.equals(STOP_ALARM)) {
             Logger.logDebug(TAG + "TO_WATCH_ALARM_STOP");
-            queueToWatch.enqueue(TO_WATCH_ALARM_STOP);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_ALARM_STOP));
         }
         if (action.equals(UPDATE_ALARM)) {
             long param = intent.getLongExtra("TIMESTAMP", 0);
             Logger.logDebug(TAG + "TO_WATCH_ALARM_SET " + param);
-            queueToWatch.enqueue(TO_WATCH_ALARM_SET + param);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_ALARM_SET, param));
         }
         if (action.equals(HINT)) {
             long param = intent.getIntExtra("REPEAT", 0);
             Logger.logDebug(TAG + "Sending hint to watch, with repeat " + param);
-            queueToWatch.enqueue(TO_WATCH_HINT + param);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_HINT, param));
         }
         if (action.equals(CHECK_CONNECTED)) {
-            queueToWatch.remove(TO_WATCH_STOP);
+            queueToWatch.remove(new MessageToWatch(TO_WATCH_STOP));
             try {
                 if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
                     watchAppOpenTime = System.currentTimeMillis();

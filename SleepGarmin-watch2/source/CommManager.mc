@@ -18,9 +18,11 @@ class CommManager {
 	static const MSG_HINT = "Hint;";
 	static const MSG_STOP_ALARM = "StopAlarm;";
 
-	// To phone
+	// To phone via TRANSMIT
 	static const MSG_START_TRACKING = "STARTING";
 	static const MSG_CONFIRMCHECK = "CONFIRMCHECK";
+
+	// To phone via HTTP
 	static const MSG_SNOOZE_ALARM = "SNOOZE";
 	static const MSG_DISMISS_ALARM = "DISMISS";
 	static const MSG_STOP_TRACKING = "STOPPING";
@@ -35,6 +37,8 @@ class CommManager {
     const MAX_DELIVERY_PAUSE = 3;
     const MAX_WAITING_TIME_IN_TRANSMIT_MS = 60000;
 
+	const WEB_URL = "http://127.0.0.1:1765";
+
     function initialize(ctx) {
         DebugManager.log("CommManager initialized");
         
@@ -42,8 +46,9 @@ class CommManager {
     }
     
     public function start() {
-        Communications.registerForPhoneAppMessages(method(:handleMessageReceived));
-        self.queue = new MessageQueue();
+        Communications.registerForPhoneAppMessages(method(:onPhoneMsgReceive));
+
+		self.queue = new MessageQueue();
         self.commListener = new CommListener(self.queue, self.ctx);
         
         enqueue(CommManager.MSG_START_TRACKING);
@@ -51,14 +56,14 @@ class CommManager {
         if (DebugManager.commDebug) {
 	        var msg = new Communications.PhoneAppMessage();
 			msg.data = CommManager.MSG_START;
-	        handleMessageReceived(msg);
+	        onPhoneMsgReceive(msg);
 	        
 	        msg.data = CommManager.MSG_BATCH_SIZE + "12";
-	        handleMessageReceived(msg);
+	        onPhoneMsgReceive(msg);
 	        
-//	        var msg2 = new Communications.PhoneAppMessage();
-//			msg2.data = CommManager.MSG_START_ALARM + "0";
-//	        handleMessageReceived(msg2);
+	        // var msg2 = new Communications.PhoneAppMessage();
+			// msg2.data = CommManager.MSG_START_ALARM + "0";
+	        // onPhoneMsgReceive(msg2);
         }
     }
         
@@ -92,36 +97,84 @@ class CommManager {
     			self.ctx.state.deliveryPauseCount = 0;
     			self.ctx.state.deliveryErrorCount = 0;
     		}
-    		
+
     		return;
     	}
     	
-    	
     	var msg = self.queue.getFirst();
-    	DebugManager.log("First msg: " + msg);
+    	// DebugManager.log("First msg: " + msg);
     	if (msg != null) {
 	    	self.ctx.state.deliveryInProgress = true;
-    		DebugManager.log("CommManager transmit: " + msg);
+    		DebugManager.log("CommManager sending: " + msg);
     		self.ctx.state.lastTransmitTs = System.getTimer();
     		
     		if (DebugManager.commDebug) {
     			DebugManager.log("NOT Transmitted");
-//    			self.commListener.onComplete();
+	   			// self.commListener.onComplete();
 				self.commListener.onError();
-    		} else if (self.ctx.state.isHttpCommunicationMode()) {
-    			// TODO: Transmit via makeWebRequest()
-    		} else {
-		    	Communications.transmit(msg, {}, self.commListener);		
-    		}
+				return;
+			}
+
+			if (msg.equals(CommManager.MSG_START_TRACKING) || msg.equals(CommManager.MSG_CONFIRMCHECK)) {
+				Communications.transmit(msg, {}, self.commListener);		
+			} else {
+				var messageToPhone = new MessageToPhone(msg);
+				var req = {messageToPhone.command => messageToPhone.data};
+    			DebugManager.log("Making web request" + req);
+				Communications.makeWebRequest(
+					WEB_URL, 
+					req,
+					{:method => Communications.HTTP_REQUEST_METHOD_GET}, 
+					method(:onWebMsgReceive)
+				);
+			}
     		
     	}
     }
 
-    // message is of type PhoneAppMessage
-    function handleMessageReceived(message) {
-    	var msg = message.data;
-    
-        DebugManager.log("Msg received: " + msg);
+	function onPhoneMsgReceive(phoneAppMessage) {
+		handleMessageReceived(phoneAppMessage.data);
+	}
+
+	function onWebMsgReceive(responseCode, data) {
+       if (responseCode == 200) {
+        	DebugManager.log("onWebMsgReceive Request Successful: " + data);
+			self.commListener.onComplete();
+			// Expecting to receive a JSON string
+			var msgArray = parseJsonDataToArray(data);
+
+			for( var i = 0; i < msgArray.size(); i += 1 ) {
+				handleMessageReceived(msgArray[i]);
+			}
+       }
+       else {
+           DebugManager.log("onWebMsgReceive Response: " + responseCode);
+		   self.commListener.onError();
+       }
+    }
+
+	function parseJsonDataToArray(json) {
+		DebugManager.log("parseJsonDataToArray" + json);
+		// contract is be c:command, d:data (d is optional)
+		var ar = [];
+
+		for (var i = 0; i < json.size(); ++i) {
+			var entry = json[i];
+			var command = entry["c"];
+			var param = entry["d"];
+
+			if (param == null) {
+				ar.add(command);
+			} else {
+				ar.add(command + ";" + param);
+			}
+		}
+
+		return ar;
+	}
+
+    function handleMessageReceived(msg) {
+        DebugManager.log("handleMessageReceived: " + msg);
 
 		if (msg.equals(CommManager.MSG_START)) {
 			self.ctx.businessManager.startTracking();

@@ -1,19 +1,5 @@
 package com.urbandroid.sleep.garmin;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.widget.Toast;
-
-import androidx.core.content.ContextCompat;
-
-import com.garmin.android.connectiq.ConnectIQ;
-import com.garmin.android.connectiq.IQDevice;
-import com.urbandroid.common.error.ErrorReporter;
-import com.urbandroid.common.logging.Logger;
-
 import static com.urbandroid.sleep.garmin.Constants.CHECK_CONNECTED;
 import static com.urbandroid.sleep.garmin.Constants.DO_HR_MONITORING;
 import static com.urbandroid.sleep.garmin.Constants.HINT;
@@ -30,6 +16,20 @@ import static com.urbandroid.sleep.garmin.Constants.STOP_WATCH_APP;
 import static com.urbandroid.sleep.garmin.Constants.UPDATE_ALARM;
 import static com.urbandroid.sleep.garmin.GlobalInitializer.debug;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+
+import com.garmin.android.connectiq.ConnectIQ;
+import com.garmin.android.connectiq.IQDevice;
+import com.urbandroid.common.error.ErrorReporter;
+import com.urbandroid.common.logging.Logger;
+
 /**
  * Created by artaud on 29.12.16.
  */
@@ -44,38 +44,20 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
         GlobalInitializer.initializeIfRequired(context);
         Logger.logInfo(TAG + " onReceive: " + intent.getAction());
 
-
-
-        try {
-            context.getPackageManager().getApplicationInfo(PACKAGE_SLEEP, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            Logger.logInfo(TAG + "Sleep not installed");
-            sleepInstalled = false;
-        }
-
-        if (!sleepInstalled) {
-            Toast.makeText(context, R.string.install_saa, Toast.LENGTH_LONG).show();
-            try {
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + PACKAGE_SLEEP));
-                context.startActivity(goToMarket);
-            } catch (Exception e) {
-                Logger.logInfo(TAG, e);
-            }
-        }
+        checkSleepInstalled(context);
 
         try {
-
             if (ConnectIQ.INCOMING_MESSAGE.equals(intent.getAction()) && !SleepAsAndroidProviderService.RUNNING) {
 
                 if (debug) {
                     IQDevice device = intent.getParcelableExtra(ConnectIQ.EXTRA_REMOTE_DEVICE);
                     if (intent.hasExtra(ConnectIQ.EXTRA_REMOTE_DEVICE) && device.getFriendlyName().equals("Simulator")) {
-                        startProviderServiceBecauseWatchSaidSo(context);
+                        startCommServicesBecauseWatchSaidSo(context);
                     }
 
                 } else if (intent.hasExtra(ConnectIQ.EXTRA_APPLICATION_ID) && IQ_APP_ID.equals(intent.getStringExtra(ConnectIQ.EXTRA_APPLICATION_ID)) &&
                         !SleepAsAndroidProviderService.RUNNING) {
-                    startProviderServiceBecauseWatchSaidSo(context);
+                    startCommServicesBecauseWatchSaidSo(context);
                 }
             }
         } catch (IllegalArgumentException e) {
@@ -173,11 +155,36 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
         }
     }
 
-    private void startProviderServiceBecauseWatchSaidSo(Context context) {
-        Logger.logInfo(TAG + " ConnectIQ intent received, starting service...");
-        ContextCompat.startForegroundService(context,new Intent(context, SleepAsAndroidProviderService.class));
+    private void checkSleepInstalled(Context context) {
+        try {
+            context.getPackageManager().getApplicationInfo(PACKAGE_SLEEP, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            Logger.logInfo(TAG + "Sleep not installed");
+            sleepInstalled = false;
+        }
+
+        if (!sleepInstalled) {
+            Toast.makeText(context, R.string.install_saa, Toast.LENGTH_LONG).show();
+            try {
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + PACKAGE_SLEEP));
+                context.startActivity(goToMarket);
+            } catch (Exception e) {
+                Logger.logInfo(TAG, e);
+            }
+        }
+    }
+
+    private void startCommServicesBecauseWatchSaidSo(Context context) {
+        startProviderServiceBecauseWatchSaidSo(context);
+
         Intent startIntent = new Intent(STARTED_ON_WATCH_NAME);
         startIntent.setPackage(PACKAGE_SLEEP);
         context.sendBroadcast(startIntent);
+    }
+
+
+    private void startProviderServiceBecauseWatchSaidSo(Context context) {
+        Logger.logInfo(TAG + " ConnectIQ intent received, starting provider service...");
+        ContextCompat.startForegroundService(context,new Intent(context, SleepAsAndroidProviderService.class));
     }
 }

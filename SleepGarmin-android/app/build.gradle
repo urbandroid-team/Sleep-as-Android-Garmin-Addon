@@ -48,6 +48,7 @@ dependencies {
     })
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.urbandroid:common:1.25@aar'
+    implementation 'org.nanohttpd:nanohttpd:2.2.0'
     testImplementation 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

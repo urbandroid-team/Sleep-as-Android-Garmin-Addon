@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import com.garmin.android.connectiq.ConnectIQ;
 import com.garmin.android.connectiq.ConnectIQAdbStrategy;
 import com.garmin.android.connectiq.IQApp;
@@ -114,6 +116,8 @@ public class CIQManager {
                     registerDeviceStatusReceiver();
                     isWatchAppAvailable();
 
+                    startHttpServer(context);
+
                     MessageHandler.getInstance().handleMessageFromSleep(initialIntent, context);
                 }
 
@@ -124,6 +128,11 @@ public class CIQManager {
                 }
             });
         }
+    }
+
+    private void startHttpServer(Context context) {
+            Logger.logInfo(TAG + " ConnectIQ intent received, starting HTTP server service...");
+            ContextCompat.startForegroundService(context,new Intent(context, HttpServerService.class));
     }
 
     public void onOpenAppOnWatch(ConnectIQ.IQOpenApplicationListener listener) throws InvalidStateException, ServiceUnavailableException {
@@ -251,7 +260,7 @@ public class CIQManager {
             }
         } catch (InvalidStateException e) {
             // This is usually because the SDK was already shut down so no worries.
-            Logger.logSevere(e);
+            Logger.logSevere("This is usually because the SDK was already shut down so no worries.", e);
         } catch (IllegalArgumentException e) {
             Logger.logSevere(e);
         } catch (RuntimeException e) {

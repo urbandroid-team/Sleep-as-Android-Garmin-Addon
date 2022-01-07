@@ -9,6 +9,10 @@ import com.garmin.android.connectiq.exception.InvalidStateException;
 import com.garmin.android.connectiq.exception.ServiceUnavailableException;
 import com.urbandroid.common.logging.Logger;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,12 +52,14 @@ public class QueueToWatch {
         this.logQueue();
     }
 
-    public String getQueueAsJson() {
-        Map<String, String> map = new HashMap<>();
+    public String getQueueAsJsonArray() throws JSONException {
+        JSONArray ar = new JSONArray();
         for (MessageToWatch msg: messageQueue) {
-            map.put(msg.command, msg.param.toString());
+            JSONObject jsonMsg = new JSONObject();
+            ar.put(jsonMsg.put("c", msg.command));
+            ar.put(jsonMsg.put("d", msg.param));
         }
-        return new JSONObject(map).toString();
+        return ar.toString();
     }
 
     public void logQueue() {
@@ -85,7 +91,7 @@ public class QueueToWatch {
         return messageQueue.size();
     }
 
-    public Boolean contains(String message) {
+    public Boolean contains(MessageToWatch message) {
         return messageQueue.contains(message);
     }
 

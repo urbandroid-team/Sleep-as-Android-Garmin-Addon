@@ -80,7 +80,7 @@ class MessageHandler {
 
     public void handleMessageFromWatchUsingHTTP(String command, String data, Context context) {
         Logger.logDebug(TAG + "handleMessageFromWatchUsingHTTP: " + command + " " + data);
-        handleMessageFromWatch(command, data.split(","), context);
+        handleMessageFromWatch(command, data.replaceAll("\\[","").replaceAll("\\]", "").replaceAll(" ",  "").split(","), context);
     }
 
     public void handleMessageFromWatch(String command, String[] data, Context context) {
@@ -91,13 +91,12 @@ class MessageHandler {
 
         switch (command) {
             case "DATA": {
-                String[] values = Arrays.copyOfRange(data, 1, data.length);
-                maxFloatValues = new float[values.length];
-                for (int i = 0; i < values.length; i++) {
-                    String maxValue = values[i];
+                maxFloatValues = new float[data.length];
+                for (int i = 0; i < data.length; i++) {
+                    String maxValue = data[i];
 
                     try {
-                        maxFloatValues[i] = Float.valueOf(maxValue);
+                        maxFloatValues[i] = Float.parseFloat(maxValue);
                     } catch (NumberFormatException e) {
                         maxFloatValues[i] = 0;
                     }
@@ -105,13 +104,12 @@ class MessageHandler {
                 break;
             }
             case "DATA_NEW": {
-                String[] values = Arrays.copyOfRange(data, 1, data.length);
-                maxRawFloatValues = new float[values.length];
-                for (int i = 0; i < values.length; i++) {
-                    String maxRawValue = values[i];
+                maxRawFloatValues = new float[data.length];
+                for (int i = 0; i < data.length; i++) {
+                    String maxRawValue = data[i];
 
                     try {
-                        maxRawFloatValues[i] = Float.valueOf(maxRawValue) * 9.806f / 1000f;
+                        maxRawFloatValues[i] = Float.parseFloat(maxRawValue) * 9.806f / 1000f;
 //                                    Logger.logDebug(TAG + "New actigraphy [m/s2]: " + maxRawFloatValues[i]);
                     } catch (NumberFormatException e) {
                         maxRawFloatValues[i] = 0;
@@ -140,10 +138,10 @@ class MessageHandler {
                 sendExplicitBroadcastToSleep(startIntent, context);
                 break;
             case "HR":
-                float[] hrData = new float[]{Float.valueOf(data[1])};
-                Logger.logInfo(TAG + ": received HR data from watch " + hrData[0]);
+                float hrData = Float.parseFloat(data[0]);
+                Logger.logInfo(TAG + ": received HR data from watch " + hrData);
                 Intent hrDataIntent = new Intent(NEW_HR_DATA_ACTION_NAME);
-                hrDataIntent.putExtra("DATA", hrData);
+                hrDataIntent.putExtra("DATA", new float[]{hrData});
                 sendExplicitBroadcastToSleep(hrDataIntent, context);
                 break;
             case "STOPPING":
@@ -157,7 +155,7 @@ class MessageHandler {
                 int spo2Framerate = Integer.parseInt(data[data.length - 2]);
                 int spo2Timestamp = Integer.parseInt(data[data.length - 1]);
 
-                Logger.logInfo(TAG + ": received SpO2 data from watch " + command + " " + spo2Timestamp + ": " + spo2);
+                Logger.logInfo(TAG + ": received SpO2 data from watch " + command + " " + spo2Timestamp + ": " + Arrays.toString(spo2));
                 Intent spo2Intent = new Intent(DATA_WITH_EXTRA);
                 spo2Intent.putExtra(EXTRA_DATA_SPO2, true);
                 spo2Intent.putExtra(EXTRA_DATA_TIMESTAMP, spo2Timestamp);
@@ -170,7 +168,7 @@ class MessageHandler {
                 float[] rrData = Utils.stringArrayToFloatArray(Arrays.copyOfRange(data, 0, data.length - 2));
                 int rrTimestamp = Integer.parseInt(data[data.length - 1]);
 
-                Logger.logInfo(TAG + ": received RR data from watch " + command + " " + rrTimestamp + ": " + rrData);
+                Logger.logInfo(TAG + ": received RR data from watch " + command + " " + rrTimestamp + ": " + Arrays.toString(rrData));
                 Intent rrDataIntent = new Intent(DATA_WITH_EXTRA);
                 rrDataIntent.putExtra(EXTRA_DATA_RR, true);
                 rrDataIntent.putExtra(EXTRA_DATA_TIMESTAMP, rrTimestamp);

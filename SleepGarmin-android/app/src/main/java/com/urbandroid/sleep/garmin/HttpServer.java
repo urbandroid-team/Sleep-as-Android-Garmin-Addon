@@ -26,9 +26,15 @@ public class HttpServer extends NanoHTTPD {
     public Response serve(IHTTPSession session) {
         Map<String, String> params = session.getParms();
 
+        Logger.logDebug(TAG + "params: " + params);
+
         for (Map.Entry<String,String> msg : params.entrySet()) {
             // Get all messages from watch and send them to sleep
-            MessageHandler.getInstance().handleMessageFromWatchUsingHTTP(msg.getKey(), msg.getValue(), context);
+            try {
+                MessageHandler.getInstance().handleMessageFromWatchUsingHTTP(msg.getKey(), msg.getValue(), context);
+            } catch (Exception e) {
+                Logger.logSevere(e);
+            }
         }
 
         // Serve all messages enqueued to watch
@@ -42,6 +48,8 @@ public class HttpServer extends NanoHTTPD {
             queueToWatch.emptyQueue();
         } catch (JSONException e) {
             Logger.logSevere(TAG + "serveQueue", e);
+        } catch (Exception e) {
+            Logger.logSevere(TAG + "serveQueue",e);
         }
         Logger.logDebug(TAG + "serveQueue: " + jsonQueue);
         return jsonQueue;

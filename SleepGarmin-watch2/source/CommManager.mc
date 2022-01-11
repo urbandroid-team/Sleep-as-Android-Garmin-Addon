@@ -46,7 +46,7 @@ class CommManager {
     }
     
     public function start() {
-        Communications.registerForPhoneAppMessages(method(:onPhoneMsgReceive));
+		Communications.registerForPhoneAppMessages(method(:onPhoneMsgReceive));
 
 		self.queue = new MessageQueue();
         self.commListener = new CommListener(self.queue, self.ctx);
@@ -91,6 +91,7 @@ class CommManager {
     	
     	
     	if (self.ctx.state.deliveryErrorCount > MAX_DELIVERY_ERROR) {
+    		DebugManager.log("Max delivery error");
     		self.ctx.state.deliveryPauseCount++;
     		
     		if (self.ctx.state.deliveryPauseCount > MAX_DELIVERY_PAUSE) {

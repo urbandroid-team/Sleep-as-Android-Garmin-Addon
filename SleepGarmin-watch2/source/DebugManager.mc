@@ -6,7 +6,7 @@ using Toybox.Time.Gregorian;
 class DebugManager {
     const debug = false; // must be false for production
     const commDebug = false;
-    
+
     static function log(message) {
     	if (DebugManager.debug) {
     		var currentTime = Gregorian.info(Time.now(), Time.FORMAT_MEDIUM);

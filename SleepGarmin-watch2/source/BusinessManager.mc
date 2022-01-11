@@ -53,10 +53,10 @@ class BusinessManager {
  	}
  	function sendRrIntervalsData(rr) {
  		DebugManager.log("sendRrData " + rr);
- 		self.ctx.commManager.enqueue([CommManager.MSG_RR, rr]); 	
+ 		self.ctx.commManager.enqueue([CommManager.MSG_RR, rr.toString()]); 	
  	}
  	function sendOxyData(oxygenSaturation) {
- 		self.ctx.commManager.enqueue([CommManager.MSG_OXY, oxygenSaturation]);
+ 		self.ctx.commManager.enqueue([CommManager.MSG_OXY, oxygenSaturation.toString()]);
  	}
  	
  	function sendPause() {

@@ -64,8 +64,6 @@ class SensorManager {
 			lastOximeterReadingSec = lastOximeterReadingSec + SENSOR_PERIOD_SEC;
         }
         
-        
-		
 		self.ctx.businessManager.onDataHook();
     }
 
@@ -116,6 +114,8 @@ class SensorManager {
         
         rrIntervalsBuf.addAll(heartBeatIntervalsArray);
         if (rrIntervalsBuf.size() > 120) {
+	    	DebugManager.log("OnHRData rrIntervalBuf>120");
+
         	rrIntervalsBuf.add(System.getTimer());
     		self.ctx.businessManager.sendRrIntervalsData(rrIntervalsBuf);
     		rrIntervalsBuf = [];        
@@ -123,6 +123,7 @@ class SensorManager {
         
     	hrBuf.add(latestHr);
     	if (hrBuf.size() > (60 / SENSOR_PERIOD_SEC)) { // Minute divided by period 
+	    	DebugManager.log("OnHRData hrBuf>12");
     		self.ctx.businessManager.sendHrData(DataUtil.median(hrBuf));
     		hrBuf = [];
     	}

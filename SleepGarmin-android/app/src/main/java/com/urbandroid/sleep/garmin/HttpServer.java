@@ -13,6 +13,7 @@ import fi.iki.elonen.NanoHTTPD;
 public class HttpServer extends NanoHTTPD {
 
     private static final String TAG = "HttpServer#";
+    static final int PORT_DEFAULT = 1765;
     Context context;
 
     public HttpServer(int port, Context context) {

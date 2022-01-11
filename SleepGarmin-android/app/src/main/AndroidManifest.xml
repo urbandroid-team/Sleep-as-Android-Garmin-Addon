@@ -38,7 +38,6 @@
         </provider>
 
         <service android:name=".SleepAsAndroidProviderService" />
-        <service android:name=".HttpServerService" />
 
         <receiver
           android:name=".SleepAsGarminReceiver"

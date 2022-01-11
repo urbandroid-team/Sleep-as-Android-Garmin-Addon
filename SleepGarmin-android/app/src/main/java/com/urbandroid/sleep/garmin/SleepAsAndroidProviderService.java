@@ -1,5 +1,9 @@
 package com.urbandroid.sleep.garmin;
 
+import static com.urbandroid.sleep.garmin.Constants.ACTION_STOP_SELF;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
+import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
+
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -12,9 +16,7 @@ import com.urbandroid.common.logging.Logger;
 
 import org.jetbrains.annotations.Nullable;
 
-import static com.urbandroid.sleep.garmin.Constants.ACTION_STOP_SELF;
-import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
-import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
+import java.io.IOException;
 
 public class SleepAsAndroidProviderService extends Service {
 
@@ -23,6 +25,9 @@ public class SleepAsAndroidProviderService extends Service {
 
     private QueueToWatch queueToWatch = QueueToWatch.getInstance();
     private CIQManager ciqManager = CIQManager.getInstance();
+
+    private boolean serverRunning = false;
+    private HttpServer server;
 
     @Override
     public void onCreate() {
@@ -39,6 +44,21 @@ public class SleepAsAndroidProviderService extends Service {
         }
 
         ciqManager.resetState();
+
+        startHttpServer();
+    }
+
+    private void startHttpServer() {
+        if (!serverRunning) {
+            serverRunning = true;
+            server = new HttpServer(HttpServer.PORT_DEFAULT, this);
+            try {
+                server.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Logger.logSevere(TAG + ": IOException when starting HttpServer", e);
+            }
+        }
     }
 
     @Override
@@ -68,6 +88,9 @@ public class SleepAsAndroidProviderService extends Service {
     public void onDestroy() {
         queueToWatch.logQueue("onDestroy");
         queueToWatch.cleanup();
+
+        server.stop();
+        serverRunning = false;
 
         ciqManager.shutdown(this);
         RUNNING = false;

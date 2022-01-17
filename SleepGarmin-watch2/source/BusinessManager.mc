@@ -108,7 +108,7 @@ class BusinessManager {
 
 	function isAroundAlarm() {
 		if (self.ctx.state.alarmTime instanceof Lang.Long) {
-			return (self.ctx.state.alarmTime > (System.getTimer() - 20000));
+			return (System.getTimer() > (self.ctx.state.alarmTime - 60000));
 		} else {
 			return false;
 		}

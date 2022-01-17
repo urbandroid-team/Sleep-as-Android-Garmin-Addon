@@ -37,6 +37,10 @@ class CommManager {
     const MAX_DELIVERY_PAUSE = 3;
     const MAX_WAITING_TIME_IN_TRANSMIT_MS = 60000;
 
+	const MINIMAL_POLL_INTERVAL_MS = 30000;
+	const AROUND_ALARM_POLL_INTERVAL_MS = 1000;
+	var lastSendTriggerTs = 0;
+
 	const WEB_URL = "http://127.0.0.1:1765";
 
     function initialize(ctx) {
@@ -78,17 +82,18 @@ class CommManager {
     	self.queue.enqueueAsFirst(msg);
     	DebugManager.log("CommManager enqueueAsFirst, current queue: " + self.queue.queue);    
     }
-    
+
     public function triggerSend() {
-    	DebugManager.log("Comm TriggerSend, inprogress: " + self.ctx.state.deliveryInProgress);
-    	if (self.ctx.state.deliveryInProgress && ((System.getTimer() - self.ctx.state.lastTransmitTs) < MAX_WAITING_TIME_IN_TRANSMIT_MS)) { 
-    		return; 
+		doTriggerSend();
+		lastSendTriggerTs = System.getTimer();
+	}
+	    
+    public function doTriggerSend() {
+    	DebugManager.log("CommManager#doTriggerSend, inprogress: " + self.ctx.state.deliveryInProgress);
+
+    	if (self.ctx.state.deliveryInProgress && !isDeliveryTakingTooLong()) {
+			return; 
     	}
-    	
-    	if (self.ctx.state.deliveryInProgress) {
-    		DebugManager.log("TriggerSend overriding deliveryInProgress");
-    	}
-    	
     	
     	if (self.ctx.state.deliveryErrorCount > MAX_DELIVERY_ERROR) {
     		DebugManager.log("Max delivery error");
@@ -106,8 +111,8 @@ class CommManager {
     	// DebugManager.log("First msg: " + msg);
     	if (msg != null) {
 	    	self.ctx.state.deliveryInProgress = true;
-    		DebugManager.log("CommManager sending: " + msg);
-    		self.ctx.state.lastTransmitTs = System.getTimer();
+    		DebugManager.log("CommManager#doTriggerSend msg: " + msg);
+    		self.ctx.state.lastDeliveryTs = System.getTimer();
     		
     		if (DebugManager.commDebug) {
     			DebugManager.log("NOT Transmitted");
@@ -121,17 +126,38 @@ class CommManager {
 			} else {
 				var messageToPhone = new MessageToPhone(msg);
 				var req = {messageToPhone.command => messageToPhone.data};
-    			DebugManager.log("Making web request" + req);
-				Communications.makeWebRequest(
-					WEB_URL, 
-					req,
-					{:method => Communications.HTTP_REQUEST_METHOD_GET}, 
-					method(:onWebMsgReceive)
-				);
+    			DebugManager.log("CommManager#doTriggerSend webRequest:" + req);
+				pollWebserver(req);
 			}
-    		
-    	}
+
+			return;
+    	} 
+
+		if (msg == null) {
+			if (self.ctx.businessManager.isAroundAlarm() && (System.getTimer() - lastSendTriggerTs) > AROUND_ALARM_POLL_INTERVAL_MS) {
+				pollWebserver(new MessageToPhone("quickPollBeforeAlarm"));
+				return;
+			}
+
+			if ((System.getTimer() - lastSendTriggerTs) > MINIMAL_POLL_INTERVAL_MS) {
+				pollWebserver(new MessageToPhone("poll"));
+				return;
+			}
+		}
     }
+
+	function isDeliveryTakingTooLong() {
+		return (System.getTimer() - self.ctx.state.lastDeliveryTs) < MAX_WAITING_TIME_IN_TRANSMIT_MS;
+	}
+
+	function pollWebserver(req) {
+		Communications.makeWebRequest(
+			WEB_URL, 
+			req,
+			{:method => Communications.HTTP_REQUEST_METHOD_GET}, 
+			method(:onWebMsgReceive)
+		);
+	}
 
 	function onPhoneMsgReceive(phoneAppMessage) {
 		handleMessageReceived(phoneAppMessage.data);

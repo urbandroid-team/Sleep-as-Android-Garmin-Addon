@@ -105,6 +105,14 @@ class BusinessManager {
  		self.ctx.state.updateAlarmTime(time);
  		if (updateUi) { WatchUi.requestUpdate(); }
  	}
+
+	function isAroundAlarm() {
+		if (self.ctx.state.alarmTime instanceof Lang.Long) {
+			return (self.ctx.state.alarmTime > (System.getTimer() - 20000));
+		} else {
+			return false;
+		}
+	}
  	
  	function unlockScreen() {
  		if (self.ctx.state.screenLocked) {

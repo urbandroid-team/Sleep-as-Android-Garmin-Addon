@@ -125,7 +125,7 @@ class CommManager {
 				Communications.transmit(msg, {}, self.commListener);		
 			} else {
 				var messageToPhone = new MessageToPhone(msg);
-				var req = {messageToPhone.command => messageToPhone.data};
+				var req = messageToPhone.toRequest();
     			DebugManager.log("CommManager#doTriggerSend webRequest:" + req);
 				pollWebserver(req);
 			}
@@ -135,12 +135,12 @@ class CommManager {
 
 		if (msg == null) {
 			if (self.ctx.businessManager.isAroundAlarm() && (System.getTimer() - lastSendTriggerTs) > AROUND_ALARM_POLL_INTERVAL_MS) {
-				pollWebserver(new MessageToPhone("quickPollBeforeAlarm"));
+				pollWebserver(new MessageToPhone("quickPollBeforeAlarm").toRequest());
 				return;
 			}
 
 			if ((System.getTimer() - lastSendTriggerTs) > MINIMAL_POLL_INTERVAL_MS) {
-				pollWebserver(new MessageToPhone("poll"));
+				pollWebserver(new MessageToPhone("poll").toRequest());
 				return;
 			}
 		}

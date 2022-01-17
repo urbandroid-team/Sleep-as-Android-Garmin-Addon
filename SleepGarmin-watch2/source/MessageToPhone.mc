@@ -21,6 +21,9 @@ class MessageToPhone {
         if (self.data == null) {
             self.data = "";
         }
+    }
 
+    function toRequest() {
+        return {command => data};
     }
 }

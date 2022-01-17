@@ -166,7 +166,7 @@ public class QueueToWatch {
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
             handler.removeCallbacks(sendMessageRunnable);
             deliveryErrorCount = 0;
-            if (next() != null && next().equals(TO_WATCH_STOP)) {
+            if (next() != null && next().equals(new MessageToWatch(TO_WATCH_STOP))) {
                 ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("over max delivery error");
             } else {
                 Logger.logSevere("App went bust. FAILURE_DURING_TRANSFER. No reason to go on like this.");
@@ -175,7 +175,7 @@ public class QueueToWatch {
         }
 
         if (size() < 1 || deliveryInProgress.get()) {
-            if (size() > 0 && messageQueue.get(0).equals("StopApp")) {
+            if (size() > 0 && messageQueue.get(0).equals(new MessageToWatch(TO_WATCH_STOP))) {
                 ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("Stuck while sending StopApp, watch app probably not running");
             }
             if (deliveryInProgress.get()) {

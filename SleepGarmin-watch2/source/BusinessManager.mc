@@ -69,7 +69,7 @@ class BusinessManager {
  		self.ctx.commManager.enqueueAsFirst(CommManager.MSG_STOP_TRACKING);
  	}
  	function sendSnoozeAlarm() {
- 		stopAlarm();
+ 		self.ctx.alarmManager.snoozeAlarm();
  		self.ctx.commManager.enqueueAsFirst(CommManager.MSG_SNOOZE_ALARM);
  	}
  	function sendDismissAlarm() {

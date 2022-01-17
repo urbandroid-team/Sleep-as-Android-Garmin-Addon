@@ -30,6 +30,10 @@ class AlarmManager {
 	    alarmDelayTimerRunning = true;
         alarmDelayTimer.start(method(:startAlarmNow), delay, false);
 	}
+
+	function snoozeAlarm() {
+		stopAlarm();
+	}
 	
 	function stopAlarm() {
 		self.ctx.alarmManager.stopAlarmVibration();

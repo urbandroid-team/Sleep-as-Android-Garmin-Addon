@@ -1,5 +1,7 @@
 package com.urbandroid.sleep.garmin;
 
+import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_STOP;
+
 import android.os.Handler;
 
 import com.garmin.android.connectiq.ConnectIQ;
@@ -122,10 +124,7 @@ public class QueueToWatch {
                         deliveryErrorCount++;
                     } else {
                         remove(message);
-                        if (message.equals("StopApp")) {
-                            // We won't schedule recovery if 'StopApp' cannot be delivered. We cannot do anything in this case as the user is usually present at this moment and won't be waiting for long enough for recovery. By not scheduling recovery, we prevent a persistent notification from popping up at a later time.
-                            ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("Cannot deliver StopApp");
-                        }
+                        messageSentSuccessfullyCallback(message);
                         deliveryErrorCount = 0;
                     }
                     deliveryInProgress.set(false);
@@ -143,6 +142,19 @@ public class QueueToWatch {
         }
     }
 
+    public void allMessagesSentSuccessfully() {
+        for (MessageToWatch m : messageQueue) {
+            messageSentSuccessfullyCallback(m);
+        }
+    }
+
+    private void messageSentSuccessfullyCallback(MessageToWatch message) {
+        if (message.equals(new MessageToWatch(TO_WATCH_STOP))) {
+            // We won't schedule recovery if 'StopApp' cannot be delivered. We cannot do anything in this case as the user is usually present at this moment and won't be waiting for long enough for recovery. By not scheduling recovery, we prevent a persistent notification from popping up at a later time.
+            ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("Cannot deliver StopApp");
+        }
+    }
+
     private void sendNextMessage() {
         if (!CIQManager.getInstance().connectIqReady) {
             handler.removeCallbacks(sendMessageRunnable);
@@ -154,7 +166,7 @@ public class QueueToWatch {
         if (deliveryErrorCount > MAX_DELIVERY_ERROR) {
             handler.removeCallbacks(sendMessageRunnable);
             deliveryErrorCount = 0;
-            if (next() != null && next().equals(Constants.TO_WATCH_STOP)) {
+            if (next() != null && next().equals(TO_WATCH_STOP)) {
                 ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("over max delivery error");
             } else {
                 Logger.logSevere("App went bust. FAILURE_DURING_TRANSFER. No reason to go on like this.");

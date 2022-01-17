@@ -46,7 +46,7 @@ public class HttpServer extends NanoHTTPD {
         String jsonQueue = null;
         try {
             jsonQueue = queueToWatch.getQueueAsJsonArray();
-            queueToWatch.allMessagesSentSuccessfully();
+            queueToWatch.queueSendingViaHttpServer();
             queueToWatch.emptyQueue();
         } catch (JSONException e) {
             Logger.logSevere(TAG + "serveQueue", e);

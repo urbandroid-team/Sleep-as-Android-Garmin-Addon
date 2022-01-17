@@ -142,17 +142,22 @@ public class QueueToWatch {
         }
     }
 
-    public void allMessagesSentSuccessfully() {
+    public void queueSendingViaHttpServer() {
         for (MessageToWatch m : messageQueue) {
             messageSentSuccessfullyCallback(m);
         }
     }
 
     private void messageSentSuccessfullyCallback(MessageToWatch message) {
-        if (message.equals(new MessageToWatch(TO_WATCH_STOP))) {
-            // We won't schedule recovery if 'StopApp' cannot be delivered. We cannot do anything in this case as the user is usually present at this moment and won't be waiting for long enough for recovery. By not scheduling recovery, we prevent a persistent notification from popping up at a later time.
-            ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("Cannot deliver StopApp");
-        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (message.equals(new MessageToWatch(TO_WATCH_STOP))) {
+                    // We won't schedule recovery if 'StopApp' cannot be delivered. We cannot do anything in this case as the user is usually present at this moment and won't be waiting for long enough for recovery. By not scheduling recovery, we prevent a persistent notification from popping up at a later time.
+                    ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("Cannot deliver StopApp");
+                }
+            }
+        }, 3500);
     }
 
     private void sendNextMessage() {

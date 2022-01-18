@@ -15,8 +15,11 @@ class Sleep2Delegate extends WatchUi.BehaviorDelegate {
     		self.ctx.businessManager.unlockScreen();
     		return true;
     	}
+
+        var menu = new Rez.Menus.MainMenu();
+        menu.addItem(Rez.Strings.version, :version);
     	
-        WatchUi.pushView(new Rez.Menus.MainMenu(), new Sleep2MenuDelegate(self.ctx), WatchUi.SLIDE_UP);
+        WatchUi.pushView(menu, new Sleep2MenuDelegate(self.ctx), WatchUi.SLIDE_UP);
         return true;
     }
     

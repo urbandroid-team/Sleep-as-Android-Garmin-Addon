@@ -1,5 +1,6 @@
 <strings>
     <string id="AppName">Sleep</string>
+    <string id="version">20220118.0.0</string>
 
     <string id="alarm">Alarm</string>
 
@@ -22,6 +23,6 @@
 
     <string id="menu_label_snooze_alarm">Snooze alarm</string>
     <string id="menu_label_dismiss_alarm">Dismiss alarm</string>    
-    
+
     
 </strings>

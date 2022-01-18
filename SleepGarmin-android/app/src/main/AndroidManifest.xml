@@ -60,4 +60,39 @@
         </receiver>
     </application>
 
+    <queries>
+        <!-- Urbandroid -->
+        <package android:name="com.urbandroid.sleep"/>
+        <package android:name="com.urbandroid.sleep.full.key"/>
+        <!-- Automate -->
+        <package android:name="net.dinglisch.android.taskerm"/>
+        <package android:name="com.llamalab.automate"/>
+        <!-- Wearables -->
+        <package android:name="com.garmin.android.apps.connectmobile"/>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="image/jpeg" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="image/jpeg" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="text/plain" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="message/rfc822" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND_MULTIPLE" />
+            <data android:mimeType="text/plain" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND_MULTIPLE" />
+            <data android:mimeType="message/rfc822" />
+        </intent>
+    </queries>
+
 </manifest>

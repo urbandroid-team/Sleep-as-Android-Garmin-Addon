@@ -69,6 +69,7 @@
         <package android:name="com.llamalab.automate"/>
         <!-- Wearables -->
         <package android:name="com.garmin.android.apps.connectmobile"/>
+        <package android:name="com.urbandroid.watchsleepstarter"/>
         <intent>
             <action android:name="android.intent.action.SEND" />
             <data android:mimeType="image/jpeg" />

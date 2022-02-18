@@ -136,7 +136,11 @@ class BusinessManager {
  	}
 
  	function switchToAlarmScreen() {
- 		Attention.backlight(true);
+		try {
+ 			Attention.backlight(true);
+		} catch (e) {
+
+		}
  		WatchUi.pushView(new AlarmView(self.ctx), new AlarmDelegate(self.ctx), WatchUi.SLIDE_UP);
  	}
 

@@ -32,6 +32,7 @@ class CommManager {
 	static const MSG_HR = "HR";
 	static const MSG_OXY = "SPO2";
 	static const MSG_RR = "RR";
+	static const MSG_ERROR = "ERROR";
 	
     const MAX_DELIVERY_ERROR = 3;
     const MAX_DELIVERY_PAUSE = 3;
@@ -167,11 +168,15 @@ class CommManager {
        if (responseCode == 200) {
         	DebugManager.log("onWebMsgReceive Request Successful: " + data);
 			self.commListener.onComplete();
-			// Expecting to receive a JSON string
-			var msgArray = parseJsonDataToArray(data);
+			try {
+				// Expecting to receive a JSON string
+				var msgArray = parseJsonDataToArray(data);
 
-			for( var i = 0; i < msgArray.size(); i += 1 ) {
-				handleMessageReceived(msgArray[i]);
+				for( var i = 0; i < msgArray.size(); i += 1 ) {
+					handleMessageReceived(msgArray[i]);
+				}
+			} catch (e instanceof UnexpectedTypeException) {
+				enqueueAsFirst([CommManager.MSG_ERROR, "UnexpectedTypeException"])
 			}
        }
        else {

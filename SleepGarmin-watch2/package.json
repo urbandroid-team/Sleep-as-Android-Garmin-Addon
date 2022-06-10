@@ -1,0 +1,15 @@
+{
+  "name": "sleepgarmin-watch2-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "buildall.mjs",
+  "scripts": {
+    "run": "node buildall.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "xml2json": "^0.12.0"
+  }
+}

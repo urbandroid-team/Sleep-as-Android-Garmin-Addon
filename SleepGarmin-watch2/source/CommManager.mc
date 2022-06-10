@@ -152,6 +152,9 @@ class CommManager {
 	}
 
 	function pollWebserver(req) {
+		if (req == null) {
+			return;
+		}
 		Communications.makeWebRequest(
 			WEB_URL, 
 			req,

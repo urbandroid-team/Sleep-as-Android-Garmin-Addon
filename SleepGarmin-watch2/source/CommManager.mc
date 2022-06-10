@@ -192,6 +192,9 @@ class CommManager {
 		DebugManager.log("parseJsonDataToArray" + json);
 		// contract is be c:command, d:data (d is optional)
 		var ar = [];
+		if (json == null) {
+			return ar;
+		}
 
 		for (var i = 0; i < json.size(); ++i) {
 			var entry = json[i];

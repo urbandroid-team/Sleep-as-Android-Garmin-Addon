@@ -171,6 +171,7 @@ class CommManager {
        if (responseCode == 200) {
         	DebugManager.log("onWebMsgReceive Request Successful: " + data);
 			self.commListener.onComplete();
+
 			try {
 				// Expecting to receive a JSON string
 				var msgArray = parseJsonDataToArray(data);
@@ -179,8 +180,9 @@ class CommManager {
 					handleMessageReceived(msgArray[i]);
 				}
 			} catch (e instanceof UnexpectedTypeException) {
-				enqueueAsFirst([CommManager.MSG_ERROR, "UnexpectedTypeException"])
+				enqueueAsFirst([CommManager.MSG_ERROR, "UnexpectedTypeException"]);
 			}
+
        }
        else {
            DebugManager.log("onWebMsgReceive Response: " + responseCode);

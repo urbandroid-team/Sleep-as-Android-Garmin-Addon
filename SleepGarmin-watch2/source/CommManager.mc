@@ -1,5 +1,6 @@
 using Toybox.Communications;
 using Toybox.System;
+using Toybox.Lang;
 
 class CommManager {
 
@@ -176,10 +177,10 @@ class CommManager {
 				// Expecting to receive a JSON string
 				var msgArray = parseJsonDataToArray(data);
 
-				for( var i = 0; i < msgArray.size(); i += 1 ) {
+				for ( var i = 0; i < msgArray.size(); i += 1 ) {
 					handleMessageReceived(msgArray[i]);
 				}
-			} catch (e instanceof UnexpectedTypeException) {
+			} catch (e instanceof Toybox.Lang.UnexpectedTypeException) {
 				enqueueAsFirst([CommManager.MSG_ERROR, "UnexpectedTypeException"]);
 			}
 

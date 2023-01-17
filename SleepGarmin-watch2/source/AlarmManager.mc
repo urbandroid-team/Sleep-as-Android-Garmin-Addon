@@ -36,6 +36,11 @@ class AlarmManager {
 	}
 	
 	function stopAlarm() {
+		if (alarmDelayTimerRunning) {
+			alarmDelayTimer.stop();
+			alarmDelayTimerRunning = false;
+		}
+
 		self.ctx.alarmManager.stopAlarmVibration();
 		self.ctx.businessManager.backToMainScreen();
 	}

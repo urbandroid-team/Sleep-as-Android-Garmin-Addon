@@ -45,6 +45,13 @@ class AlarmManager {
 		self.ctx.businessManager.backToMainScreen();
 	}
 
+	function cancelAlarms() {
+		if (alarmDelayTimerRunning) {
+			alarmDelayTimer.stop();
+			alarmDelayTimerRunning = false;
+		}
+	}
+
 	function hintVibrCallback() {
 		self.ctx.state.doingHint = false;
 		vibrTimerRunning = false;

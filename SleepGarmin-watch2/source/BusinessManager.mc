@@ -88,7 +88,9 @@ class BusinessManager {
  	function stopAlarm() {
  		if (self.ctx.state.isAlarmRunning()) {
  			self.ctx.alarmManager.stopAlarm();
- 		}
+ 		} else {
+			self.ctx.alarmManager.cancelAlarms();
+		}
  	}
  	
  	function setBatchSize(size) {

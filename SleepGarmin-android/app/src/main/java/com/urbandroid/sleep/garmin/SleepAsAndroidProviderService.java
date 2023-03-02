@@ -3,6 +3,7 @@ package com.urbandroid.sleep.garmin;
 import static com.urbandroid.sleep.garmin.Constants.ACTION_STOP_SELF;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
+import static com.urbandroid.sleep.garmin.ServiceRecoveryManager.getPendingIntentFlags;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -101,10 +102,10 @@ public class SleepAsAndroidProviderService extends Service {
         final Intent stopIntent = new Intent(this, SleepAsAndroidProviderService.class);
         stopIntent.setAction(ACTION_STOP_SELF);
 
-        PendingIntent pendingIntent = PendingIntent.getService(this, 150, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getService(this, 150, stopIntent, getPendingIntentFlags());
 
         if (Build.VERSION.SDK_INT >= 26) {
-            pendingIntent = PendingIntent.getForegroundService(this, 150, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getForegroundService(this, 150, stopIntent, getPendingIntentFlags());
         }
 
         final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_TRACKING)

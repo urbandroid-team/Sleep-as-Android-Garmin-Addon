@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.urbandroid.sleep.garmin"
         minSdkVersion 14
-        targetSdkVersion 30
-        versionCode 33
-        versionName "20220118"
+        targetSdkVersion 31
+        versionCode 35
+        versionName "20220302"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     signingConfigs {
@@ -27,7 +27,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    buildToolsVersion '28.0.3'
 }
 
 repositories {

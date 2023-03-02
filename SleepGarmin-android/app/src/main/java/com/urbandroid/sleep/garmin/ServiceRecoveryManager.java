@@ -1,5 +1,7 @@
 package com.urbandroid.sleep.garmin;
 
+import static com.urbandroid.sleep.garmin.Constants.ACTION_RESTART_SELF;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -13,8 +15,6 @@ import com.urbandroid.common.logging.Logger;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-
-import static com.urbandroid.sleep.garmin.Constants.ACTION_RESTART_SELF;
 
 public class ServiceRecoveryManager {
 
@@ -73,13 +73,21 @@ public class ServiceRecoveryManager {
         pendingIntent.setAction(ACTION_RESTART_SELF);
         pendingIntent.setPackage(service.getPackageName());
 
-        PendingIntent pi = PendingIntent.getService(service.getApplicationContext(), 0, pendingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pi = PendingIntent.getService(service.getApplicationContext(), 0, pendingIntent, getPendingIntentFlags());
 
         if (Build.VERSION.SDK_INT >= 26) {
-            pi = PendingIntent.getForegroundService(service.getApplicationContext(), 0, pendingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pi = PendingIntent.getForegroundService(service.getApplicationContext(), 0, pendingIntent, getPendingIntentFlags());
         }
 
         return pi;
+    }
+
+    public static int getPendingIntentFlags() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        } else {
+            return PendingIntent.FLAG_UPDATE_CURRENT;
+        }
     }
 
     private void cancelRecovery(Service service) {

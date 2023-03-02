@@ -1,5 +1,6 @@
 using Toybox.Communications;
 using Toybox.System;
+using Toybox.Lang;
 
 class CommManager {
 
@@ -32,6 +33,7 @@ class CommManager {
 	static const MSG_HR = "HR";
 	static const MSG_OXY = "SPO2";
 	static const MSG_RR = "RR";
+	static const MSG_ERROR = "ERROR";
 	
     const MAX_DELIVERY_ERROR = 3;
     const MAX_DELIVERY_PAUSE = 3;
@@ -151,6 +153,9 @@ class CommManager {
 	}
 
 	function pollWebserver(req) {
+		if (req == null) {
+			return;
+		}
 		Communications.makeWebRequest(
 			WEB_URL, 
 			req,
@@ -167,12 +172,18 @@ class CommManager {
        if (responseCode == 200) {
         	DebugManager.log("onWebMsgReceive Request Successful: " + data);
 			self.commListener.onComplete();
-			// Expecting to receive a JSON string
-			var msgArray = parseJsonDataToArray(data);
 
-			for( var i = 0; i < msgArray.size(); i += 1 ) {
-				handleMessageReceived(msgArray[i]);
+			try {
+				// Expecting to receive a JSON string
+				var msgArray = parseJsonDataToArray(data);
+
+				for ( var i = 0; i < msgArray.size(); i += 1 ) {
+					handleMessageReceived(msgArray[i]);
+				}
+			} catch (e instanceof Toybox.Lang.UnexpectedTypeException) {
+				enqueueAsFirst([CommManager.MSG_ERROR, "UnexpectedTypeException"]);
 			}
+
        }
        else {
            DebugManager.log("onWebMsgReceive Response: " + responseCode);
@@ -184,6 +195,9 @@ class CommManager {
 		DebugManager.log("parseJsonDataToArray" + json);
 		// contract is be c:command, d:data (d is optional)
 		var ar = [];
+		if (json == null) {
+			return ar;
+		}
 
 		for (var i = 0; i < json.size(); ++i) {
 			var entry = json[i];

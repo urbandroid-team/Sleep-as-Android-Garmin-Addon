@@ -2,3 +2,4 @@ Release.key
 .idea/
 build/
 bin/
+node_modules/

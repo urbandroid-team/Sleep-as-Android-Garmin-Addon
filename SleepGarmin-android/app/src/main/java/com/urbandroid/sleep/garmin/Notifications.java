@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -87,6 +88,35 @@ public class Notifications {
 
         NotificationManagerCompat nM = NotificationManagerCompat.from(c);
         nM.notify(1375, notificationBuilder.build());
+    }
+
+    public static void showUnrestrictedBatteryNeededNotification(Context c) {
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + c.getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, i, 0);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c, NOTIFICATION_CHANNEL_ID_WARNING)
+                .setSmallIcon(R.drawable.ic_action_watch)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(c.getString(R.string.unrestricted_battery_needed)))
+                .setContentText(c.getString(R.string.unrestricted_battery_needed))
+                .setColor(c.getResources().getColor(R.color.tint_dark))
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+                .setOnlyAlertOnce(true)
+                .setAutoCancel(true);
+
+        if (Build.VERSION.SDK_INT < 24) {
+            notificationBuilder.setContentTitle(c.getResources().getString(R.string.app_name_long));
+        }
+
+        NotificationManagerCompat nM = NotificationManagerCompat.from(c);
+        nM.notify(1389, notificationBuilder.build());
     }
 
 }

@@ -1,9 +1,23 @@
 package com.urbandroid.sleep.garmin;
 
+import static android.content.Context.POWER_SERVICE;
+import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
+import static android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS;
+import static android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
+
+import androidx.core.content.ContextCompat;
 
 import com.urbandroid.common.logging.Logger;
 
@@ -69,5 +83,49 @@ public class Utils {
             }
         }
         return defaultValue;
+    }
+
+    public static void startForegroundService(Context context, Intent serviceIntent) {
+        Logger.logDebug("Utils.startForegroundService");
+        if (Build.VERSION.SDK_INT >= 31) {
+            UtilsAPI31.startForegroundService(context, serviceIntent);
+        } else {
+            Logger.logDebug("Utils.startForegroundService alert");
+            ContextCompat.startForegroundService(context, serviceIntent);
+        }
+
+    }
+
+    public static void startAppInfo(final Activity context) {
+        if (context == null) return;
+
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + context.getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        context.startActivity(i);
+    }
+
+    public static void showUnrestrictedBatteryDialog(Activity context) {
+        new AlertDialog.Builder(context)
+            .setTitle("Opt out of battery optimizations")
+            .setMessage("Garmin addon for Sleep needs unrestricted battery usage on Android 12+ to be able to start." +
+                    "\n\n Tap OK and in the next screen: \n\n1. Select 'App battery usage'. \n2. Tap 'Unrestricted'")
+            .setPositiveButton("OK", (dialogInterface, i) -> {
+                startAppInfo(context);
+            })
+            .show();
+    }
+
+    public static void showUnrestrictedBatteryNeededNotificationIfNeeded(Context context) {
+        if (Build.VERSION.SDK_INT >= 31) {
+            PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
+            if (pm != null && !pm.isIgnoringBatteryOptimizations(context.getPackageName())) {
+                Notifications.showUnrestrictedBatteryNeededNotification(context);
+            }
+        }
     }
 }

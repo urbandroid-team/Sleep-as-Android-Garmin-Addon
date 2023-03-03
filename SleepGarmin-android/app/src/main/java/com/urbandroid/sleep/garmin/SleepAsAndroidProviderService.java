@@ -39,6 +39,7 @@ public class SleepAsAndroidProviderService extends Service {
         GlobalInitializer.initializeIfRequired(this);
 
         ServiceRecoveryManager.getInstance().init(this);
+        Utils.showUnrestrictedBatteryNeededNotificationIfNeeded(this);
 
         if (!Utils.isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER, this) && Build.VERSION.SDK_INT >= 26) {
             Notifications.showNotificationToInstallSleepWatchStarter(this);

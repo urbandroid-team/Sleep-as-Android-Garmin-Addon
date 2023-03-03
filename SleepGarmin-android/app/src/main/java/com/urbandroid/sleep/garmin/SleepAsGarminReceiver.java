@@ -76,7 +76,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                 if (intent.hasExtra(DO_HR_MONITORING)) {
                     serviceIntent.putExtra("DO_HR_MONITORING", true);
                 }
-                ContextCompat.startForegroundService(context, serviceIntent);
+                Utils.startForegroundService(context, serviceIntent);
                 break;
             }
             case STOP_WATCH_APP:
@@ -84,7 +84,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.setAction(STOP_WATCH_APP);
-                    ContextCompat.startForegroundService(context, serviceIntent);
+                    Utils.startForegroundService(context, serviceIntent);
                 }
                 break;
             case SET_PAUSE:
@@ -92,7 +92,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.setAction(SET_PAUSE);
                     serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
-                    ContextCompat.startForegroundService(context, serviceIntent);
+                    Utils.startForegroundService(context, serviceIntent);
                 }
                 break;
             case SET_BATCH_SIZE:
@@ -100,7 +100,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.setAction(SET_BATCH_SIZE);
                     serviceIntent.putExtra("SIZE", intent.getLongExtra("SIZE", 0));
-                    ContextCompat.startForegroundService(context,serviceIntent);
+                    Utils.startForegroundService(context,serviceIntent);
                 }
 
                 break;
@@ -109,7 +109,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.setAction(HINT);
                     serviceIntent.putExtra("REPEAT", Utils.getLongOrIntExtraAsLong(intent, "REPEAT", 0L));
-                    ContextCompat.startForegroundService(context, serviceIntent);
+                    Utils.startForegroundService(context, serviceIntent);
                 }
                 break;
             case UPDATE_ALARM:
@@ -117,7 +117,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.setAction(UPDATE_ALARM);
                     serviceIntent.putExtra("TIMESTAMP", intent.getLongExtra("TIMESTAMP", 0));
-                    ContextCompat.startForegroundService(context, serviceIntent);
+                    Utils.startForegroundService(context, serviceIntent);
                 }
                 break;
             case START_ALARM:
@@ -125,21 +125,21 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.putExtra("DELAY", intent.getIntExtra("DELAY", 0));
                     serviceIntent.setAction(START_ALARM);
-                    ContextCompat.startForegroundService(context, serviceIntent);
+                    Utils.startForegroundService(context, serviceIntent);
                 }
                 break;
             case STOP_ALARM:
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.setAction(STOP_ALARM);
-                    ContextCompat.startForegroundService(context, serviceIntent);
+                    Utils.startForegroundService(context, serviceIntent);
                 }
                 break;
             case CHECK_CONNECTED: {
                 Logger.logDebug("Receiver: Check connected");
                 Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                 serviceIntent.setAction(CHECK_CONNECTED);
-                ContextCompat.startForegroundService(context, serviceIntent);
+                Utils.startForegroundService(context, serviceIntent);
                 break;
             }
             case REPORT:
@@ -185,6 +185,6 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
 
     private void startProviderServiceBecauseWatchSaidSo(Context context) {
         Logger.logInfo(TAG + " ConnectIQ intent received, starting provider service...");
-        ContextCompat.startForegroundService(context,new Intent(context, SleepAsAndroidProviderService.class));
+        Utils.startForegroundService(context,new Intent(context, SleepAsAndroidProviderService.class));
     }
 }

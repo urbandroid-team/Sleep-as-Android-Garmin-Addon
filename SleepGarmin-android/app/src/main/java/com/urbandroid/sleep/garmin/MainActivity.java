@@ -1,10 +1,18 @@
 package com.urbandroid.sleep.garmin;
 
+import static com.garmin.android.connectiq.IQApp.IQAppStatus.INSTALLED;
+import static com.urbandroid.sleep.garmin.Constants.IQ_APP_ID;
+import static com.urbandroid.sleep.garmin.Constants.IQ_STORE_ID;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_GCM;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
+import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 
 import com.garmin.android.connectiq.ConnectIQ;
@@ -15,13 +23,6 @@ import com.garmin.android.connectiq.exception.ServiceUnavailableException;
 import com.urbandroid.common.logging.Logger;
 
 import java.util.List;
-
-import static com.garmin.android.connectiq.IQApp.IQAppStatus.INSTALLED;
-import static com.urbandroid.sleep.garmin.Constants.IQ_APP_ID;
-import static com.urbandroid.sleep.garmin.Constants.IQ_STORE_ID;
-import static com.urbandroid.sleep.garmin.Constants.PACKAGE_GCM;
-import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
-import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 
 public class MainActivity extends Activity {
 
@@ -34,6 +35,20 @@ public class MainActivity extends Activity {
 
     private ConnectIQ mConnectIQ;
     private IQDevice mDevice;
+
+    public static void startAppInfo(final Activity context) {
+        if (context == null) {
+            return;
+        }
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + context.getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        context.startActivity(i);
+    }
 
     private ConnectIQ.ConnectIQListener mListener = new ConnectIQ.ConnectIQListener() {
 
@@ -162,6 +177,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         GlobalInitializer.initializeIfRequired(this);
         setContentView(R.layout.activity_main);
+
+        startAppInfo(this);
 
         Logger.logDebug("Main Activity connectIQ intialization");
 

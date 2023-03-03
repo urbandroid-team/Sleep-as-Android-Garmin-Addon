@@ -108,7 +108,7 @@ public class SleepAsGarminReceiver extends BroadcastReceiver {
                 if (serviceRunning) {
                     Intent serviceIntent = new Intent(context, SleepAsAndroidProviderService.class);
                     serviceIntent.setAction(HINT);
-                    serviceIntent.putExtra("REPEAT", intent.getLongExtra("REPEAT", 0));
+                    serviceIntent.putExtra("REPEAT", Utils.getLongOrIntExtraAsLong(intent, "REPEAT", 0L));
                     ContextCompat.startForegroundService(context, serviceIntent);
                 }
                 break;

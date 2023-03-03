@@ -50,11 +50,13 @@ import java.util.List;
 
 class MessageHandler {
     private static final MessageHandler ourInstance = new MessageHandler();
+
     public static MessageHandler getInstance() {
         return ourInstance;
     }
 
-    private MessageHandler() { }
+    private MessageHandler() {
+    }
 
     private final static String TAG = "MessageHandler: ";
 
@@ -71,7 +73,7 @@ class MessageHandler {
     }
 
     public void handleMessageFromWatchUsingCIQ(List<Object> message, ConnectIQ.IQMessageStatus status, Context context) {
-        String[] msgArray = message.toArray()[0].toString().replaceAll("\\[","").replaceAll("\\]", "").replaceAll(" ",  "").split(",");
+        String[] msgArray = message.toArray()[0].toString().replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(" ", "").split(",");
         String command = msgArray[0];
         String[] data = Arrays.copyOfRange(msgArray, 1, msgArray.length);
 
@@ -80,7 +82,7 @@ class MessageHandler {
 
     public void handleMessageFromWatchUsingHTTP(String command, String data, Context context) {
         Logger.logDebug(TAG + "handleMessageFromWatchUsingHTTP: " + command + " " + data);
-        handleMessageFromWatch(command, data.replaceAll("\\[","").replaceAll("\\]", "").replaceAll(" ",  "").split(","), context);
+        handleMessageFromWatch(command, data.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll(" ", "").split(","), context);
     }
 
     public void handleMessageFromWatch(String command, String[] data, Context context) {
@@ -198,7 +200,7 @@ class MessageHandler {
             action = "";
         }
 
-        if (action.equals(START_WATCH_APP)){
+        if (action.equals(START_WATCH_APP)) {
             Logger.logDebug(TAG + "START_WATCH_APP");
             dumpIntent(intent);
 
@@ -241,9 +243,10 @@ class MessageHandler {
             queueToWatch.enqueue(new MessageToWatch(TO_WATCH_ALARM_SET, param));
         }
         if (action.equals(HINT)) {
-            long param = intent.getIntExtra("REPEAT", 0);
-            Logger.logDebug(TAG + "Sending hint to watch, with repeat " + param);
-            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_HINT, param));
+            Long repeat = Utils.getLongOrIntExtraAsLong(intent, "REPEAT", 0L);
+            if (repeat == null) return;
+            Logger.logDebug(TAG + "Sending hint to watch, with repeat " + repeat);
+            queueToWatch.enqueue(new MessageToWatch(TO_WATCH_HINT, repeat));
         }
         if (action.equals(CHECK_CONNECTED)) {
             queueToWatch.remove(new MessageToWatch(TO_WATCH_STOP));
@@ -281,7 +284,6 @@ class MessageHandler {
         }
 
     }
-
 
 }
 

@@ -55,4 +55,19 @@ public class Utils {
         return floatAr;
     }
 
+    public static Long getLongOrIntExtraAsLong(Intent intent, String key, Long defaultValue) {
+        Bundle extras = intent.getExtras();
+        if (extras != null && extras.containsKey(key)) {
+            Object extraVal = extras.get(key);
+            if (extraVal == null) return defaultValue;
+
+            if (extraVal instanceof Integer) {
+                Integer intExtra = (Integer) extraVal;
+                return intExtra.longValue();
+            } else if (extraVal instanceof Long) {
+                return (long) extraVal;
+            }
+        }
+        return defaultValue;
+    }
 }

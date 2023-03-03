@@ -165,6 +165,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Logger.logDebug("Main Activity connectIQ intialization");
+        Utils.showUnrestrictedBatteryNeededNotificationIfNeeded(this);
 
         if (GlobalInitializer.debug){
             mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.TETHERED);

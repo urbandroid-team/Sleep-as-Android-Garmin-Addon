@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -90,6 +91,7 @@ public class Notifications {
         nM.notify(1375, notificationBuilder.build());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public static void showUnrestrictedBatteryNeededNotification(Context c) {
         final Intent i = new Intent();
         i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -99,7 +101,7 @@ public class Notifications {
         i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, i, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, i, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c, NOTIFICATION_CHANNEL_ID_WARNING)
                 .setSmallIcon(R.drawable.ic_action_watch)

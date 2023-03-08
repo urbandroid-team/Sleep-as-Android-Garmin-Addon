@@ -46,7 +46,7 @@ public class Notifications {
 
         installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, installIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, installIntent, getPendingIntentFlags());
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c, NOTIFICATION_CHANNEL_ID_WARNING)
                 .setSmallIcon(R.drawable.ic_action_watch)
@@ -71,7 +71,7 @@ public class Notifications {
 
         documentationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, documentationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, documentationIntent, getPendingIntentFlags());
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c, NOTIFICATION_CHANNEL_ID_WARNING)
                 .setSmallIcon(R.drawable.ic_action_watch)
@@ -101,7 +101,7 @@ public class Notifications {
         i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, i, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(c, 0, i, getPendingIntentFlags());
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c, NOTIFICATION_CHANNEL_ID_WARNING)
                 .setSmallIcon(R.drawable.ic_action_watch)
@@ -121,4 +121,11 @@ public class Notifications {
         nM.notify(1389, notificationBuilder.build());
     }
 
+    public static int getPendingIntentFlags() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        } else {
+            return PendingIntent.FLAG_UPDATE_CURRENT;
+        }
+    }
 }

@@ -73,21 +73,13 @@ public class ServiceRecoveryManager {
         pendingIntent.setAction(ACTION_RESTART_SELF);
         pendingIntent.setPackage(service.getPackageName());
 
-        PendingIntent pi = PendingIntent.getService(service.getApplicationContext(), 0, pendingIntent, getPendingIntentFlags());
+        PendingIntent pi = PendingIntent.getService(service.getApplicationContext(), 0, pendingIntent, Notifications.getPendingIntentFlags());
 
         if (Build.VERSION.SDK_INT >= 26) {
-            pi = PendingIntent.getForegroundService(service.getApplicationContext(), 0, pendingIntent, getPendingIntentFlags());
+            pi = PendingIntent.getForegroundService(service.getApplicationContext(), 0, pendingIntent, Notifications.getPendingIntentFlags());
         }
 
         return pi;
-    }
-
-    public static int getPendingIntentFlags() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            return PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
-        } else {
-            return PendingIntent.FLAG_UPDATE_CURRENT;
-        }
     }
 
     private void cancelRecovery(Service service) {

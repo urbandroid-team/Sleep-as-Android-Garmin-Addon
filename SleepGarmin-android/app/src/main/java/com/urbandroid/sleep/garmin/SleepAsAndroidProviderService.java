@@ -3,7 +3,7 @@ package com.urbandroid.sleep.garmin;
 import static com.urbandroid.sleep.garmin.Constants.ACTION_STOP_SELF;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
-import static com.urbandroid.sleep.garmin.ServiceRecoveryManager.getPendingIntentFlags;
+import static com.urbandroid.sleep.garmin.Notifications.getPendingIntentFlags;
 
 import android.app.PendingIntent;
 import android.app.Service;

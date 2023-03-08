@@ -8,10 +8,11 @@
     <uses-permission-sdk-23 android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-      android:allowBackup="true"
+        android:allowBackup="true"
       android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
       android:supportsRtl="true"
+        android:name=".SleepAsGarminApplication"
       android:theme="@style/AppTheme">
 
         <activity android:name=".ErrorReportActivity"

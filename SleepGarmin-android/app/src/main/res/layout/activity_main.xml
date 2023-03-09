@@ -27,6 +27,64 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:background="@drawable/card"
+                android:id="@+id/card_battery_optimization_opt_out"
+                android:paddingTop="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="@color/secondary"
+                    style="?android:attr/textAppearanceMedium"
+                    android:id="@+id/text_battery_optimization_opt_out"
+                    android:text="@string/text_battery_optimization_opt_out"
+                    android:paddingBottom="8dp"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+                <Button
+                    android:textStyle="bold"
+                    android:layout_gravity="right"
+                    android:textColor="@color/primary"
+                    android:background="@drawable/button_flat"
+                    android:id="@+id/btn_battery_optimization_opt_out"
+                    android:text="@string/read_more"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/card"
+                android:id="@+id/card_allow_notifications"
+                android:paddingTop="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                <TextView
+                    android:textColor="@color/secondary"
+                    style="?android:attr/textAppearanceMedium"
+                    android:id="@+id/text_allow_notifications"
+                    android:text="@string/text_allow_notifications"
+                    android:paddingBottom="8dp"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+                <Button
+                    android:textStyle="bold"
+                    android:layout_gravity="right"
+                    android:textColor="@color/primary"
+                    android:background="@drawable/button_flat"
+                    android:id="@+id/btn_allow_notifications"
+                    android:text="@string/read_more"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@drawable/card"
                 android:id="@+id/card_install_saa"
                 android:paddingTop="16dp"
                 android:paddingLeft="16dp"

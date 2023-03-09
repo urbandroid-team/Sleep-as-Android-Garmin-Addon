@@ -18,5 +18,7 @@
   <string name="unrestricted_battery_needed">Unrestricted battery needed for this app on Android 12+. Tap on this notification, then on \"App battery usage\" and set to \"Unrestricted\".</string>
   <string name="generating_report">Generating wearable report…</string>
   <string name="battery_opt_out_channel_title">Battery optimization warning</string>
+  <string name="text_battery_optimization_opt_out">Unrestricted battery needed on Android 12+ to be able to track sleep in the background. Tap on \"Setup\", then on \"App battery usage\" and set to \"Unrestricted\".</string>
+  <string name="text_allow_notifications">Allow Sleep as Android: Garmin addon to show you status and warning notifications to help you maintain maximum reliability for sleep tracking using your watch.</string>
 
 </resources>

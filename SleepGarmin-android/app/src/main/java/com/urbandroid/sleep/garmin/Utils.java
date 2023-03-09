@@ -119,14 +119,21 @@ public class Utils {
     }
 
     public static void showUnrestrictedBatteryNeededNotificationIfNeeded(Context context) {
-        if (Build.VERSION.SDK_INT >= 31) {
-            NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-            if (!nm.areNotificationsEnabled()) return;
-
-            PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
-            if (pm != null && !pm.isIgnoringBatteryOptimizations(context.getPackageName())) {
+        if (isUnrestrictedBatteryNotificationNeeded(context)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Notifications.showUnrestrictedBatteryNeededNotification(context);
             }
         }
+    }
+
+    public static boolean isUnrestrictedBatteryNotificationNeeded(Context context) {
+        if (Build.VERSION.SDK_INT >= 31) {
+            NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            if (!nm.areNotificationsEnabled()) return false;
+
+            PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
+            return pm != null && !pm.isIgnoringBatteryOptimizations(context.getPackageName());
+        }
+        return false;
     }
 }

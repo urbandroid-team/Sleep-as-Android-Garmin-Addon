@@ -6,6 +6,7 @@ import static com.urbandroid.sleep.garmin.Constants.IQ_STORE_ID;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_GCM;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
+import static com.urbandroid.sleep.garmin.Utils.startAppInfo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -238,6 +239,26 @@ public class MainActivity extends Activity {
             }
         });
 
+        findViewById(R.id.btn_allow_notifications).setOnClickListener(v -> {
+            sendUnrestrictedBatteryNotificationWithPermissionCheck();
+        });
+
+        findViewById(R.id.btn_battery_optimization_opt_out).setOnClickListener(v -> {
+            startAppInfo(this);
+        });
+
+        if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            findViewById(R.id.card_allow_notifications).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.card_allow_notifications).setVisibility(View.VISIBLE);
+        }
+
+        findViewById(R.id.card_battery_optimization_opt_out).setVisibility(Utils.isUnrestrictedBatteryNotificationNeeded(this) ? View.VISIBLE : View.GONE);
+
+        sendUnrestrictedBatteryNotificationWithPermissionCheck();
+    }
+
+    private void sendUnrestrictedBatteryNotificationWithPermissionCheck() {
         if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             // You can use the API that requires the permission.
             if (Build.VERSION.SDK_INT >= 24) {

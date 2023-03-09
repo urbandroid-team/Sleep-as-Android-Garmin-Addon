@@ -94,13 +94,13 @@ public class Utils {
 
     }
 
-    public static void startAppInfo(final Activity context) {
+    public static void startAppInfo(final Activity context, final String packageName) {
         if (context == null) return;
 
         final Intent i = new Intent();
         i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         i.addCategory(Intent.CATEGORY_DEFAULT);
-        i.setData(Uri.parse("package:" + context.getPackageName()));
+        i.setData(Uri.parse("package:" + packageName));
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
@@ -113,7 +113,7 @@ public class Utils {
             .setMessage("Garmin addon for Sleep needs unrestricted battery usage on Android 12+ to be able to start." +
                     "\n\n Tap OK and in the next screen: \n\n1. Select 'App battery usage'. \n2. Tap 'Unrestricted'")
             .setPositiveButton("OK", (dialogInterface, i) -> {
-                startAppInfo(context);
+                startAppInfo(context, context.getPackageName());
             })
             .show();
     }

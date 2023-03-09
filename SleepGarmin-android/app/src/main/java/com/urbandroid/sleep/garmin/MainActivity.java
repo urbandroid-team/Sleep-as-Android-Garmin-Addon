@@ -16,7 +16,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
@@ -197,54 +196,25 @@ public class MainActivity extends Activity {
 //            Logger.logDebug("ConnectIQ instance set to WIRELESS");
         }
 
-        findViewById(R.id.whitelist_GCM).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://sleep.urbandroid.org/documentation/faq/alarms-sleep-tracking-dont-work/#garmin"));
-                startActivity(browserIntent);
-            }
+        findViewById(R.id.whitelist_GCM).setOnClickListener(v -> {
+            startAppInfo(this, PACKAGE_GCM);
         });
 
-        findViewById(R.id.install_gcm).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                installGCM();
-            }
-        });
+        findViewById(R.id.install_gcm).setOnClickListener(v -> installGCM());
 
-        findViewById(R.id.install_saa).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                installSleep();
-            }
-        });
+        findViewById(R.id.install_saa).setOnClickListener(v -> installSleep());
 
-        findViewById(R.id.install_watchapp).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                installWatchApp(mConnectIQ);
-            }
-        });
+        findViewById(R.id.install_watchapp).setOnClickListener(v -> installWatchApp(mConnectIQ));
 
-        findViewById(R.id.setup).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setupSleep();
-            }
-        });
-        findViewById(R.id.install_watchsleepstarter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                installSleepWatchStarter();
-            }
-        });
+        findViewById(R.id.setup).setOnClickListener(v -> setupSleep());
+        findViewById(R.id.install_watchsleepstarter).setOnClickListener(v -> installSleepWatchStarter());
 
         findViewById(R.id.btn_allow_notifications).setOnClickListener(v -> {
             sendUnrestrictedBatteryNotificationWithPermissionCheck();
         });
 
         findViewById(R.id.btn_battery_optimization_opt_out).setOnClickListener(v -> {
-            startAppInfo(this);
+            startAppInfo(this, getPackageName());
         });
 
         if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {

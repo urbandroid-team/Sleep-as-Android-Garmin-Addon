@@ -28,10 +28,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/card"
                 android:id="@+id/card_battery_optimization_opt_out"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent" android:layout_height="wrap_content">
 
                 <TextView
@@ -48,7 +46,7 @@
                     android:textColor="@color/primary"
                     android:background="@drawable/button_flat"
                     android:id="@+id/btn_battery_optimization_opt_out"
-                    android:text="@string/read_more"
+                    android:text="@string/fix"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
             </LinearLayout>
@@ -57,10 +55,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/card"
                 android:id="@+id/card_allow_notifications"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent" android:layout_height="wrap_content">
 
                 <TextView
@@ -86,10 +82,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/card"
                 android:id="@+id/card_install_saa"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -117,10 +111,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/card"
                 android:id="@+id/card_install_gcm"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -148,10 +140,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/card"
                 android:id="@+id/card_install_watchapp"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -179,10 +169,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/card"
                 android:id="@+id/card_whitelist_GCM"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -200,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:background="@drawable/button_flat"
-                    android:text="@string/read_more"
+                    android:text="@string/setup"
                     android:textColor="@color/primary"
                     android:textStyle="bold" />
 
@@ -210,10 +198,8 @@
                 android:orientation="vertical"
                 android:background="@drawable/card"
                 android:id="@+id/card_install_watchsleepstarter"
-                android:paddingTop="16dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -242,9 +228,8 @@
                 android:id="@+id/card_setup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:paddingRight="16dp"
-                android:paddingLeft="16dp"
+                android:layout_marginBottom="16dp"
+                android:padding="16dp"
                 android:background="@drawable/card"
                 android:orientation="vertical"
                 android:paddingTop="16dp">

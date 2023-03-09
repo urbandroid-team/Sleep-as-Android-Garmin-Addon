@@ -5,6 +5,7 @@
         android:bottom="0dp"
         android:top="0dp">
         <shape android:shape="rectangle">
+            <corners android:bottomLeftRadius="24dp" android:bottomRightRadius="24dp" android:topLeftRadius="24dp" android:topRightRadius="24dp"/>
             <solid android:color="@color/bg_main" />
         </shape>
     </item>
@@ -13,6 +14,7 @@
         android:bottom="0dp"
         android:top="0dp">
         <shape android:shape="rectangle">
+            <corners android:bottomLeftRadius="24dp" android:bottomRightRadius="24dp" android:topLeftRadius="24dp" android:topRightRadius="24dp"/>
             <solid android:color="@color/quaternary" />
         </shape>
     </item>
@@ -21,6 +23,7 @@
         android:bottom="0dp"
         android:top="1dp">
         <shape android:shape="rectangle">
+            <corners android:bottomLeftRadius="24dp" android:bottomRightRadius="24dp" android:topLeftRadius="24dp" android:topRightRadius="24dp"/>
             <solid android:color="@color/bg_card" />
         </shape>
     </item>

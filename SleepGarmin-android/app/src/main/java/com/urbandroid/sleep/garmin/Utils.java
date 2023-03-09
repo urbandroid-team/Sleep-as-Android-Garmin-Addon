@@ -1,13 +1,11 @@
 package com.urbandroid.sleep.garmin;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static android.content.Context.POWER_SERVICE;
-import static android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS;
-import static android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS;
-import static android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ForegroundServiceStartNotAllowedException;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -122,6 +120,9 @@ public class Utils {
 
     public static void showUnrestrictedBatteryNeededNotificationIfNeeded(Context context) {
         if (Build.VERSION.SDK_INT >= 31) {
+            NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            if (!nm.areNotificationsEnabled()) return;
+
             PowerManager pm = (PowerManager) context.getSystemService(POWER_SERVICE);
             if (pm != null && !pm.isIgnoringBatteryOptimizations(context.getPackageName())) {
                 Notifications.showUnrestrictedBatteryNeededNotification(context);

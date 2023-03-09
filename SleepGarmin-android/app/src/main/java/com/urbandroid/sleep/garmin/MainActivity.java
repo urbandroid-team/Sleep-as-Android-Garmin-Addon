@@ -8,12 +8,17 @@ import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
 
 import com.garmin.android.connectiq.ConnectIQ;
 import com.garmin.android.connectiq.IQApp;
@@ -35,6 +40,9 @@ public class MainActivity extends Activity {
 
     private ConnectIQ mConnectIQ;
     private IQDevice mDevice;
+
+    private static final String PERMISSION_POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS";
+    private static final int PERMISSION_POST_NOTIFICATIONS_REQUEST_CODE = 420;
 
     private ConnectIQ.ConnectIQListener mListener = new ConnectIQ.ConnectIQListener() {
 
@@ -165,7 +173,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Logger.logDebug("Main Activity connectIQ intialization");
-        Utils.showUnrestrictedBatteryNeededNotificationIfNeeded(this);
 
         if (GlobalInitializer.debug){
             mConnectIQ = ConnectIQ.getInstance(this, ConnectIQ.IQConnectType.TETHERED);
@@ -230,6 +237,34 @@ public class MainActivity extends Activity {
                 installSleepWatchStarter();
             }
         });
+
+        if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            // You can use the API that requires the permission.
+            if (Build.VERSION.SDK_INT >= 24) {
+                NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                if (nm.areNotificationsEnabled()) Utils.showUnrestrictedBatteryNeededNotificationIfNeeded(this);
+            } else {
+                Utils.showUnrestrictedBatteryNeededNotificationIfNeeded(this);
+            }
+        } else if (Build.VERSION.SDK_INT >= 23 && shouldShowRequestPermissionRationale(PERMISSION_POST_NOTIFICATIONS)) {
+            showPostNotificationPermissionRationaleDialog();
+        } else if (Build.VERSION.SDK_INT >= 23) {
+            // You can directly ask for the permission.
+            requestPermissions(new String[] { PERMISSION_POST_NOTIFICATIONS }, PERMISSION_POST_NOTIFICATIONS_REQUEST_CODE);
+        }
+    }
+
+    public void showPostNotificationPermissionRationaleDialog() {
+        if (Build.VERSION.SDK_INT < 23) return;
+
+        new AlertDialog.Builder(this)
+                .setTitle("Allow notifications")
+                .setMessage("Allow Sleep as Android: Garmin addon to show you status and warning notifications to help you maintain maximum reliability for sleep tracking using your watch.")
+                .setNegativeButton("No thanks", (dialogInterface, i) -> {})
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    requestPermissions(new String[]{PERMISSION_POST_NOTIFICATIONS}, PERMISSION_POST_NOTIFICATIONS_REQUEST_CODE);
+                })
+                .show();
     }
 
     @Override

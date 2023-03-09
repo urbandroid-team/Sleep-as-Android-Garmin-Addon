@@ -15,7 +15,7 @@
   <string name="running">Sleep tracking with Garmin. Tap to stop.</string>
   <string name="running_server">Sleep tracking with Garmin using server. Tap to stop.</string>
   <string name="cannot_start_from_phone">Please start tracking from the watch - Garmin Vívoactive 3 has a firmware bug that breaks starting from phone. Tap to see more information.</string>
-  <string name="unrestricted_battery_needed">Unrestricted battery needed for this app on Android 12+. Tap on this notification, then on \"App battery usage\" and set to \"Unrestricted\".</string>
+  <string name="unrestricted_battery_needed">Turn off battery optimizations needed. Tap here, then on \"App battery usage\" and set to \"Unrestricted\".</string>
   <string name="generating_report">Generating wearable report…</string>
   <string name="battery_opt_out_channel_title">Battery optimization warning</string>
   <string name="text_battery_optimization_opt_out">Turn off battery optimizations to allow sleep tracking sleep in the background. Tap on \"Fix\", then on \"App battery usage\" and set to \"Unrestricted\".</string>

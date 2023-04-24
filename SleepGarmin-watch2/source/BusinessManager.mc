@@ -80,12 +80,15 @@ class BusinessManager {
  	}
  	
  	function startAlarm(delay) {
+		logTransmit("BusinessManager#startAlarm");
+
  		if (!self.ctx.state.isAlarmRunning()) {
 	 		self.ctx.alarmManager.startAlarm(delay);	
  		}
  	}
  	
  	function stopAlarm() {
+		logTransmit("BusinessManager#stopAlarm isAlarmRunning: " + self.ctx.state.isAlarmRunning());
  		if (self.ctx.state.isAlarmRunning()) {
  			self.ctx.alarmManager.stopAlarm();
  		} else {
@@ -153,5 +156,11 @@ class BusinessManager {
  	function doHint(repeat) {
 		self.ctx.alarmManager.doHint(repeat);
  	}
+
+    function logTransmit(message) {
+    	if (DebugManager.debug) {
+			self.ctx.commManager.enqueueAsFirst("LOG: " + message);
+        }
+    }
 
  }

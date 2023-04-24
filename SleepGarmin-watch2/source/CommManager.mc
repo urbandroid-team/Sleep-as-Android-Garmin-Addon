@@ -17,7 +17,7 @@ class CommManager {
 	static const MSG_SET_ALARM = "SetAlarm;";
 	static const MSG_START_ALARM = "StartAlarm;";
 	static const MSG_HINT = "Hint;";
-	static const MSG_STOP_ALARM = "StopAlarm;";
+	static const MSG_STOP_ALARM = "StopAlarm";
 
 	// To phone via TRANSMIT
 	static const MSG_START_TRACKING = "STARTING";
@@ -216,6 +216,7 @@ class CommManager {
 
     function handleMessageReceived(msg) {
         DebugManager.log("handleMessageReceived: " + msg);
+		self.ctx.businessManager.logTransmit("CommManager#handleMessageReceived: " + msg);
 
 		if (msg.equals(CommManager.MSG_START)) {
 			self.ctx.businessManager.startTracking();
@@ -257,6 +258,8 @@ class CommManager {
 		}
 		
 		if (msg.find(CommManager.MSG_STOP_ALARM) == 0) {
+			self.ctx.businessManager.logTransmit("CommManager#received MSG_STOP_ALARM");
+
 			self.ctx.businessManager.stopAlarm();
 			return;
 		}

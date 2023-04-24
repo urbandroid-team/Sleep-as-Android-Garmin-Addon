@@ -5,6 +5,7 @@ class AlarmManager {
 
 	var ctx;
 
+	// Note: Running timers cannot be stopped in CIQ. Nonrepeating timer ignores stop() calls completely, while repeating timers will execute one last time after stop() is called on them.
 	var alarmDelayTimer = new Timer.Timer();
 	var alarmDelayTimerRunning = false;
 
@@ -21,31 +22,41 @@ class AlarmManager {
 	}
 	
 	function startAlarmNow() {
+		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmNow");
 	    alarmDelayTimerRunning = false;
 		self.ctx.businessManager.switchToAlarmScreen();
 		self.ctx.alarmManager.startAlarmVibration();
 	}
+
+	function startAlarmAfterDelay() {
+		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmAfterDelay");
+		if (alarmDelayTimerRunning) {
+			startAlarmNow();
+		}
+	}
 	
 	function startAlarm(delay) {
+		self.ctx.businessManager.logTransmit("AlarmManager#startAlarm, delay: " + delay);
 	    alarmDelayTimerRunning = true;
-        alarmDelayTimer.start(method(:startAlarmNow), delay, false);
+        alarmDelayTimer.start(method(:startAlarmAfterDelay), delay, false);
 	}
 
 	function snoozeAlarm() {
+		self.ctx.businessManager.logTransmit("AlarmManager#snoozeAlarm");
 		stopAlarm();
 	}
 	
 	function stopAlarm() {
-		if (alarmDelayTimerRunning) {
-			alarmDelayTimer.stop();
-			alarmDelayTimerRunning = false;
-		}
+		self.ctx.businessManager.logTransmit("AlarmManager#stopAlarm");
+		cancelAlarms();
 
 		self.ctx.alarmManager.stopAlarmVibration();
 		self.ctx.businessManager.backToMainScreen();
 	}
 
 	function cancelAlarms() {
+		self.ctx.businessManager.logTransmit("AlarmManager#cancelAlarms, alarmDelayTimerRunning: " + alarmDelayTimerRunning);
+
 		if (alarmDelayTimerRunning) {
 			alarmDelayTimer.stop();
 			alarmDelayTimerRunning = false;
@@ -90,6 +101,7 @@ class AlarmManager {
     }
     
     function startAlarmVibration() {
+		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmVibration");
     	if (!alarmTimerRunning) {
 	    	alarmTimerRunning = true;    	
 	    	alarmTimer.start(method(:vibrateForAlarmOnce), 1000, true);

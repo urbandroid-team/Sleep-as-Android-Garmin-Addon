@@ -165,7 +165,15 @@ class CommManager {
 	}
 
 	function onPhoneMsgReceive(phoneAppMessage) {
-		handleMessageReceived(phoneAppMessage.data);
+		if (Lang.typeOf(phoneAppMessage) == Communications.PhoneAppMessage) {
+			try {
+				handleMessageReceived(phoneAppMessage.data);
+			} catch (ex) {
+				DebugManager.log("Error in handleMessageReceived: " + ex);
+			}
+		} else {
+			DebugManager.log("Invalid phoneAppMessage: " + phoneAppMessage);
+		}
 	}
 
 	function onWebMsgReceive(responseCode, data) {

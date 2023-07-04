@@ -153,7 +153,7 @@ class CommManager {
 	}
 
 	function pollWebserver(req) {
-		if (req == null || WEB_URL == null || method(onWebMsgReceive) == null) {
+		if (req == null || WEB_URL == null || method(:onWebMsgReceive) == null) {
 			return;
 		}
 		Communications.makeWebRequest(

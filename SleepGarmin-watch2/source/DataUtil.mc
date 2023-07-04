@@ -13,15 +13,6 @@ class DataUtil {
 		// check if array is empty or null
 		if (beatIntervalArray == null || beatIntervalArray.size() == 0) { return null; }
 
-		// check if array contains valid numbers
-		for (var i = 0; i < beatIntervalArray.size(); i++) {
-			var value = beatIntervalArray[i];
-			if (value == null || value <= 0 || !Lang.isNumber(value)) {
-				DebugManager.log("Invalid value: " + value);
-				return null;
-			}
-		}
-
 		var med = median(beatIntervalArray);
 		if (med == null || med == 0) { return null; }
 		

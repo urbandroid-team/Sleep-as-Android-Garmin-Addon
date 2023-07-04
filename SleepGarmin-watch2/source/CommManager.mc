@@ -165,7 +165,7 @@ class CommManager {
 	}
 
 	function onPhoneMsgReceive(phoneAppMessage) {
-		if (Lang.typeOf(phoneAppMessage) == Communications.PhoneAppMessage) {
+		if (phoneAppMessage instanceof Communications.PhoneAppMessage) {
 			try {
 				handleMessageReceived(phoneAppMessage.data);
 			} catch (ex) {

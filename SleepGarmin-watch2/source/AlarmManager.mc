@@ -21,24 +21,35 @@ class AlarmManager {
 		self.ctx = ctx;
 	}
 	
-	function startAlarmNow() {
+	function startAlarmNow(vibrate) {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmNow");
 	    alarmDelayTimerRunning = false;
 		self.ctx.businessManager.switchToAlarmScreen();
-		self.ctx.alarmManager.startAlarmVibration();
+		if (vibrate) {
+			self.ctx.alarmManager.startAlarmVibration();
+		}
 	}
 
 	function startAlarmAfterDelay() {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmAfterDelay");
 		if (alarmDelayTimerRunning) {
-			startAlarmNow();
+			startAlarmNow(true);
 		}
+	}
+
+	function startAlarmWithoutVibration() {
+		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmWithoutVibration");
+		startAlarmNow(false);
 	}
 	
 	function startAlarm(delay) {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarm, delay: " + delay);
-	    alarmDelayTimerRunning = true;
-        alarmDelayTimer.start(method(:startAlarmAfterDelay), delay, false);
+		if (delay == -1) {
+			startAlarmWithoutVibration();
+		} else {
+			alarmDelayTimerRunning = true;
+			alarmDelayTimer.start(method(:startAlarmAfterDelay), delay, false);
+		}
 	}
 
 	function snoozeAlarm() {

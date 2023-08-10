@@ -1,6 +1,7 @@
 using Toybox.Communications;
 using Toybox.System;
 using Toybox.Lang;
+using Toybox.Application;
 
 class CommManager {
 
@@ -49,12 +50,16 @@ class CommManager {
         DebugManager.log("CommManager initialized");
         
         self.ctx = ctx;
+		self.queue = new MessageQueueWithStorage();
     }
     
     public function start() {
 		Communications.registerForPhoneAppMessages(method(:onPhoneMsgReceive));
 
-		self.queue = new MessageQueue();
+		// if (Toybox.Application has :Storage) {
+		// } else {
+			// self.queue = new MessageQueue();
+		// }
         self.commListener = new CommListener(self.queue, self.ctx);
         
         enqueue(CommManager.MSG_START_TRACKING);
@@ -76,13 +81,13 @@ class CommManager {
     public function enqueue(msg) {
     	DebugManager.log("CommManager enqueue " + msg);
     	self.queue.enqueue(msg);
-    	DebugManager.log("CommManager enqueue, current queue: " + self.queue.queue);
+    	DebugManager.log("CommManager enqueue, current queue: " + self.queue.showCurrentQueue());
     }
     
     public function enqueueAsFirst(msg) {
     	DebugManager.log("CommManager enqueueAsFirst " + msg);
     	self.queue.enqueueAsFirst(msg);
-    	DebugManager.log("CommManager enqueueAsFirst, current queue: " + self.queue.queue);    
+    	DebugManager.log("CommManager enqueueAsFirst, current queue: " + self.queue.showCurrentQueue());    
     }
 
     public function triggerSend() {

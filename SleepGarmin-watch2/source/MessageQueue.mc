@@ -12,14 +12,14 @@ class MessageQueue {
 		return queue[0];
 	}
 	
-	function enqueueAsFirst(msg) {
+	public function enqueueAsFirst(msg) {
 		var newQ = [msg];
 		newQ.addAll(queue);
 		queue = newQ;
 		newQ = null;
 	}
 	
-	function enqueue(msg) {
+	public function enqueue(msg) {
 		if (contains(msg)) { return; }
 
         var freeMemRatio = Sys.getSystemStats().freeMemory*100/Sys.getSystemStats().totalMemory;
@@ -34,16 +34,16 @@ class MessageQueue {
 		queue.add(msg);
 	}
 	
-	function isEmpty() {
-		return queue.size == 0;
-	}
-	
-	function contains(msg) {
+	public function contains(msg) {
 		return (queue.indexOf(msg) != -1);
 	}
 	
-	function removeFirst() {
+	public function removeFirst() {
 		queue.remove(self.getFirst());
+	}
+
+	public function showCurrentQueue() {
+		return queue;
 	}
 
 }

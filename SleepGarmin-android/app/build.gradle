@@ -3,13 +3,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
+    namespace "com.urbandroid.sleep.garmin"
+
     defaultConfig {
-        applicationId "com.urbandroid.sleep.garmin"
         minSdkVersion 14
-        targetSdkVersion 31
-        versionCode 37
-        versionName "20230303"
+        targetSdkVersion 33
+        versionCode 38
+        versionName "20230805"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     signingConfigs {
@@ -27,6 +28,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    namespace 'com.urbandroid.sleep.garmin'
 }
 
 repositories {
@@ -41,13 +43,20 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.urbandroid:common:1.25@aar'
     implementation 'org.nanohttpd:nanohttpd:2.2.0'
-    testImplementation 'junit:junit:4.12'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation 'junit:junit:4.13.2'
+    constraints {
+        implementation("org.jetbrains.kotlin:akotlin-stdlib-jdk7:1.8.0") {
+            because("kotlin-stdlib-jdk7 is now a part of kotlin-stdlib")
+        }
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0") {
+            because("kotlin-stdlib-jdk8 is now a part of kotlin-stdlib")
+        }
+    }
 }

@@ -17,7 +17,7 @@ fs.readFile( './manifest.xml', function(err, data) {
   for (const d of devices) {
     const model = d.id
 
-    const command = `java -Xms1g -Dfile.encoding=UTF-8 -Dapple.awt.UIElement=true -jar /home/artaud/.Garmin/ConnectIQ/Sdks/connectiq-sdk-lin-4.0.7-2021-11-29-437ff4cc4/bin/monkeybrains.jar -o /home/artaud/Projects/urbandroid/SleepGarmin/SleepGarmin-watch2/build/20220118.0.0/sleep-${model}.prg -f /home/artaud/Projects/urbandroid/SleepGarmin/SleepGarmin-watch2/monkey.jungle -y "/home/artaud/Insync/richtej2@gmail.com/Google Drive/keystore/urbandroid/garmin_developer_key.der" -w -d ${model} -r`
+    const command = `java -Xms1g -Dfile.encoding=UTF-8 -Dapple.awt.UIElement=true -jar /home/petr/.Garmin/ConnectIQ/Sdks/connectiq-sdk-lin-4.2.4-2023-04-05-5830cc591/bin/monkeybrains.jar -o /home/petr/project/android-git/SleepAsGarmin/Sleep-as-Android-Garmin-Addon/SleepGarmin-watch2/build/20220118.0.0/sleep-${model}.prg -f /home/petr/project/android-git/SleepAsGarmin/Sleep-as-Android-Garmin-Addon/SleepGarmin-watch2/monkey.jungle -y "//home/petr/project/android-git/SleepAsGarmin/Sleep-as-Android-Garmin-Addon/SleepGarmin-watch2/garmin_developer_key.der" -w -d ${model} -r`
 
     exec(command, (err, stdout, stderr) => {
       if (err) {

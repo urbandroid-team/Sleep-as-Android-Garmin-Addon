@@ -46,7 +46,7 @@ class Sleep2View extends WatchUi.View {
     }
     
     private function updateMainText(isScreenLocked) {
-	    var textArea = View.findDrawableById("lockedTextArea");
+	    var textArea = View.findDrawableById("lockedTextArea") as Toybox.WatchUi.TextArea;
     
 		if (isScreenLocked) {
 			if (SystemUtil.hasMenuButton()) {
@@ -65,12 +65,12 @@ class Sleep2View extends WatchUi.View {
     }
     
     private function updateTimeText() {
-    	var timeArea = View.findDrawableById("time");
+    	var timeArea = View.findDrawableById("time") as Toybox.WatchUi.TextArea;
     	timeArea.setText(self.ctx.state.currentTime);
     }
 
     private function updateAlarmTimeText() {
-    	var alarmTimeArea = View.findDrawableById("alarmTime");
+    	var alarmTimeArea = View.findDrawableById("alarmTime") as Toybox.WatchUi.TextArea;
     	
     	alarmTimeArea.setText(DateUtil.msTimestampToHHMM(self.ctx.state.alarmTime));
     }

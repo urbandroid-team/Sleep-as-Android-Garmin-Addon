@@ -54,7 +54,9 @@ class CommManager {
     }
     
     public function start() {
-		Communications.registerForPhoneAppMessages(method(:onPhoneMsgReceive));
+
+        var phoneMethod = method(:onPhoneMsgReceive);
+		Communications.registerForPhoneAppMessages(phoneMethod);
 
 		// if (Toybox.Application has :Storage) {
 		// } else {
@@ -169,7 +171,7 @@ class CommManager {
 		);
 	}
 
-	function onPhoneMsgReceive(phoneAppMessage) {
+	function onPhoneMsgReceive(phoneAppMessage as Communications.Message) as Void {
 		if (phoneAppMessage instanceof Communications.PhoneAppMessage) {
 			try {
 				handleMessageReceived(phoneAppMessage.data);
@@ -181,7 +183,7 @@ class CommManager {
 		}
 	}
 
-	function onWebMsgReceive(responseCode, data) {
+	function onWebMsgReceive(responseCode as Lang.Number, data as Lang.Dictionary<Lang.String, Lang.Object?> or Lang.String or Null) as Void {
        if (responseCode == 200) {
         	DebugManager.log("onWebMsgReceive Request Successful: " + data);
 			self.commListener.onComplete();

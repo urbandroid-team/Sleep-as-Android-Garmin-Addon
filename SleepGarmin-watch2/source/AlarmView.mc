@@ -49,7 +49,7 @@ class AlarmView extends WatchUi.View {
     }
     
     private function updateMainText() {
-	    var textArea = View.findDrawableById("mainText");
+	    var textArea = View.findDrawableById("mainText")  as Toybox.WatchUi.TextArea;
     
 		if (SystemUtil.hasMenuButton()) {
 			textArea.setText(Rez.Strings.mainAlarmTextNoTouch);					
@@ -59,7 +59,7 @@ class AlarmView extends WatchUi.View {
     }
     
     private function updateTimeText() {
-    	var timeArea = View.findDrawableById("time");
+    	var timeArea = View.findDrawableById("time") as Toybox.WatchUi.TextArea;
     	timeArea.setText(self.ctx.state.currentTime);
     }
        

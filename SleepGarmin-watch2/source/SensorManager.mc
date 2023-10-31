@@ -26,6 +26,7 @@ class SensorManager {
         var maxSampleRate = Sensor.getMaxSampleRate();
         DebugManager.log("MaxSampleRate " + maxSampleRate);
     }
+	
 
     function start() {
         DebugManager.log("SensorManager startAccelerometer");
@@ -40,11 +41,11 @@ class SensorManager {
 				:enabled => true
 			}
 		};
-        Sensor.registerSensorDataListener(method(:onData), options);
+        Sensor.registerSensorDataListener(SensorManager.method(:onData), options);
     }
 
     // argument is of type SensorData
-    function onData(sensorData) {
+    public function onData(sensorData as Sensor.SensorData) as Void {
         DebugManager.log("SensorManager onData");
         
         if (self.ctx.state.tracking) {

@@ -33,7 +33,7 @@ class AlarmManager {
 	function startAlarmAfterDelay() {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmAfterDelay");
 		if (alarmDelayTimerRunning) {
-			startAlarmNow(true);
+			self.ctx.alarmManager.startAlarmVibration();
 		}
 	}
 
@@ -46,7 +46,10 @@ class AlarmManager {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarm, delay: " + delay);
 		if (delay == -1) {
 			startAlarmWithoutVibration();
+		} else if (delay == 0) {
+			startAlarmNow(true);
 		} else {
+			startAlarmNow(false);
 			alarmDelayTimerRunning = true;
 			alarmDelayTimer.start(method(:startAlarmAfterDelay), delay, false);
 		}

@@ -12,6 +12,7 @@ class CommManager {
 	// From phone
 	static const MSG_START = "StartTracking";
 	static const MSG_START_HR = "StartHRTracking";
+	static const MSG_START_OXI = "StartOxiTracking";
 	static const MSG_STOP = "StopApp";
 	static const MSG_CHECK = "Check";
 	static const MSG_BATCH_SIZE = "BatchSize;";
@@ -238,6 +239,17 @@ class CommManager {
 			return;
 		}
         
+		if (msg.equals(CommManager.MSG_START_HR)) {
+			self.ctx.sensorManager.startHr();
+			return;
+		}
+
+		if (msg.equals(CommManager.MSG_START_OXI)) {
+			self.ctx.sensorManager.startOxi();
+			return;
+		}
+        
+
 		if (msg.equals(CommManager.MSG_STOP)) {
 			self.ctx.businessManager.exit();
 			return;

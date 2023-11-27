@@ -5,6 +5,8 @@ class SensorManager {
 
 	const SENSOR_PERIOD_SEC = 4;
 	const OXI_READING_PERIOD_SEC = 4;
+	const SENSOR_FREQ = 15;
+	const SENSOR_AGGREG_WINDOW = 10;
 
 	var ctx;
 	
@@ -27,6 +29,13 @@ class SensorManager {
         DebugManager.log("MaxSampleRate " + maxSampleRate);
     }
 	
+	function startHr() {
+		// Sensor.enableSensorType(Sensor.SensorType.SENSOR_HEARTRATE)
+	}
+
+	function startOxi() {
+		// Sensor.enableSensorType(Sensor.SensorType.SENSOR_PULSE_OXIMETRY)		
+	}
 
     function start() {
         DebugManager.log("SensorManager startAccelerometer");
@@ -35,10 +44,7 @@ class SensorManager {
 			:period => SENSOR_PERIOD_SEC,
 			:accelerometer => {
 				:enabled => true,
-				:sampleRate => 10
-			},
-			:heartBeatIntervals => {
-				:enabled => true
+				:sampleRate => SENSOR_FREQ
 			}
 		};
         Sensor.registerSensorDataListener(SensorManager.method(:onData), options);
@@ -76,7 +82,7 @@ class SensorManager {
         accYBuf.addAll(yArr);
         accZBuf.addAll(zArr);
         
-        var maxCount = 100; // Maximum number of values to go into one aggregate (sampleRate [Hz] x batchPeriod [s])
+        var maxCount = SENSOR_AGGREG_WINDOW * SENSOR_FREQ; // Maximum number of values to go into one aggregate (sampleRate [Hz] x batchPeriod [s])
         
         // Since maximum sensor batching period is 4 seconds and we need to have aggregate period of 10 seconds, we need to aggregate two and half sensor batches. Then we need to retain the remaining half of the third batch.
         // In order to do that, we first add all the data from three batches into one array and then aggregate just first 100 values, deleting them from the batch arrays. 

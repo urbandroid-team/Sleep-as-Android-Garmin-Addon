@@ -32,9 +32,9 @@ class DataUtil {
 	static function max(arr) {
 		if (arr.size() == 0) { return null; }
 		
-		var max = arr[0];
-		for( var i = 1; i < arr.size(); i += 1 ) {
-			if (arr[i] > arr[i-1]) { max = arr[i]; }
+		var max = 0;
+		for( var i = 0; i < arr.size(); i += 1 ) {
+			if (arr[i] > max) { max = arr[i]; }
 		}
 		return max;
 	}

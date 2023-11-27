@@ -7,16 +7,30 @@ class BusinessManager {
  
  	var ctx;
 
+	var lastUpdate = -1;
+
+    var lastUpdateUi = -1;
+
  	function initialize(ctx) {
  		self.ctx = ctx;
  	}
  	
  	// Hook that is called on every data received callback - we use this so that we do not have to have our own Timer, which is presumably battery intensive.
  	function onDataHook() {
- 		DebugManager.log("BusinessManager onDataHook");
- 		self.ctx.commManager.triggerSend();
- 		updateTime(true);
- 		lockScreen();
+
+		// DebugManager.log("BusinessManager onDataHook");
+		var now = System.getTimer();
+
+		if ((lastUpdate == -1) || (now - lastUpdate > 2000)) {
+ 			self.ctx.commManager.triggerSend();
+			lastUpdate = now;
+		}
+
+		if ((lastUpdateUi == -1) || (now - lastUpdateUi > 5000)) {
+ 			updateTime(true);
+	 		lockScreen();
+			lastUpdateUi = now;
+		}
  	}
  	
  	

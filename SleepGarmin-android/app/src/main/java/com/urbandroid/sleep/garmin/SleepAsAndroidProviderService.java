@@ -1,6 +1,7 @@
 package com.urbandroid.sleep.garmin;
 
 import static com.urbandroid.sleep.garmin.Constants.ACTION_STOP_SELF;
+import static com.urbandroid.sleep.garmin.Constants.CHECK_CONNECTED;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
 import static com.urbandroid.sleep.garmin.Notifications.getPendingIntentFlags;
@@ -9,6 +10,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 
 import androidx.core.app.NotificationCompat;
@@ -48,6 +50,8 @@ public class SleepAsAndroidProviderService extends Service {
         ciqManager.resetState();
 
         startHttpServer();
+
+        handler = new Handler();
     }
 
     private void startHttpServer() {
@@ -63,6 +67,11 @@ public class SleepAsAndroidProviderService extends Service {
         }
     }
 
+    private Handler handler;
+
+    private Runnable connectionTimeout = () -> ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("CONNECTIVITY_CHECK timeout");
+
+
     @Override
     public int onStartCommand(final Intent intent, int flags, int startId) {
         Logger.logDebug(TAG + "onStartCommand, intent " + ((intent != null && intent.getAction() != null) ? intent.getAction() : "null"));
@@ -70,9 +79,15 @@ public class SleepAsAndroidProviderService extends Service {
         startForeground();
         RUNNING = true;
 
-        if (intent != null && intent.getAction() != null && ACTION_STOP_SELF.equals(intent.getAction())) {
-            ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("STOP_SELF intent received");
-            return START_NOT_STICKY;
+        if (intent != null) {
+            if (ACTION_STOP_SELF.equals(intent.getAction())) {
+                ServiceRecoveryManager.getInstance().stopSelfAndDontScheduleRecovery("STOP_SELF intent received");
+                return START_NOT_STICKY;
+            } else if (CHECK_CONNECTED.equals(intent.getAction())) {
+                handler.postDelayed(connectionTimeout, 60000);
+            } else {
+                handler.removeCallbacks(connectionTimeout);
+            }
         }
 
         ciqManager.init(this, intent);
@@ -119,7 +134,7 @@ public class SleepAsAndroidProviderService extends Service {
                 notificationBuilder.setContentTitle(getResources().getString(R.string.app_name_long));
         }
 
-        notificationBuilder.setSmallIcon(R.drawable.ic_action_track);
+        notificationBuilder.setSmallIcon(R.drawable.ic_action_watch);
 
         startForeground(1349, notificationBuilder.build());
     }

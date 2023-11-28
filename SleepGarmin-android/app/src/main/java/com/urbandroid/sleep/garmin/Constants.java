@@ -14,6 +14,7 @@ public class Constants {
     public final static String TO_WATCH_ALARM_SET = "SetAlarm";
     public final static String TO_WATCH_HINT = "Hint";
     public final static String TO_WATCH_TRACKING_START_HR = "StartHRTracking";
+    public final static String TO_WATCH_TRACKING_START_OXI = "StartOxiTracking";
     public final static String TO_WATCH_TRACKING_START = "StartTracking";
 
     // From watch to plugin
@@ -36,6 +37,9 @@ public class Constants {
     //    From sleep to plugin
     final static String START_WATCH_APP = "com.urbandroid.sleep.watch.START_TRACKING";
     final static String DO_HR_MONITORING = "DO_HR_MONITORING";
+
+    final static String DO_OXIMETER_MONITORING = "DO_OXIMETER_MONITORING";
+
     final static String STOP_WATCH_APP = "com.urbandroid.sleep.watch.STOP_TRACKING";
     final static String SET_PAUSE = "com.urbandroid.sleep.watch.SET_PAUSE";
     final static String SET_BATCH_SIZE = "com.urbandroid.sleep.watch.SET_BATCH_SIZE";

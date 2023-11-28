@@ -4,6 +4,7 @@ import static com.urbandroid.sleep.garmin.Constants.CHECK_CONNECTED;
 import static com.urbandroid.sleep.garmin.Constants.DATA_WITH_EXTRA;
 import static com.urbandroid.sleep.garmin.Constants.DISMISS_ACTION_NAME;
 import static com.urbandroid.sleep.garmin.Constants.DO_HR_MONITORING;
+import static com.urbandroid.sleep.garmin.Constants.DO_OXIMETER_MONITORING;
 import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_BATCH;
 import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_FRAMERATE;
 import static com.urbandroid.sleep.garmin.Constants.EXTRA_DATA_RR;
@@ -33,6 +34,7 @@ import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_PAUSE;
 import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_STOP;
 import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_TRACKING_START;
 import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_TRACKING_START_HR;
+import static com.urbandroid.sleep.garmin.Constants.TO_WATCH_TRACKING_START_OXI;
 import static com.urbandroid.sleep.garmin.Constants.UPDATE_ALARM;
 import static com.urbandroid.sleep.garmin.Utils.dumpIntent;
 
@@ -57,6 +59,8 @@ class MessageHandler {
 
     private MessageHandler() {
     }
+
+
 
     private final static String TAG = "MessageHandler: ";
 
@@ -204,12 +208,19 @@ class MessageHandler {
             Logger.logDebug(TAG + "START_WATCH_APP");
             dumpIntent(intent);
 
+
             if (intent.hasExtra(DO_HR_MONITORING)) {
                 queueToWatch.enqueue(new MessageToWatch(TO_WATCH_TRACKING_START_HR));
                 Logger.logInfo(TAG + "TO_WATCH_TRACKING_START_HR");
             }
 
+            if (intent.hasExtra(DO_OXIMETER_MONITORING)) {
+                queueToWatch.enqueue(new MessageToWatch(TO_WATCH_TRACKING_START_OXI));
+                Logger.logInfo(TAG + "TO_WATCH_TRACKING_START_OXI");
+            }
+
             queueToWatch.enqueue(new MessageToWatch(TO_WATCH_TRACKING_START));
+
             Logger.logDebug(TAG + "TO_WATCH_TRACKING_START");
         }
 
@@ -250,6 +261,9 @@ class MessageHandler {
         }
         if (action.equals(CHECK_CONNECTED)) {
             queueToWatch.remove(new MessageToWatch(TO_WATCH_STOP));
+
+
+
             try {
                 if (watchAppOpenTime == -1 || System.currentTimeMillis() - watchAppOpenTime >= 10000) {
                     watchAppOpenTime = System.currentTimeMillis();

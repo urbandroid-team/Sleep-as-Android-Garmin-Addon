@@ -217,16 +217,10 @@ public class MainActivity extends Activity {
             startAppInfo(this, getPackageName());
         });
 
-        if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-            findViewById(R.id.card_allow_notifications).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.card_allow_notifications).setVisibility(View.VISIBLE);
-        }
-
-        findViewById(R.id.card_battery_optimization_opt_out).setVisibility(Utils.isUnrestrictedBatteryNotificationNeeded(this) ? View.VISIBLE : View.GONE);
-
         sendUnrestrictedBatteryNotificationWithPermissionCheck();
     }
+
+
 
     private void sendUnrestrictedBatteryNotificationWithPermissionCheck() {
         if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
@@ -284,6 +278,13 @@ public class MainActivity extends Activity {
         findViewById(R.id.card_install_gcm).setVisibility(!gcmInstalled ? View.VISIBLE : View.GONE);
         findViewById(R.id.card_install_watchsleepstarter).setVisibility(!watchsleepstarterInstalled ? View.VISIBLE : View.GONE);
 
+        if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            findViewById(R.id.card_allow_notifications).setVisibility(View.GONE);
+        } else {
+            findViewById(R.id.card_allow_notifications).setVisibility(View.VISIBLE);
+        }
+
+        findViewById(R.id.card_battery_optimization_opt_out).setVisibility(Utils.isUnrestrictedBatteryNotificationNeeded(this) ? View.VISIBLE : View.GONE);
     }
 
     private void setupSleep() {

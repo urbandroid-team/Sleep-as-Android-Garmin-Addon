@@ -48,6 +48,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.urbandroid:common:1.25@aar'
     implementation 'org.nanohttpd:nanohttpd:2.2.0'
+    implementation "com.garmin.connectiq:ciq-companion-app-sdk:2.2.0@aar"
     testImplementation 'junit:junit:4.13.2'
     constraints {
         implementation("org.jetbrains.kotlin:akotlin-stdlib-jdk7:1.8.0") {

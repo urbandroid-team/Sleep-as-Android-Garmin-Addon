@@ -1,6 +1,7 @@
 <resources>
   <string name="app_name">Sleep Garmin</string>
   <string name="app_name_long">Sleep as Android Garmin Addon</string>
+
   <string name="whitelist_GCM_text">Make sure to whitelist Garmin Connect Mobile from any battery optimization.</string>
   <string name="read_more">Read more</string>
   <string name="install_saa">Please install Sleep as Android</string>

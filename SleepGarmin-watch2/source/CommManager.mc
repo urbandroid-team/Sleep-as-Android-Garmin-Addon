@@ -51,7 +51,7 @@ class CommManager {
         DebugManager.log("CommManager initialized");
         
         self.ctx = ctx;
-		self.queue = new MessageQueueWithStorage();
+		self.queue = new MessageQueue();
     }
     
     public function start() {
@@ -262,19 +262,25 @@ class CommManager {
 		
 		if (msg.find(CommManager.MSG_BATCH_SIZE) == 0) {
 			var size = extractDataFromIncomingMessage(msg).toNumber();
-			self.ctx.businessManager.setBatchSize(size);
+			if (size > 0 && size < 20) {
+				self.ctx.businessManager.setBatchSize(size);
+			}
 			return;
 		}
 		
 		if (msg.find(CommManager.MSG_HINT) == 0) {
 			var hintRepeat = extractDataFromIncomingMessage(msg).toNumber();
-			self.ctx.businessManager.doHint(hintRepeat);
+			if (hintRepeat != -1) {
+				self.ctx.businessManager.doHint(hintRepeat);				
+			}
 			return;
 		}
 		
 		if (msg.find(CommManager.MSG_SET_ALARM) == 0) {
 			var alarmTime = extractDataFromIncomingMessage(msg).toLong();
-			self.ctx.businessManager.setAlarmTime(alarmTime, true);
+			if (alarmTime != 1) {	
+				self.ctx.businessManager.setAlarmTime(alarmTime, true);
+			}
 			return;
 		}
 		
@@ -294,7 +300,7 @@ class CommManager {
     }
     
     function extractDataFromIncomingMessage(msg) {
-    	if (msg.find(";") == null) { return null; }
+    	if (msg.find(";") == null) { return "-1"; }
     	
     	return msg.substring((msg.find(";"))+1, msg.length());
     }

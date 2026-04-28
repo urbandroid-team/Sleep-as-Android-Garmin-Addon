@@ -14,15 +14,15 @@ class AlarmView extends WatchUi.View {
 
     // Load your resources here
     function onLayout(dc) {
-        setLayout(Rez.Layouts.AlarmLayout(dc));
-		
-		 
+        setLayout(Rez.Layouts.AlarmLayout(dc));		
     }
 
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() {
+        updateTimeText();
+        updateMainText();
     }
 
     // Update the view
@@ -50,12 +50,7 @@ class AlarmView extends WatchUi.View {
     
     private function updateMainText() {
 	    var textArea = View.findDrawableById("mainText")  as Toybox.WatchUi.TextArea;
-    
-		if (SystemUtil.hasMenuButton()) {
-			textArea.setText(Rez.Strings.mainAlarmTextNoTouch);					
-		} else {
-			textArea.setText(Rez.Strings.mainAlarmTextTouch);		
-		}
+        textArea.setText(Rez.Strings.messageAlarm);					
     }
     
     private function updateTimeText() {

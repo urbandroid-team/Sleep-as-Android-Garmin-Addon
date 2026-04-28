@@ -1,8 +1,21 @@
 <layout id="MainLayout">
-	<text-area id="time" x="center" y="13%" text="--:--" font="Graphics.FONT_NUMBER_MEDIUM" width="100%" height="100%" color="Graphics.COLOR_WHITE" justification="Graphics.TEXT_JUSTIFY_CENTER"></text-area>
-	
-	<bitmap id="alarmIcon" x="27%" y="37%" filename="../drawables/alarm.png" />
-	<text-area id="alarmTime" x="center" y="35%" text="--:--" font="Graphics.FONT_SMALL" width="70%" height="50%" color="Graphics.COLOR_WHITE" justification="Graphics.TEXT_JUSTIFY_CENTER"></text-area>
+    <bitmap id="alarmIconSmall" x="center" y="10%" filename="../drawables/alarm.png" />
     
-    <text-area id="lockedTextArea" x="center" y="50%" text="@Strings.init" font="Graphics.FONT_XTINY" width="70%" height="50%" color="Graphics.COLOR_YELLOW" justification="Graphics.TEXT_JUSTIFY_CENTER" />
+    <text-area id="alarmTime" x="center" y="22%" 
+               text="———" font="Graphics.FONT_SMALL" 
+               width="80%" height="15%" 
+               color="Graphics.COLOR_WHITE" 
+               justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+    <text-area id="time" x="center" y="center" 
+               text="———" font="Graphics.FONT_NUMBER_MEDIUM" 
+               width="95%" height="45%" 
+               color="Graphics.COLOR_WHITE" 
+               justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+    
+    <text-area id="message" x="center" y="50%" 
+               text="@Strings.init" font="Graphics.FONT_XTINY" 
+               width="80%" height="50%" 
+               color="Graphics.COLOR_GREEN" 
+               justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
 </layout>

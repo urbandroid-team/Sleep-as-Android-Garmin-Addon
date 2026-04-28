@@ -19,7 +19,7 @@ class State {
 	var onTrackingScreen = true;
 	
 	var currentTime;
-	var alarmTime = "--:--";
+	var alarmTime = "———";
 	
 	var httpCommunicationMode = false; // Tracks how we currently communicate with the phone
 	
@@ -51,6 +51,10 @@ class State {
 	
 	function isAlarmRunning() {
 		return self.doingAlarm;
+	}
+
+	function setAlarmRunning(ringing) {
+		self.doingAlarm = ringing;
 	}
 	
 	function isHttpCommunicationMode() {

@@ -26,14 +26,14 @@ class AlarmManager {
 	    alarmDelayTimerRunning = false;
 		self.ctx.businessManager.switchToAlarmScreen();
 		if (vibrate) {
-			self.ctx.alarmManager.startAlarmVibration();
+			startAlarmVibration();
 		}
 	}
 
 	function startAlarmAfterDelay() {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmAfterDelay");
 		if (alarmDelayTimerRunning) {
-			self.ctx.alarmManager.startAlarmVibration();
+			startAlarmVibration();
 		}
 	}
 
@@ -44,6 +44,7 @@ class AlarmManager {
 	
 	function startAlarm(delay) {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarm, delay: " + delay);
+
 		if (delay == -1) {
 			startAlarmWithoutVibration();
 		} else if (delay == 0) {
@@ -64,7 +65,7 @@ class AlarmManager {
 		self.ctx.businessManager.logTransmit("AlarmManager#stopAlarm");
 		cancelAlarms();
 
-		self.ctx.alarmManager.stopAlarmVibration();
+		stopAlarmVibration();
 		self.ctx.businessManager.backToMainScreen();
 	}
 

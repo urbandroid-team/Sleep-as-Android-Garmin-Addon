@@ -27,8 +27,8 @@ class BusinessManager {
 		}
 
 		if ((lastUpdateUi == -1) || (now - lastUpdateUi > 5000)) {
- 			updateTime(true);
-	 		lockScreen();
+			updateTime(true);
+			lockScreen();
 			lastUpdateUi = now;
 		}
  	}
@@ -97,7 +97,8 @@ class BusinessManager {
 		logTransmit("BusinessManager#startAlarm");
 
  		if (!self.ctx.state.isAlarmRunning()) {
-	 		self.ctx.alarmManager.startAlarm(delay);	
+	 		self.ctx.alarmManager.startAlarm(delay);
+			self.ctx.state.setAlarmRunning(true);	
  		}
  	}
  	
@@ -105,6 +106,7 @@ class BusinessManager {
 		logTransmit("BusinessManager#stopAlarm isAlarmRunning: " + self.ctx.state.isAlarmRunning());
  		if (self.ctx.state.isAlarmRunning()) {
  			self.ctx.alarmManager.stopAlarm();
+			self.ctx.state.setAlarmRunning(false);	
  		} else {
 			self.ctx.alarmManager.cancelAlarms();
 		}
@@ -134,19 +136,19 @@ class BusinessManager {
 	}
  	
  	function unlockScreen() {
- 		if (self.ctx.state.screenLocked) {
-			self.ctx.state.screenLocked = false;
-			self.ctx.state.screenLockedAt = System.getTimer();
-	 		DebugManager.log("UnlockScreen");
-	 		WatchUi.requestUpdate();
-	 	}
+ 		// if (self.ctx.state.screenLocked) {
+		// 	self.ctx.state.screenLocked = false;
+		// 	self.ctx.state.screenLockedAt = System.getTimer();
+	 	// 	DebugManager.log("UnlockScreen");
+	 	// 	WatchUi.requestUpdate();
+	 	// }
  	}
  	
  	function lockScreen() {
- 		if (self.ctx.state.tracking && !self.ctx.state.screenLocked && (System.getTimer() - self.ctx.state.screenLockedAt > 5000)) {
-	 		self.ctx.state.screenLocked = true;
-	 		WatchUi.requestUpdate(); 		
- 		}
+ 		// if (SystemUtil.hasMenuButton() && self.ctx.state.tracking && !self.ctx.state.screenLocked && (System.getTimer() - self.ctx.state.screenLockedAt > 5000)) {
+	 	// 	self.ctx.state.screenLocked = true;
+	 	// 	WatchUi.requestUpdate(); 		
+ 		// }
  	}
  	
  	function exit() {

@@ -20,30 +20,58 @@ class DataUtil {
 	}
 	
 	static function computeMaxRawFromArray(xArr, yArr, zArr) {
-		var axisAggregates = [];
-		
-		for( var i = 0; i < xArr.size(); i += 1 ) {
-			axisAggregates.add(Math.sqrt(Math.pow(xArr[i],2) + Math.pow(yArr[i],2) + Math.pow(zArr[i],2)));
+		var size = xArr.size();
+		if (size == 0) { 
+			return null; // Better than 0, so the caller knows there was no data
 		}
-		
-		return DataUtil.max(axisAggregates); 
+	
+		var maxSquaredMag = 0.0;
+
+		for (var i = 0; i < size; i++) { // Start at 0!
+			var x = xArr[i];
+			var y = yArr[i];
+			var z = zArr[i];
+
+			// Square the values directly (much faster than Math.pow)
+			var currentSquaredMag = (x * x) + (y * y) + (z * z);
+
+			if (currentSquaredMag > maxSquaredMag) {
+				maxSquaredMag = currentSquaredMag;
+			}
+		}
+
+	    // Only do the expensive square root ONCE for the final winner
+    	return Math.sqrt(maxSquaredMag);
 	}
 	
 	static function max(arr) {
-		if (arr.size() == 0) { return null; }
+		var size = arr.size();
 		
-		var max = 0;
-		for( var i = 0; i < arr.size(); i += 1 ) {
-			if (arr[i] > max) { max = arr[i]; }
+		// 1. Handle empty array
+		if (size == 0) { 
+			return null; // Better than 0, so the caller knows there was no data
 		}
-		return max;
+		
+		// 2. Initialize with the first element (handles negative numbers)
+		var maxVal = arr[0];
+		
+		// 3. Start loop from the second element
+		for (var i = 1; i < size; i++) {
+			var current = arr[i];
+			if (current > maxVal) { 
+				maxVal = current; 
+			}
+		}
+		
+		return maxVal;
 	}
-	
+
+
 	static function median(arr) {
 	
-		if (arr.size() == 0) { return null; }
+		if (arr.size() == 0) { return -1; }
 		if (arr.size() == 1) { return arr[0]; }
-		DataUtil.sort_asc(arr);
+		DataUtil.sorti_asc(arr);
 		
 //		DebugManager.log("Median: arr.size " + arr.size() + " arr: " + arr.toString()); 
 		
@@ -82,4 +110,17 @@ class DataUtil {
 //    	DebugManager.log("sort_asc");	
 		DataUtil.bubble_sort(array, new Lang.Method($, :less_than));
 	}
+
+	static function sorti_asc(array) {
+    var n = array.size();
+    for (var i = 1; i < n; i++) {
+        var key = array[i];
+        var j = i - 1;
+        while (j >= 0 && array[j] > key) {
+            array[j + 1] = array[j];
+            j--;
+        }
+        array[j + 1] = key;
+    }
+}
 }

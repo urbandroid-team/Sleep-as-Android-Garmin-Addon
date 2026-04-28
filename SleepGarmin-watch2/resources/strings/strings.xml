@@ -1,28 +1,23 @@
 <strings>
     <string id="AppName">Sleep</string>
-    <string id="version">20230810</string>
+    <string id="version">20260423</string>
 
     <string id="alarm">Alarm</string>
 
     <string id="init">Connecting to phone...</string>
 
+    <string id="tracking">Sleep tracking...</string>
+    
+    <string id="messageAlarm">Wake up</string>
 
-    <string id="lockedTouch">Tracking.\nScreen locked.\nUnlock by long touch on screen.</string>
-    <string id="lockedNoTouch">Tracking.\nScreen locked.\nUnlock by holding menu button.</string>
-
-    <string id="unlockedTouch">Tracking.\nFor options, long touch on screen.</string>
-    <string id="unlockedNoTouch">Tracking.\nFor options, hold menu button.</string>
-
-    <string id="mainAlarmTextTouch">Dismiss/snooze by long touch on screen.</string>
-    <string id="mainAlarmTextNoTouch">To dismiss/snooze, hold menu button.</string>
-
-
+    <string id="menu_label_cancel">Back to alarm</string>
+    <string id="menu_label_back">Back to tracking</string>
     <string id="menu_label_stop_tracking">Stop tracking</string>
     <string id="menu_label_pause_tracking">Pause tracking</string>
-    <string id="menu_label_force_stop">Force stop app</string>    
+    <string id="menu_label_force_stop">Close app</string>    
 
-    <string id="menu_label_snooze_alarm">Snooze alarm</string>
-    <string id="menu_label_dismiss_alarm">Dismiss alarm</string>    
+    <string id="menu_label_snooze_alarm">Snooze</string>
+    <string id="menu_label_dismiss_alarm">Dismiss</string>    
 
     
 </strings>

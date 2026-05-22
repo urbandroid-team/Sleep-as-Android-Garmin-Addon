@@ -18,7 +18,7 @@ class Sleep2Delegate extends WatchUi.BehaviorDelegate {
       	// DebugManager.log("showMenu");
 
         var menu = new Rez.Menus.MainMenu();
-        menu.addItem(Rez.Strings.version, :version);
+        menu.addItem(WatchUi.loadResource(Rez.Strings.version), :version);
     	
         WatchUi.pushView(menu, new Sleep2MenuDelegate(self.ctx), WatchUi.SLIDE_UP);
         

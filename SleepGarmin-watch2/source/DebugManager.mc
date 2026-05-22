@@ -6,6 +6,7 @@ using Toybox.Time.Gregorian;
 class DebugManager {
     public static const debug = false as Lang.Boolean; // must be false for production
     public static const commDebug = false as Lang.Boolean;
+    public static const hrv = false as Lang.Boolean;
 
     static function log(message) {
     	if (DebugManager.debug) {

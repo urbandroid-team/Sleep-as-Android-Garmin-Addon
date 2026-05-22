@@ -37,11 +37,11 @@ class CommManager {
 	static const MSG_RR = "RR";
 	static const MSG_ERROR = "ERROR";
 	
-    const MAX_DELIVERY_ERROR = 3;
-    const MAX_DELIVERY_PAUSE = 3;
-    const MAX_WAITING_TIME_IN_TRANSMIT_MS = 60000;
+    const MAX_DELIVERY_ERROR = 10;
+    const MAX_DELIVERY_PAUSE = 5;
+    const MAX_WAITING_TIME_IN_TRANSMIT_MS = 5000;
 
-	const MINIMAL_POLL_INTERVAL_MS = 30000;
+	const MINIMAL_POLL_INTERVAL_MS = 2500;
 	const AROUND_ALARM_POLL_INTERVAL_MS = 1000;
 	var lastSendTriggerTs = 0;
 
@@ -58,29 +58,17 @@ class CommManager {
 
         var phoneMethod = method(:onPhoneMsgReceive);
 		Communications.registerForPhoneAppMessages(phoneMethod);
-
-		// if (Toybox.Application has :Storage) {
-		// } else {
-			// self.queue = new MessageQueue();
-		// }
-        self.commListener = new CommListener(self.queue, self.ctx);
+	
+	    self.commListener = new CommListener(self.queue, self.ctx);
         
         enqueue(CommManager.MSG_START_TRACKING);
+	}
         
-        if (DebugManager.commDebug) {
-	        var msg = new Communications.PhoneAppMessage();
-			msg.data = CommManager.MSG_START;
-	        onPhoneMsgReceive(msg);
-	        
-	        msg.data = CommManager.MSG_BATCH_SIZE + "12";
-	        onPhoneMsgReceive(msg);
-	        
-	        // var msg2 = new Communications.PhoneAppMessage();
-			// msg2.data = CommManager.MSG_START_ALARM + "0";
-	        // onPhoneMsgReceive(msg2);
-        }
-    }
-        
+
+	public function stop() {
+		Communications.registerForPhoneAppMessages(null);
+	}
+
     public function enqueue(msg) {
     	DebugManager.log("CommManager enqueue " + msg);
     	self.queue.enqueue(msg);
@@ -99,7 +87,7 @@ class CommManager {
 	}
 	    
     public function doTriggerSend() {
-    	DebugManager.log("CommManager#doTriggerSend, inprogress: " + self.ctx.state.deliveryInProgress);
+    	// DebugManager.log("CommManager#doTriggerSend, inprogress: " + self.ctx.state.deliveryInProgress);
 
     	if (self.ctx.state.deliveryInProgress && !isDeliveryTakingTooLong()) {
 			return; 
@@ -121,15 +109,17 @@ class CommManager {
     	// DebugManager.log("First msg: " + msg);
     	if (msg != null) {
 	    	self.ctx.state.deliveryInProgress = true;
+
     		DebugManager.log("CommManager#doTriggerSend msg: " + msg);
+
     		self.ctx.state.lastDeliveryTs = System.getTimer();
     		
-    		if (DebugManager.commDebug) {
-    			DebugManager.log("NOT Transmitted");
-	   			// self.commListener.onComplete();
-				self.commListener.onError();
-				return;
-			}
+    		// if (DebugManager.commDebug) {
+    		// 	DebugManager.log("NOT Transmitted");
+	   		// 	// self.commListener.onComplete();
+			// 	self.commListener.onError();
+			// 	return;
+			// }
 
 			if (msg.equals(CommManager.MSG_START_TRACKING) || msg.equals(CommManager.MSG_CONFIRMCHECK)) {
 				Communications.transmit(msg, {}, self.commListener);		
@@ -144,12 +134,12 @@ class CommManager {
     	} 
 
 		if (msg == null) {
-			if (self.ctx.businessManager.isAroundAlarm() && (System.getTimer() - lastSendTriggerTs) > AROUND_ALARM_POLL_INTERVAL_MS) {
+			if (self.ctx.businessManager.isAroundAlarm() && (DataUtil.abs(System.getTimer() - lastSendTriggerTs)) > AROUND_ALARM_POLL_INTERVAL_MS) {
 				pollWebserver(new MessageToPhone("quickPollBeforeAlarm").toRequest());
 				return;
 			}
 
-			if ((System.getTimer() - lastSendTriggerTs) > MINIMAL_POLL_INTERVAL_MS) {
+			if (DataUtil.abs(System.getTimer() - lastSendTriggerTs) > MINIMAL_POLL_INTERVAL_MS) {
 				pollWebserver(new MessageToPhone("poll").toRequest());
 				return;
 			}
@@ -157,7 +147,7 @@ class CommManager {
     }
 
 	function isDeliveryTakingTooLong() {
-		return (System.getTimer() - self.ctx.state.lastDeliveryTs) < MAX_WAITING_TIME_IN_TRANSMIT_MS;
+		return DataUtil.abs(System.getTimer() - self.ctx.state.lastDeliveryTs) > MAX_WAITING_TIME_IN_TRANSMIT_MS;
 	}
 
 	function pollWebserver(req) {
@@ -215,15 +205,17 @@ class CommManager {
 			return ar;
 		}
 
-		for (var i = 0; i < json.size(); ++i) {
-			var entry = json[i];
-			var command = entry["c"];
-			var param = entry["d"];
+		if (json instanceof Lang.Array) {
+			for (var i = 0; i < json.size(); ++i) {
+				var entry = json[i];
+				var command = entry["c"];
+				var param = entry["d"];
 
-			if (param == null) {
-				ar.add(command);
-			} else {
-				ar.add(command + ";" + param);
+				if (param == null) {
+					ar.add(command);
+				} else {
+					ar.add(command + ";" + param);
+				}
 			}
 		}
 
@@ -234,8 +226,9 @@ class CommManager {
         DebugManager.log("handleMessageReceived: " + msg);
 		self.ctx.businessManager.logTransmit("CommManager#handleMessageReceived: " + msg);
 
+		self.ctx.businessManager.startTracking();
+
 		if (msg.equals(CommManager.MSG_START)) {
-			self.ctx.businessManager.startTracking();
 			return;
 		}
         
@@ -300,8 +293,10 @@ class CommManager {
     }
     
     function extractDataFromIncomingMessage(msg) {
-    	if (msg.find(";") == null) { return "-1"; }
-    	
-    	return msg.substring((msg.find(";"))+1, msg.length());
-    }
+		var index = msg.find(";");
+		if (index == null || index >= msg.length() - 1) { 
+        	return "-1"; 
+		}
+    	return msg.substring(index + 1, msg.length());
+	}
 }

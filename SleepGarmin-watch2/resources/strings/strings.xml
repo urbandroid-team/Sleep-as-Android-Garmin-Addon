@@ -1,12 +1,12 @@
 <strings>
     <string id="AppName">Sleep</string>
-    <string id="version">20260423</string>
+    <string id="version">20260522</string>
 
     <string id="alarm">Alarm</string>
 
-    <string id="init">Connecting to phone...</string>
+    <string id="init">Connecting</string>
 
-    <string id="tracking">Sleep tracking...</string>
+    <string id="tracking">Sleep tracking</string>
     
     <string id="messageAlarm">Wake up</string>
 

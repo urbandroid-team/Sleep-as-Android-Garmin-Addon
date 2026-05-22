@@ -19,7 +19,7 @@ class State {
 	var onTrackingScreen = true;
 	
 	var currentTime;
-	var alarmTime = "———";
+	var alarmTime = -1;
 	
 	var httpCommunicationMode = false; // Tracks how we currently communicate with the phone
 	
@@ -33,6 +33,14 @@ class State {
 	}
 	
 	function getBatchSize() {
+		if (self.batchSize < 1) {
+			return 1;
+		}
+
+		if (self.batchSize > 12) {
+			return 12;
+		}
+
 		return self.batchSize;
 	}
 	

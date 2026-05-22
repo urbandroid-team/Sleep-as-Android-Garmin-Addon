@@ -1,5 +1,6 @@
 using Toybox.WatchUi;
 using Toybox.System;
+using Toybox.Time;
 
 class Sleep2View extends WatchUi.View {
 
@@ -58,8 +59,17 @@ class Sleep2View extends WatchUi.View {
 
     private function updateAlarmTimeText() {
     	var alarmTimeArea = View.findDrawableById("alarmTime") as Toybox.WatchUi.TextArea;
-    	
-    	alarmTimeArea.setText(DateUtil.msTimestampToHHMM(self.ctx.state.alarmTime));
+        
+        var alarmTime = self.ctx.state.alarmTime;
+        if (alarmTime > -1) {
+            if ((alarmTime/ 1000) - (Time.now().value().toLong()) > 86400) {
+                alarmTimeArea.setText(DateUtil.msTimestampToDDDHHMM(self.ctx.state.alarmTime));
+            } else {
+                alarmTimeArea.setText(DateUtil.msTimestampToHHMM(self.ctx.state.alarmTime));
+            }
+        } else {
+                alarmTimeArea.setText("---");            
+        }
     }
 
     

@@ -1,0 +1,26 @@
+<layout id="AlarmLayout">
+	<drawable id="BgFill" />    
+                   
+    <bitmap id="alarmIcon" x="74%" y="1%" filename="../drawables/alarm_black.png" />
+
+
+    <label id="alarmText" x="82%" y="18%" 
+            text="@Strings.alarm"
+               font="Graphics.FONT_SMALL" 
+               color="Graphics.COLOR_BLACK" 
+               justification="Graphics.TEXT_JUSTIFY_CENTER" />
+
+    <text-area id="time" x="center" y="center" 
+            text="———"
+               font="Graphics.FONT_NUMBER_MEDIUM" 
+               width="95%" height="45%" 
+               color="Graphics.COLOR_BLACK" 
+               justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+    
+    <text-area id="mainText" x="center" y="50%" 
+            text="@Strings.messageAlarm" font="Graphics.FONT_XTINY" 
+               width="80%" height="50%" 
+               color="Graphics.COLOR_BLACK" 
+               justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+
+</layout>

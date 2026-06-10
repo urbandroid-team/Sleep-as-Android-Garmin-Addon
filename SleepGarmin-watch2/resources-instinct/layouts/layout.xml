@@ -1,11 +1,13 @@
 <layout id="MainLayout">
-    <bitmap id="alarmIconSmall" x="center" y="10%" filename="../drawables/alarm.png" />
+    <bitmap id="alarmIconSmall" x="77%" y="4%" filename="../drawables/alarm.png" />
     
-    <text-area id="alarmTime" x="center" y="22%" 
-               text="———" font="Graphics.FONT_SMALL" 
-               width="80%" height="15%" 
-               color="Graphics.COLOR_WHITE" 
-               justification="Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER" />
+<!-- Sub-window Alarm Time -->
+<label id="alarmTime" 
+           x="82%" y="16%"
+           text="———" 
+           font="Graphics.FONT_XTINY" 
+           color="Graphics.COLOR_WHITE"
+           justification="Graphics.TEXT_JUSTIFY_CENTER" />
 
     <text-area id="time" x="center" y="center" 
                text="———" font="Graphics.FONT_NUMBER_MEDIUM" 

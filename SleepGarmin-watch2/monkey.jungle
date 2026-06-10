@@ -1,1 +1,24 @@
 project.manifest = manifest.xml
+project.typecheck = 0
+
+base.resourcePath = resources
+
+# Define the Paths
+instinctRes = resources;resources-instinct
+contrastRes = resources;resources-high-contrast
+amoledRes = resources;resources-amoled
+
+# --- Assignments ---
+
+# Instinct family (B&W/Limited color)
+semioctagon.resourcePath = $(base.resourcePath);$(instinctRes)
+
+# Fenix 7 / High-End MIP (Bold colors, no gradients)
+fenix7.resourcePath = $(base.resourcePath);$(contrastRes)
+fenix7s.resourcePath = $(base.resourcePath);$(contrastRes)
+fenix7x.resourcePath = $(base.resourcePath);$(contrastRes)
+# Use the 'round-260x260' family to catch similar MIP watches
+round-260x260.resourcePath = $(base.resourcePath);$(contrastRes)
+
+# Venu/AMOLED (Rich colors)
+round-416x416.resourcePath = $(base.resourcePath);$(amoledRes)

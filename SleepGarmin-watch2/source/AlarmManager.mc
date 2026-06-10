@@ -26,14 +26,14 @@ class AlarmManager {
 	    alarmDelayTimerRunning = false;
 		self.ctx.businessManager.switchToAlarmScreen();
 		if (vibrate) {
-			self.ctx.alarmManager.startAlarmVibration();
+			startAlarmVibration();
 		}
 	}
 
 	function startAlarmAfterDelay() {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarmAfterDelay");
 		if (alarmDelayTimerRunning) {
-			self.ctx.alarmManager.startAlarmVibration();
+			startAlarmVibration();
 		}
 	}
 
@@ -44,6 +44,7 @@ class AlarmManager {
 	
 	function startAlarm(delay) {
 		self.ctx.businessManager.logTransmit("AlarmManager#startAlarm, delay: " + delay);
+
 		if (delay == -1) {
 			startAlarmWithoutVibration();
 		} else if (delay == 0) {
@@ -64,7 +65,7 @@ class AlarmManager {
 		self.ctx.businessManager.logTransmit("AlarmManager#stopAlarm");
 		cancelAlarms();
 
-		self.ctx.alarmManager.stopAlarmVibration();
+		stopAlarmVibration();
 		self.ctx.businessManager.backToMainScreen();
 	}
 
@@ -83,8 +84,12 @@ class AlarmManager {
 	}
 		
     function doHint(repeat) {
-    	if (!self.ctx.state.canGrabAttention()) { return; }
-    
+		if (vibrTimerRunning) { 
+        	return; 
+    	}
+
+    	if (!self.ctx.state.canGrabAttention()) { return; }    
+
         // Garmin only supports vibrating up to 8 VibeProfiles, so we have to cap repeating on 4
         if (repeat > 4) {
             repeat = 4;
@@ -95,7 +100,9 @@ class AlarmManager {
         if (Attention has :vibrate) {
 	    	self.ctx.state.doingHint = true;
     
+			
 	        var vibrateData = [];
+
             for ( var i = 0; i < repeat; i += 1) {
                 vibrateData.add(new Attention.VibeProfile(  50, 1000));
                 vibrateData.add(new Attention.VibeProfile(  0, 1000));

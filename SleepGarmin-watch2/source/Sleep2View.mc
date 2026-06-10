@@ -1,10 +1,11 @@
 using Toybox.WatchUi;
 using Toybox.System;
+using Toybox.Time;
 
 class Sleep2View extends WatchUi.View {
 
 	var ctx;
-	var lockedTextArea;
+	var messageArea;
 
     function initialize(ctx) {
         self.ctx = ctx;
@@ -46,22 +47,9 @@ class Sleep2View extends WatchUi.View {
     }
     
     private function updateMainText(isScreenLocked) {
-	    var textArea = View.findDrawableById("lockedTextArea") as Toybox.WatchUi.TextArea;
+	    var textArea = View.findDrawableById("message") as Toybox.WatchUi.TextArea;
     
-		if (isScreenLocked) {
-			if (SystemUtil.hasMenuButton()) {
-				textArea.setText(Rez.Strings.lockedNoTouch);		
-			} else {			
-				textArea.setText(Rez.Strings.lockedTouch);		
-			}
-
-		} else {				
-			if (SystemUtil.hasMenuButton()) {
-				textArea.setText(Rez.Strings.unlockedNoTouch);					
-			} else {
-				textArea.setText(Rez.Strings.unlockedTouch);		
-			}
-		}    
+        textArea.setText(Rez.Strings.tracking);		
     }
     
     private function updateTimeText() {
@@ -71,8 +59,17 @@ class Sleep2View extends WatchUi.View {
 
     private function updateAlarmTimeText() {
     	var alarmTimeArea = View.findDrawableById("alarmTime") as Toybox.WatchUi.TextArea;
-    	
-    	alarmTimeArea.setText(DateUtil.msTimestampToHHMM(self.ctx.state.alarmTime));
+        
+        var alarmTime = self.ctx.state.alarmTime;
+        if (alarmTime > -1) {
+            if ((alarmTime/ 1000) - (Time.now().value().toLong()) > 86400) {
+                alarmTimeArea.setText(DateUtil.msTimestampToDDDHHMM(self.ctx.state.alarmTime));
+            } else {
+                alarmTimeArea.setText(DateUtil.msTimestampToHHMM(self.ctx.state.alarmTime));
+            }
+        } else {
+                alarmTimeArea.setText("---");            
+        }
     }
 
     

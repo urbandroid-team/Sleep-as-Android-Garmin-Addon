@@ -1,4 +1,5 @@
 <menu id="AlarmMenu">
+    <menu-item id="item_0" label="@Strings.menu_label_cancel" />
     <menu-item id="item_1" label="@Strings.menu_label_snooze_alarm" />
     <menu-item id="item_2" label="@Strings.menu_label_dismiss_alarm" />
 </menu>

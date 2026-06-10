@@ -20,4 +20,8 @@ class Sleep2MenuDelegate extends WatchUi.MenuInputDelegate {
         }
     }
 
+    function onBack() {
+        WatchUi.popView(WatchUi.SLIDE_DOWN);
+    }
+
 }

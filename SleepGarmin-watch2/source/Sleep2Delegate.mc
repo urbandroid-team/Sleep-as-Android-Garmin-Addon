@@ -4,36 +4,57 @@ class Sleep2Delegate extends WatchUi.BehaviorDelegate {
 
 	var ctx;
 	
+    var viewTransitionTimer = new Timer.Timer();
+    
+    var isTransitionPending = false;
+
     function initialize(ctx) {
         BehaviorDelegate.initialize();
         self.ctx = ctx;
     }
 
-    function onMenu() {
-    	DebugManager.log("onMenu");
-    	if (self.ctx.state.screenLocked) {
-    		self.ctx.businessManager.unlockScreen();
-    		return true;
-    	}
+    function safePushMenu() {
+        isTransitionPending = false;
 
         var menu = new Rez.Menus.MainMenu();
-        menu.addItem(Rez.Strings.version, :version);
+        menu.addItem(WatchUi.loadResource(Rez.Strings.version), :version);
     	
         WatchUi.pushView(menu, new Sleep2MenuDelegate(self.ctx), WatchUi.SLIDE_UP);
+        
+        return true;
+    } 
+
+    function showMenu() {
+        if (!isTransitionPending) {
+            isTransitionPending = true;
+            viewTransitionTimer.start(method(:safePushMenu), 1, false);
+        }
+        return true;
+    }
+
+    function onMenu() {
+        showMenu();
+        return true;
+    }
+
+    function onHold(clickEvent) {
+        showMenu();
+        return true;
+    }
+
+    function onSelect() {
+        showMenu();
+        return true;
+    }
+
+    function onBack() {
+        showMenu();
         return true;
     }
     
-    function onBack() {
-    	return true;
-    }
-    
     function onKey(keyEvent){
-    	var k = keyEvent.getKey();
-
-    	// Prevents exiting from the app
-    	if (k == WatchUi.KEY_ESC || k == WatchUi.KEY_ENTER) { return true; }
-
-    	return false;
+        showMenu();
+        return true;
     }
 
 }

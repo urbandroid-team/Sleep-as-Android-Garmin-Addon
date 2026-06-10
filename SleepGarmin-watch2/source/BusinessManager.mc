@@ -2,6 +2,7 @@ using Toybox.System;
 using Toybox.WatchUi;
 using Toybox.Timer;
 using Toybox.Attention;
+using Toybox.Math;
 		
 class BusinessManager {
  
@@ -10,6 +11,8 @@ class BusinessManager {
 	var lastUpdate = -1;
 
     var lastUpdateUi = -1;
+
+	var isOnAlarmScreen = false;
 
  	function initialize(ctx) {
  		self.ctx = ctx;
@@ -21,14 +24,14 @@ class BusinessManager {
 		// DebugManager.log("BusinessManager onDataHook");
 		var now = System.getTimer();
 
-		if ((lastUpdate == -1) || (now - lastUpdate > 2000)) {
+		if (lastUpdate == -1 || (DataUtil.abs(now - lastUpdate) > 1900)) {
  			self.ctx.commManager.triggerSend();
 			lastUpdate = now;
 		}
 
 		if ((lastUpdateUi == -1) || (now - lastUpdateUi > 5000)) {
- 			updateTime(true);
-	 		lockScreen();
+			updateTime(true);
+			lockScreen();
 			lastUpdateUi = now;
 		}
  	}
@@ -41,16 +44,20 @@ class BusinessManager {
  	function startSensors() {
  		self.ctx.sensorManager.start();
  	}
+
  	function startTracking() {
  		self.ctx.state.tracking = true;
  		WatchUi.requestUpdate();
- 		
  	}
 
  	function displayOffWhenOnTrackingScreen() {
- 		if (ctx.state.onTrackingScreen) {	
-	 		Attention.backlight(false); 	
- 		}
+ 		// if (ctx.state.onTrackingScreen) {
+		// 	if (Toybox has :Attention) {
+		// 		try {
+		// 			Attention.backlight(false);
+		// 		} catch (e) {}
+		// 	}	
+ 		// }
  	}
  	
  	function confirmConnection() {
@@ -58,6 +65,7 @@ class BusinessManager {
  	}
  	
  	function sendAccData(dataArray) {
+		// TODO do not pass in string
  		self.ctx.commManager.enqueue([CommManager.MSG_DATA, dataArray.toString()]);
  	}
  	
@@ -65,10 +73,12 @@ class BusinessManager {
  		DebugManager.log("sendHrData " + hr);
  		self.ctx.commManager.enqueue([CommManager.MSG_HR, hr]); 		
  	}
+
  	function sendRrIntervalsData(rr) {
  		DebugManager.log("sendRrData " + rr);
  		self.ctx.commManager.enqueue([CommManager.MSG_RR, rr.toString()]); 	
  	}
+
  	function sendOxyData(oxygenSaturation) {
  		self.ctx.commManager.enqueue([CommManager.MSG_OXY, oxygenSaturation.toString()]);
  	}
@@ -76,20 +86,28 @@ class BusinessManager {
  	function sendPause() {
  		self.ctx.commManager.enqueue(CommManager.MSG_PAUSE_TRACKING);
  	}
+
  	function sendResume() {
  		self.ctx.commManager.enqueue(CommManager.MSG_RESUME_TRACKING);
  	}
+
  	function sendStop() {
  		self.ctx.commManager.enqueueAsFirst(CommManager.MSG_STOP_TRACKING);
  	}
+
  	function sendSnoozeAlarm() {
  		self.ctx.alarmManager.snoozeAlarm();
  		self.ctx.commManager.enqueueAsFirst(CommManager.MSG_SNOOZE_ALARM);
  	}
+
  	function sendDismissAlarm() {
  		self.ctx.commManager.enqueueAsFirst(CommManager.MSG_DISMISS_ALARM); 	
  	}
+
  	function forceStop() {
+		self.ctx.sensorManager.stop();
+		self.ctx.commManager.stop();
+		self.ctx.alarmManager.stopAlarm();
 		System.exit();
  	}
  	
@@ -97,7 +115,8 @@ class BusinessManager {
 		logTransmit("BusinessManager#startAlarm");
 
  		if (!self.ctx.state.isAlarmRunning()) {
-	 		self.ctx.alarmManager.startAlarm(delay);	
+	 		self.ctx.alarmManager.startAlarm(delay);
+			self.ctx.state.setAlarmRunning(true);	
  		}
  	}
  	
@@ -105,6 +124,7 @@ class BusinessManager {
 		logTransmit("BusinessManager#stopAlarm isAlarmRunning: " + self.ctx.state.isAlarmRunning());
  		if (self.ctx.state.isAlarmRunning()) {
  			self.ctx.alarmManager.stopAlarm();
+			self.ctx.state.setAlarmRunning(false);	
  		} else {
 			self.ctx.alarmManager.cancelAlarms();
 		}
@@ -126,45 +146,48 @@ class BusinessManager {
  	}
 
 	function isAroundAlarm() {
-		if (self.ctx.state.alarmTime instanceof Lang.Long) {
-			return (System.getTimer() > (self.ctx.state.alarmTime - 60000));
-		} else {
-			return false;
+		var alarmMs = self.ctx.state.alarmTime;
+		if (alarmMs instanceof Lang.Long && alarmMs > 0) {
+			// Convert Unix MS to Seconds to compare with Time.now()
+			var nowSec = Time.now().value();
+			var alarmSec = alarmMs / 1000;
+			return (nowSec > (alarmSec - 60)); // Is it within 60 seconds of alarm?
 		}
+		return false;
 	}
  	
  	function unlockScreen() {
- 		if (self.ctx.state.screenLocked) {
-			self.ctx.state.screenLocked = false;
-			self.ctx.state.screenLockedAt = System.getTimer();
-	 		DebugManager.log("UnlockScreen");
-	 		WatchUi.requestUpdate();
-	 	}
  	}
  	
  	function lockScreen() {
- 		if (self.ctx.state.tracking && !self.ctx.state.screenLocked && (System.getTimer() - self.ctx.state.screenLockedAt > 5000)) {
-	 		self.ctx.state.screenLocked = true;
-	 		WatchUi.requestUpdate(); 		
- 		}
  	}
  	
  	function exit() {
- 		DebugManager.log("BusinessManager exit");
+		self.ctx.sensorManager.stop();
+		self.ctx.commManager.stop();
+		self.ctx.alarmManager.stopAlarm();
+
  		System.exit();
  	}
 
  	function switchToAlarmScreen() {
-		try {
- 			Attention.backlight(true);
-		} catch (e) {
+		if (isOnAlarmScreen) { return; }
 
-		}
+		if (Toybox has :Attention) {
+			try {
+				Attention.backlight(true);
+			} catch (e) {}
+		}	
+
  		WatchUi.pushView(new AlarmView(self.ctx), new AlarmDelegate(self.ctx), WatchUi.SLIDE_UP);
+		isOnAlarmScreen = true;
  	}
 
  	function backToMainScreen() {
- 		WatchUi.popView(WatchUi.SLIDE_DOWN);
+		if (isOnAlarmScreen) {
+	 		WatchUi.popView(WatchUi.SLIDE_DOWN);
+			isOnAlarmScreen = false;
+		}
  	}
  	
  	function doHint(repeat) {

@@ -9,19 +9,22 @@ class AlarmDelegate extends WatchUi.BehaviorDelegate {
         self.ctx = ctx;
     }
 
-    function onMenu() {
+    function showMenu() {
         WatchUi.pushView(new Rez.Menus.AlarmMenu(), new AlarmMenuDelegate(self.ctx), WatchUi.SLIDE_UP);
         return true;
     }
+
+    function onMenu() {
+        return showMenu();
+    }
     
     function onBack() {
-    	return true;
+    	return showMenu();
 	}
 	
     function onKey(keyEvent){
-    	var k = keyEvent.getKey();
-    	if (k == WatchUi.KEY_ESC || k == WatchUi.KEY_ENTER) { return true; }
-    	return false;
+    
+        return showMenu();
     }
 	
 

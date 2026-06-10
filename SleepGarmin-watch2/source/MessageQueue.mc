@@ -1,49 +1,70 @@
 using Toybox.System as Sys;
+using Toybox.Application as App;
 
 class MessageQueue {
 
-	var queue = [];
+    private var queue;
+    private var maxQueueSize;
 
-	function initialize() {
-	}
+    function initialize(maxSize) {
+        queue = [];
+        maxQueueSize = maxSize; // Explicitly control queue size bounds
+    }
 
-	public function getFirst() {
-		if (queue.size() == 0) {return null;}
-		return queue[0];
-	}
-	
-	public function enqueueAsFirst(msg) {
-		var newQ = [msg];
-		newQ.addAll(queue);
-		queue = newQ;
-		newQ = null;
-	}
-	
-	public function enqueue(msg) {
-		if (contains(msg)) { return; }
+    public function getFirst() {
+        if (queue.size() == 0) { return null; }
+        return queue[0];
+    }
+    
+    // Optimized using Monkey C array concatenation syntax
+    public function enqueueAsFirst(msg) {
+        if (contains(msg)) { return; }
+        queue = [msg] + queue; 
+        enforceMemoryLimits();
+    }
 
-        var freeMemRatio = Sys.getSystemStats().freeMemory*100/Sys.getSystemStats().totalMemory;
+    public function enqueue(msg) {
+        if (contains(msg)) { return; }
 
-        DebugManager.log("free: " + Sys.getSystemStats().freeMemory + " ratio:" + freeMemRatio + " q size:" + queue.size());
-
-        if (((freeMemRatio <= 65) && (queue.size() > 0)) || (queue.size() > 30)) {
-            DebugManager.log("Rem from q, freeRatio:" + freeMemRatio + ",q:" + queue.size());
-            queue.remove(queue[0]);
+        queue.add(msg);
+        enforceMemoryLimits();
+    }
+    
+    public function contains(msg) {
+        return (queue.indexOf(msg) != -1);
+    }
+    
+    public function removeFirst() {
+        var size = queue.size();
+        if (size > 0) {
+            // Corrected slice bounds to safely remove index 0
+            queue = queue.slice(1, size);
         }
-		
-		queue.add(msg);
-	}
-	
-	public function contains(msg) {
-		return (queue.indexOf(msg) != -1);
-	}
-	
-	public function removeFirst() {
-		queue.remove(self.getFirst());
-	}
+    }
 
-	public function showCurrentQueue() {
-		return queue;
-	}
+    // Proactively manage memory based on size and actual available system RAM
+    private function enforceMemoryLimits() {
+        var size = queue.size();
+        
+        // 1. Hard cap pruning based on size
+        if (size > maxQueueSize) {
+            // Keep the newest 'maxQueueSize' elements (the end of the array)
+            queue = queue.slice(size - maxQueueSize, size);
+            size = queue.size();
+        }
 
+        // 2. Emergency pruning based on actual system memory pressure
+        var stats = Sys.getSystemStats();
+        if (stats.freeMemory < (stats.totalMemory * 0.20)) { // Under 20% memory left
+            System.println("Low Memory Warning! Pruning queue.");
+            if (size > 5) {
+                // Aggressively chop queue down to the last 5 messages
+                queue = queue.slice(size - 5, size);
+            }
+        }
+    }
+
+    public function showCurrentQueue() {
+        return queue;
+    }
 }

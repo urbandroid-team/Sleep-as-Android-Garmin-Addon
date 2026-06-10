@@ -2,7 +2,6 @@ package com.urbandroid.sleep.garmin;
 
 import static com.urbandroid.sleep.garmin.Constants.ACTION_STOP_SELF;
 import static com.urbandroid.sleep.garmin.Constants.CHECK_CONNECTED;
-import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 import static com.urbandroid.sleep.garmin.Notifications.NOTIFICATION_CHANNEL_ID_TRACKING;
 import static com.urbandroid.sleep.garmin.Notifications.getPendingIntentFlags;
 
@@ -43,9 +42,9 @@ public class SleepAsAndroidProviderService extends Service {
         ServiceRecoveryManager.getInstance().init(this);
         Utils.showUnrestrictedBatteryNeededNotificationIfNeeded(this);
 
-        if (!Utils.isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER, this) && Build.VERSION.SDK_INT >= 26) {
-            Notifications.showNotificationToInstallSleepWatchStarter(this);
-        }
+//        if (!Utils.isAppInstalled(PACKAGE_SLEEP_WATCH_STARTER, this) && Build.VERSION.SDK_INT >= 26) {
+//            Notifications.showNotificationToInstallSleepWatchStarter(this);
+//        }
 
         ciqManager.resetState();
 

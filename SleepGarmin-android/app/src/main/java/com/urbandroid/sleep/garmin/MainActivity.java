@@ -8,6 +8,7 @@ import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP;
 import static com.urbandroid.sleep.garmin.Constants.PACKAGE_SLEEP_WATCH_STARTER;
 import static com.urbandroid.sleep.garmin.Utils.startAppInfo;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
@@ -223,7 +224,10 @@ public class MainActivity extends Activity {
 
 
     private void sendUnrestrictedBatteryNotificationWithPermissionCheck() {
-        if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S && ((this.checkSelfPermission(PERMISSION_POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) || (this.checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED))) {
+            // You can directly ask for the permission.
+            requestPermissions(new String[] { PERMISSION_POST_NOTIFICATIONS, Manifest.permission.BLUETOOTH_CONNECT}, PERMISSION_POST_NOTIFICATIONS_REQUEST_CODE);
+        } else if (ContextCompat.checkSelfPermission(this, PERMISSION_POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
             // You can use the API that requires the permission.
             if (Build.VERSION.SDK_INT >= 24) {
                 NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -233,9 +237,9 @@ public class MainActivity extends Activity {
             }
         } else if (Build.VERSION.SDK_INT >= 23 && shouldShowRequestPermissionRationale(PERMISSION_POST_NOTIFICATIONS)) {
             showPostNotificationPermissionRationaleDialog();
-        } else if (Build.VERSION.SDK_INT >= 23) {
+        } else if (Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT <= Build.VERSION_CODES.S) {
             // You can directly ask for the permission.
-            requestPermissions(new String[] { PERMISSION_POST_NOTIFICATIONS }, PERMISSION_POST_NOTIFICATIONS_REQUEST_CODE);
+            requestPermissions(new String[] { PERMISSION_POST_NOTIFICATIONS}, PERMISSION_POST_NOTIFICATIONS_REQUEST_CODE);
         }
     }
 

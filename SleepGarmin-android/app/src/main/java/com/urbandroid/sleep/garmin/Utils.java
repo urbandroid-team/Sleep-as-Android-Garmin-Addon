@@ -85,7 +85,7 @@ public class Utils {
 
     public static void startForegroundService(Context context, Intent serviceIntent) {
         Logger.logDebug("Utils.startForegroundService");
-        if (Build.VERSION.SDK_INT >= 31) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             UtilsAPI31.startForegroundService(context, serviceIntent);
         } else {
             Logger.logDebug("Utils.startForegroundService alert");
@@ -127,7 +127,7 @@ public class Utils {
     }
 
     public static boolean isUnrestrictedBatteryNotificationNeeded(Context context) {
-        if (Build.VERSION.SDK_INT >= 31) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
             if (!nm.areNotificationsEnabled()) return false;
 

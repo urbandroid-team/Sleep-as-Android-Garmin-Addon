@@ -7,118 +7,80 @@ using Toybox.Position;
 
 class SensorManager {
 
-	const SENSOR_PERIOD_SEC = 2;
-	const OXI_READING_PERIOD_SEC = 2;
-	const SENSOR_FREQ = 10;
-	const SENSOR_AGGREG_WINDOW_SEC = 10;
-	const MAX_ARRAY_SIZE = 127;
+    private const SENSOR_PERIOD_SEC = 2;
+    private const SENSOR_FREQ = 10;
+    private const MAX_ARRAY_SIZE = 127;
 
-	var ctx;
-	
-	var accBatch = [];
+    // Explicitly derive how many ticks make up our 10-second window
+    private const TICKS_PER_AGGREG_WINDOW = 5; // 5 ticks * 2 seconds = 10 seconds
 
-	var aggregateTime = -1;
+    private var ctx;
+    private var dataListenerMethod;
 
-	var aggregateMax = -1;
+    private var accBatch = [];
+    private var spo2buf = [];
 
-	var hrMedianBuf = [];
-	var hrBuf = [];
-	var rrIntervalsBuf = [];
-	
-	var spo2buf = [];
-	
-	var lastOximeterReadingSec = 0;
+    private var tickCounter = 0;
+    private var aggregateMax = -1.0;
 
     function initialize(ctx) {
         DebugManager.log("SensorManager initialized");
         self.ctx = ctx;
-        var maxSampleRate = Sensor.getMaxSampleRate();
-        DebugManager.log("MaxSampleRate " + maxSampleRate);
-    }
-	
-	function startHr() {
-		Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
-	}
-
-	function startOxi() {
-		Sensor.setEnabledSensors([Sensor.SENSOR_PULSE_OXIMETRY]);
-	}
-
-	// var session = null;
-
-    function start() {
-        DebugManager.log("SensorManager startAccelerometer");
-
-		// if (Toybox has :ActivityRecording) {
-		// 	if (session == null) {
-		// 		session = ActivityRecording.createSession({
-		// 			:name => "Sleep Tracking",
-		// 			:sport => ActivityRecording.SPORT_GENERIC,
-		// 			:subSport => ActivityRecording.SUB_SPORT_GENERIC,
-		// 			:autoPause => false,
-		// 		});
-		// 		session.start();
-		// 	} 
-
-		// }
-
-		var options = {
-			:period => SENSOR_PERIOD_SEC,
-			:accelerometer => {
-				:enabled => true,
-				:sampleRate => SENSOR_FREQ
-			},
-			:heartRate => {
-				:enabled => true
-			}};
-
-		if (DebugManager.hrv) {
-			options = {
-				:period => SENSOR_PERIOD_SEC,
-				:accelerometer => {
-					:enabled => true,
-					:sampleRate => SENSOR_FREQ
-				},
-				:heartBeatIntervals => {
-					:enabled => true
-				}};
-
-		}
-
-
-        Sensor.registerSensorDataListener(self.method(:onData), options);
-
-		aggregateTime = System.getTimer();
+        // Cache our method pointer inside the constructor to save high-frequency allocation overhead
+        self.dataListenerMethod = method(:onData);
     }
 
-	function stop() {
-		Sensor.unregisterSensorDataListener();
-		// if (Toybox has :ActivityRecording) {
-		// 	if (session == null) {
-		// 		session.stop();
-		// 		session.discard();
-		// 		session = null;
-		// 	} 
+    public function startHr() {
+        Sensor.setEnabledSensors([Sensor.SENSOR_HEARTRATE]);
+    }
 
-		// }
-	}
+    public function startOxi() {
+        Sensor.setEnabledSensors([Sensor.SENSOR_PULSE_OXIMETRY]);
+    }
+
+    public function start() {
+        DebugManager.log("SensorManager tracking sequence starting");
+
+        var options = {
+            :period => SENSOR_PERIOD_SEC,
+            :accelerometer => {
+                :enabled => true,
+                :sampleRate => SENSOR_FREQ
+            }
+        };
+
+        // Inject either granular Heart Beat Intervals (HRV) or standard Heart Rate based on system state
+        if (DebugManager.hrv) {
+            options[:heartBeatIntervals] = { :enabled => true };
+        } else {
+            options[:heartRate] = { :enabled => true };
+        }
+
+        Sensor.registerSensorDataListener(self.dataListenerMethod, options);
+
+        self.tickCounter = 0;
+        self.aggregateMax = -1.0;
+    }
+
+    public function stop() {
+        Sensor.unregisterSensorDataListener();
+    }
 
     // argument is of type SensorData
     public function onData(sensorData as Sensor.SensorData) as Void {
 		// DebugManager.log("SensorManager onData");
 
 		try {
-			
+
 			if (self.ctx.state.tracking) {
 
 				// DebugManager.log("SensorManager trackig");
 
-				if (sensorData.accelerometerData != null && sensorData.accelerometerData.x != null && sensorData.accelerometerData.y != null && sensorData.accelerometerData.z != null) {
-
-					// DebugManager.log("SensorManager hasAccelData");
-
-					onAccelData(sensorData.accelerometerData.x, sensorData.accelerometerData.y, sensorData.accelerometerData.z);
-				}
+            // 1. Process Accelerometer Vector Payloads safely
+            var acc = sensorData.accelerometerData;
+            if (acc != null && acc.x != null && acc.y != null && acc.z != null) {
+                processAccelerometer(acc.x, acc.y, acc.z);
+            }
 
 				// We check Sensor.getInfo() because the listener's HR array is often null on this device
                 var info = Sensor.getInfo();
@@ -126,187 +88,112 @@ class SensorManager {
                     self.ctx.businessManager.sendHrData(info.heartRate);
                 }
 
-				if (sensorData has :heartRateData && sensorData.heartRateData != null) {
+// 2. Process Biometric Heart Rate Streams via scoped sub-properties
+            if (sensorData has :heartRateData && sensorData.heartRateData != null) {
+                var hrData = sensorData.heartRateData;
 
-					if (DebugManager.hrv) {
-						if (sensorData.heartRateData.heartBeatIntervals != null) {
-							var hrvArray = sensorData.heartRateData.heartBeatIntervals;
-							if (hrvArray != null && hrvArray.size() > 0) {
-								onHRVData(hrvArray);
-							}
-						}
-					} else {
-						if (sensorData.heartRateData.heartRate != null) {
-							var hrArray = sensorData.heartRateData.heartRate;
+                if (DebugManager.hrv && hrData.heartBeatIntervals != null) {
+                    var hrvArray = hrData.heartBeatIntervals;
+                    if (hrvArray.size() > 0) {
+                        processHRVData(hrvArray);
+                    }
+                } else if (hrData.heartRate != null) {
+                    var hrArray = hrData.heartRate;
+                    if (hrArray.size() > 0 && hrArray[0] != null) {
+                        self.ctx.businessManager.sendHrData(hrArray[0]);
+                    }
+                }
+            }
 
-							if (hrArray != null && hrArray.size() > 0) {
-								onHRData(hrArray);
-							}
-						}
-					}
-				}	
+            // 3. Process Pulse Oximetry Data safely via global system sensors
+            var info = Sensor.getInfo();
+            if (info has :oxygenSaturation && info.oxygenSaturation != null) {
+                processOxyData(info.oxygenSaturation);
+            }
 
-				if (info has :oxygenSaturation && info.oxygenSaturation != null) {
-					var spo2 = info.oxygenSaturation;
-					if (spo2 != null) {
-						onOxyData(spo2);
-					}
-				}
-			} else {
-				DebugManager.log("SensorManager not tracking");
-			}
-			
-			self.ctx.businessManager.onDataHook();
-		} catch(e) {
-    		DebugManager.log("onData error " + e.getErrorMessage());
-		}
-    }
-
-    function onAccelData(xArr,yArr,zArr) {
-    	DebugManager.log("onAccelData");
-//        DebugManager.logf("sizes x: $1$ y: $2$ z: $3$", [xArr.size(), yArr.size(), zArr.size()]);
-        
-		var max = computeMaxRawFromArray(xArr, yArr, zArr);
-
-		// DebugManager.log("SensorManager max " + max);
-
-		if (max > aggregateMax) {
-			aggregateMax = max;
-		}
-
-		// DebugManager.log("SensorManager aggr max " + aggregateMax);
- 
-		// DebugManager.log("SensorManager time window > 950 " + DataUtil.abs(System.getTimer() - aggregateTime));
-
-		if (DataUtil.abs(System.getTimer() - aggregateTime) > 9500) {
-
-			if (aggregateMax != -1) {
-
-				// DebugManager.log("SensorManager addToAccBatch " + aggregateMax);
-
-				addToAccBatch(aggregateMax);
-				aggregateTime = System.getTimer();
-				aggregateMax = -1;
-			}
-		}
-
-    }
-
-	function computeMaxRawFromArray(xArr, yArr, zArr) {
-		var xSize = xArr.size();
-		var ySize = yArr.size();
-		var zSize = zArr.size();
-
-		// FIND THE MINIMUM SIZE: This prevents the IAOOB error
-		var size = xSize;
-		if (ySize < size) { size = ySize; }
-		if (zSize < size) { size = zSize; }
-
-		if (size == 0) { 
-			return null; 
-		}	
-
-		var maxSquaredMag = 0.0;
-
-		for (var i = 0; i < size; i++) { 
-			var x = xArr[i];
-			var y = yArr[i];
-			var z = zArr[i];
-
-			if (x == null || y == null || z == null) {
-				continue; 
-			}
-			var currentSquaredMag = (x * x) + (y * y) + (z * z);
-
-			if (currentSquaredMag > maxSquaredMag) {
-				maxSquaredMag = currentSquaredMag;
-			}
-		}
-
-    	return Math.sqrt(maxSquaredMag);
-	}
-
-
-    function addToAccBatch(aggregate) {
-
-		if (accBatch.size() < MAX_ARRAY_SIZE) {
-	    	accBatch.add(aggregate);
-		}
-    	DebugManager.log("SensorManager addToAccBatchSize " + accBatch.size());
-
-		var effectiveBatchSize = self.ctx.state.getBatchSize();
-		if (effectiveBatchSize > MAX_ARRAY_SIZE) { effectiveBatchSize = MAX_ARRAY_SIZE; }
-
-    	if (accBatch.size() >= effectiveBatchSize) {
-	    	DebugManager.log("SensorManager send accel data " + accBatch.size());
-    		self.ctx.businessManager.sendAccData(accBatch);
-    		accBatch = [];
-    	}
-    }
-    
-    // // Gathers both rr intervals and computes hr
-    // function onHRVData(heartBeatIntervalsArray) {
-    // 	DebugManager.log("OnHRVData");
-
-	// 	self.ctx.businessManager.sendRrIntervalsData(heartBeatIntervalsArray);
-	// }
-
-   // Gathers both just HR
-    function onHRData(hrArray) {
-    	DebugManager.log("OnHRVData");
-
-		if (hrArray == null || hrArray.size() < 1) {
-			return;
-		}
-		var hr = hrArray[0];
-
-    	DebugManager.log("OnHRVData hr " + hr);
-
-		self.ctx.businessManager.sendHrData(hr);
-	}
-	
-    
-    function onOxyData(spo2) {
-    	DebugManager.log("onOxyData");
-    	
-		if (spo2buf.size() < MAX_ARRAY_SIZE) {
-	        spo2buf.add(spo2);
-		}
-        if (spo2buf.size() > 120 / OXI_READING_PERIOD_SEC) {
-        	spo2buf.add(OXI_READING_PERIOD_SEC); // add framerate at the end-1 of array
-        	spo2buf.add(System.getTimer()); // add timestamp at the end of array
-        	
-    		self.ctx.businessManager.sendOxyData(spo2buf);
-    		spo2buf = [];        
+            self.ctx.businessManager.onDataHook();
+        } catch(e) {
+            DebugManager.log("Exception handled in Sensor execution loop: " + e.getErrorMessage());
         }
     }
 
+    private function processAccelerometer(xArr, yArr, zArr) {
+        var size = xArr.size();
+        if (yArr.size() < size) { size = yArr.size(); }
+        if (zArr.size() < size) { size = zArr.size(); }
+        if (size == 0) { return; }
 
-	// Gathers both rr intervals and computes hr
-    function onHRVData(heartBeatIntervalsArray) {
-    	DebugManager.log("OnHRVData");
+        var maxSquaredMag = 0.0;
+        for (var i = 0; i < size; i++) {
+            var x = xArr[i]; var y = yArr[i]; var z = zArr[i];
+            if (x == null || y == null || z == null) { continue; }
 
-		var hr = hrFromBeatIntervals(heartBeatIntervalsArray);
+            var currentSquaredMag = (x * x) + (y * y) + (z * z);
+            if (currentSquaredMag > maxSquaredMag) {
+                maxSquaredMag = currentSquaredMag;
+            }
+        }
 
-		if (hr != null && hr > 0) {
-			self.ctx.businessManager.sendHrData(hr);
-		}
+        var currentMaxMag = Math.sqrt(maxSquaredMag);
+        if (currentMaxMag > self.aggregateMax) {
+            self.aggregateMax = currentMaxMag;
+        }
 
-		self.ctx.businessManager.sendRrIntervalsData(heartBeatIntervalsArray);
-	}
+        // Track time slots cleanly via integer ticks instead of fluctuating millisecond timers
+        self.tickCounter++;
+        if (self.tickCounter >= TICKS_PER_AGGREG_WINDOW) {
+            if (self.aggregateMax != -1.0) {
+                commitAccelToBatch(self.aggregateMax);
+            }
+            self.tickCounter = 0;
+            self.aggregateMax = -1.0;
+        }
+    }
 
+    private function commitAccelToBatch(aggregateValue) {
+        if (accBatch.size() < MAX_ARRAY_SIZE) {
+            accBatch.add(aggregateValue);
+        }
 
-	function hrFromBeatIntervals(beatIntervalArray) {
-		DebugManager.log("hrFromBeatIntervals");
-		if (beatIntervalArray == null) { return null; }
-		
-		var size = beatIntervalArray.size();
+        var effectiveBatchSize = self.ctx.state.getBatchSize();
+        if (effectiveBatchSize > MAX_ARRAY_SIZE) { effectiveBatchSize = MAX_ARRAY_SIZE; }
 
-        if (size == 0) { return null; }		
+        if (accBatch.size() >= effectiveBatchSize) {
+            self.ctx.businessManager.sendAccData(accBatch);
+            accBatch = []; // Purge allocations immediately
+        }
+    }
 
-		var sum = 0;
-		for (var i = 0; i < size; i++) { sum += beatIntervalArray[i]; }
-		return (60000 * size) / sum;
+    private function processHRVData(heartBeatIntervalsArray) {
+        // Safe linear check to compute structural Heart Rate values straight from Raw Pulse intervals
+        var totalIntervals = heartBeatIntervalsArray.size();
+        var sum = 0;
+        for (var i = 0; i < totalIntervals; i++) {
+            sum += heartBeatIntervalsArray[i];
+        }
 
-	}
+        if (sum > 0) {
+            var calculatedHr = (60000 * totalIntervals) / sum;
+            self.ctx.businessManager.sendHrData(calculatedHr);
+        }
+        self.ctx.businessManager.sendRrIntervalsData(heartBeatIntervalsArray);
+    }
+    
+    private function processOxyData(spo2) {
+        if (spo2buf.size() < MAX_ARRAY_SIZE) {
+            spo2buf.add(spo2);
+        }
+
+        // Accumulate roughly 60 samples before wrapping structural packets cleanly
+        if (spo2buf.size() > 60) {
+            var structuredPayload = {
+                "samples" => spo2buf,
+                "period" => SENSOR_PERIOD_SEC,
+                "timestamp" => System.getTimer()
+            };
+
+            self.ctx.businessManager.sendOxyData(structuredPayload);
+            spo2buf = [];
+        }
+    }
 }

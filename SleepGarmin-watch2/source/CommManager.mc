@@ -13,39 +13,51 @@ class CommManager {
     private var webMsgCallback;
     private var phoneMsgCallback;
 
-    // Command Declarations (Highly recommend converting these to integers if possible)
-    static const MSG_START = "StartTracking";
-    static const MSG_START_HR = "StartHRTracking";
-    static const MSG_START_OXI = "StartOxiTracking";
-    static const MSG_STOP = "StopApp";
-    static const MSG_CHECK = "Check";
-    static const MSG_BATCH_SIZE = "BatchSize;";
-    static const MSG_SET_ALARM = "SetAlarm;";
-    static const MSG_START_ALARM = "StartAlarm;";
-    static const MSG_HINT = "Hint;";
-    static const MSG_STOP_ALARM = "StopAlarm";
+	// From phone
+	static const MSG_START = "StartTracking";
+	static const MSG_START_HR = "StartHRTracking";
+	static const MSG_START_OXI = "StartOxiTracking";
+	static const MSG_STOP = "StopApp";
+	static const MSG_CHECK = "Check";
+	static const MSG_BATCH_SIZE = "BatchSize;";
+	static const MSG_SET_ALARM = "SetAlarm;";
+	static const MSG_START_ALARM = "StartAlarm;";
+	static const MSG_HINT = "Hint;";
+	static const MSG_STOP_ALARM = "StopAlarm";
 
-    static const MSG_START_TRACKING = "STARTING";
-    static const MSG_CONFIRMCHECK = "CONFIRMCHECK";
+	// To phone via TRANSMIT
+	static const MSG_START_TRACKING = "STARTING";
+	static const MSG_CONFIRMCHECK = "CONFIRMCHECK";
 
+	// To phone via HTTP
+	static const MSG_SNOOZE_ALARM = "SNOOZE";
+	static const MSG_DISMISS_ALARM = "DISMISS";
+	static const MSG_STOP_TRACKING = "STOPPING";
+	static const MSG_PAUSE_TRACKING = "PAUSE";
+	static const MSG_RESUME_TRACKING = "RESUME";
+	static const MSG_DATA = "DATA_NEW";
+	static const MSG_HR = "HR";
+	static const MSG_OXY = "SPO2";
+	static const MSG_RR = "RR";
+	static const MSG_ERROR = "ERROR";
+	
     const MAX_DELIVERY_ERROR = 10;
     const MAX_DELIVERY_PAUSE = 5;
     const MAX_WAITING_TIME_IN_TRANSMIT_MS = 5000;
 
-    const MINIMAL_POLL_INTERVAL_MS = 2500;
-    const AROUND_ALARM_POLL_INTERVAL_MS = 1000;
-    private var lastSendTriggerTs = 0;
+	const MINIMAL_POLL_INTERVAL_MS = 2500;
+	const AROUND_ALARM_POLL_INTERVAL_MS = 1000;
+	var lastSendTriggerTs = 0;
 
-    // Warning: Only works if backend service resides natively on the paired mobile client loopback
-    const WEB_URL = "http://127.0.0.1:1765";
+	const WEB_URL = "http://127.0.0.1:1765";
 
     function initialize(ctx) {
         DebugManager.log("CommManager initialized");
+        
         self.ctx = ctx;
-        self.queue = new MessageQueue(50); // Initializing queue with concrete limit definitions
+		self.queue = new MessageQueue(50);
 
-        // Instantiating the callback methods ONCE to conserve heap allocation cycles
-        self.webMsgCallback = method(:onWebMsgReceive);
+		self.webMsgCallback = method(:onWebMsgReceive);
         self.phoneMsgCallback = method(:onPhoneMsgReceive);
     }
     
@@ -60,25 +72,29 @@ class CommManager {
     }
 
     public function enqueue(msg) {
-        self.queue.enqueue(msg);
+    	DebugManager.log("CommManager enqueue " + msg);
+    	self.queue.enqueue(msg);
+    	DebugManager.log("CommManager enqueue, current queue: " + self.queue.showCurrentQueue());
     }
     
     public function enqueueAsFirst(msg) {
-        self.queue.enqueueAsFirst(msg);
+    	DebugManager.log("CommManager enqueueAsFirst " + msg);
+    	self.queue.enqueueAsFirst(msg);
+    	DebugManager.log("CommManager enqueueAsFirst, current queue: " + self.queue.showCurrentQueue());    
     }
 
     public function triggerSend() {
-        doTriggerSend();
-        lastSendTriggerTs = System.getTimer();
-    }
-        
+		doTriggerSend();
+		lastSendTriggerTs = System.getTimer();
+	}
+	    
     public function doTriggerSend() {
         var currentTimer = System.getTimer();
 
         if (self.ctx.state.deliveryInProgress && !isDeliveryTakingTooLong(currentTimer)) {
-            return; 
+            return;
         }
-        
+
         if (self.ctx.state.deliveryErrorCount > MAX_DELIVERY_ERROR) {
             self.ctx.state.deliveryPauseCount++;
             if (self.ctx.state.deliveryPauseCount > MAX_DELIVERY_PAUSE) {
@@ -87,20 +103,20 @@ class CommManager {
             }
             return;
         }
-        
+
         var msg = self.queue.getFirst();
         if (msg != null) {
             self.ctx.state.deliveryInProgress = true;
             self.ctx.state.lastDeliveryTs = currentTimer;
 
             if (msg.equals(CommManager.MSG_START_TRACKING) || msg.equals(CommManager.MSG_CONFIRMCHECK)) {
-                Communications.transmit(msg, {}, self.commListener);        
+                Communications.transmit(msg, {}, self.commListener);
             } else {
                 var messageToPhone = new MessageToPhone(msg);
                 pollWebserver(messageToPhone.toRequest());
             }
             return;
-        } 
+        }
 
         // Empty processing fallback - Execute polling routines cleanly
         var timeDelta = (currentTimer - lastSendTriggerTs).abs(); // Robust numeric math calculation
@@ -119,11 +135,11 @@ class CommManager {
 
     private function pollWebserver(req) {
         if (req == null) { return; }
-        
+
         Communications.makeWebRequest(
-            WEB_URL, 
+            WEB_URL,
             req,
-            {:method => Communications.HTTP_REQUEST_METHOD_GET}, 
+            {:method => Communications.HTTP_REQUEST_METHOD_GET},
             self.webMsgCallback // Using cached method pointer safely
         );
     }
@@ -158,7 +174,7 @@ class CommManager {
 
     private function handleMessageReceived(msg) {
         if (msg == null || !(msg instanceof Lang.String)) { return; }
-        
+
         self.ctx.businessManager.logTransmit("CommManager: " + msg);
         self.ctx.businessManager.startTracking();
 

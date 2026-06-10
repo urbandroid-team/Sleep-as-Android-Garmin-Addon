@@ -62,6 +62,5 @@ public class Constants {
 
     //  Just for testing
     public static final String EXTRA_MESSAGE = "message";
-    public static final String LOG_BROADCAST = SleepAsAndroidProviderService.class.getName() + "LogBroadcast";
     //  Testing END
 }

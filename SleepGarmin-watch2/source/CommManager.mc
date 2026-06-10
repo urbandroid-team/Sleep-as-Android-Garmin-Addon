@@ -5,9 +5,13 @@ using Toybox.Application;
 
 class CommManager {
 
-	var ctx;
-	var queue;
-	private var commListener;
+    private var ctx;
+    private var queue;
+    private var commListener;
+
+    // Cache method references as instance variables to prevent OOM runtime leaks
+    private var webMsgCallback;
+    private var phoneMsgCallback;
 
 	// From phone
 	static const MSG_START = "StartTracking";
@@ -51,23 +55,21 @@ class CommManager {
         DebugManager.log("CommManager initialized");
         
         self.ctx = ctx;
-		self.queue = new MessageQueue();
+		self.queue = new MessageQueue(50);
+
+		self.webMsgCallback = method(:onWebMsgReceive);
+        self.phoneMsgCallback = method(:onPhoneMsgReceive);
     }
     
     public function start() {
-
-        var phoneMethod = method(:onPhoneMsgReceive);
-		Communications.registerForPhoneAppMessages(phoneMethod);
-	
-	    self.commListener = new CommListener(self.queue, self.ctx);
-        
+        Communications.registerForPhoneAppMessages(self.phoneMsgCallback);
+        self.commListener = new CommListener(self.queue, self.ctx);
         enqueue(CommManager.MSG_START_TRACKING);
-	}
-        
+    }
 
-	public function stop() {
-		Communications.registerForPhoneAppMessages(null);
-	}
+    public function stop() {
+        Communications.registerForPhoneAppMessages(null);
+    }
 
     public function enqueue(msg) {
     	DebugManager.log("CommManager enqueue " + msg);
@@ -87,216 +89,125 @@ class CommManager {
 	}
 	    
     public function doTriggerSend() {
-    	// DebugManager.log("CommManager#doTriggerSend, inprogress: " + self.ctx.state.deliveryInProgress);
+        var currentTimer = System.getTimer();
 
-    	if (self.ctx.state.deliveryInProgress && !isDeliveryTakingTooLong()) {
-			return; 
-    	}
-    	
-    	if (self.ctx.state.deliveryErrorCount > MAX_DELIVERY_ERROR) {
-    		DebugManager.log("Max delivery error");
-    		self.ctx.state.deliveryPauseCount++;
-    		
-    		if (self.ctx.state.deliveryPauseCount > MAX_DELIVERY_PAUSE) {
-    			self.ctx.state.deliveryPauseCount = 0;
-    			self.ctx.state.deliveryErrorCount = 0;
-    		}
+        if (self.ctx.state.deliveryInProgress && !isDeliveryTakingTooLong(currentTimer)) {
+            return;
+        }
 
-    		return;
-    	}
-    	
-    	var msg = self.queue.getFirst();
-    	// DebugManager.log("First msg: " + msg);
-    	if (msg != null) {
-	    	self.ctx.state.deliveryInProgress = true;
+        if (self.ctx.state.deliveryErrorCount > MAX_DELIVERY_ERROR) {
+            self.ctx.state.deliveryPauseCount++;
+            if (self.ctx.state.deliveryPauseCount > MAX_DELIVERY_PAUSE) {
+                self.ctx.state.deliveryPauseCount = 0;
+                self.ctx.state.deliveryErrorCount = 0;
+            }
+            return;
+        }
 
-    		DebugManager.log("CommManager#doTriggerSend msg: " + msg);
+        var msg = self.queue.getFirst();
+        if (msg != null) {
+            self.ctx.state.deliveryInProgress = true;
+            self.ctx.state.lastDeliveryTs = currentTimer;
 
-    		self.ctx.state.lastDeliveryTs = System.getTimer();
-    		
-    		// if (DebugManager.commDebug) {
-    		// 	DebugManager.log("NOT Transmitted");
-	   		// 	// self.commListener.onComplete();
-			// 	self.commListener.onError();
-			// 	return;
-			// }
+            if (msg.equals(CommManager.MSG_START_TRACKING) || msg.equals(CommManager.MSG_CONFIRMCHECK)) {
+                Communications.transmit(msg, {}, self.commListener);
+            } else {
+                var messageToPhone = new MessageToPhone(msg);
+                pollWebserver(messageToPhone.toRequest());
+            }
+            return;
+        }
 
-			if (msg.equals(CommManager.MSG_START_TRACKING) || msg.equals(CommManager.MSG_CONFIRMCHECK)) {
-				Communications.transmit(msg, {}, self.commListener);		
-			} else {
-				var messageToPhone = new MessageToPhone(msg);
-				var req = messageToPhone.toRequest();
-    			DebugManager.log("CommManager#doTriggerSend webRequest:" + req);
-				pollWebserver(req);
-			}
-
-			return;
-    	} 
-
-		if (msg == null) {
-			if (self.ctx.businessManager.isAroundAlarm() && (DataUtil.abs(System.getTimer() - lastSendTriggerTs)) > AROUND_ALARM_POLL_INTERVAL_MS) {
-				pollWebserver(new MessageToPhone("quickPollBeforeAlarm").toRequest());
-				return;
-			}
-
-			if (DataUtil.abs(System.getTimer() - lastSendTriggerTs) > MINIMAL_POLL_INTERVAL_MS) {
-				pollWebserver(new MessageToPhone("poll").toRequest());
-				return;
-			}
-		}
+        // Empty processing fallback - Execute polling routines cleanly
+        var timeDelta = (currentTimer - lastSendTriggerTs).abs(); // Robust numeric math calculation
+        if (self.ctx.businessManager.isAroundAlarm()) {
+            if (timeDelta > AROUND_ALARM_POLL_INTERVAL_MS) {
+                pollWebserver(new MessageToPhone("quickPollBeforeAlarm").toRequest());
+            }
+        } else if (timeDelta > MINIMAL_POLL_INTERVAL_MS) {
+            pollWebserver(new MessageToPhone("poll").toRequest());
+        }
     }
 
-	function isDeliveryTakingTooLong() {
-		return DataUtil.abs(System.getTimer() - self.ctx.state.lastDeliveryTs) > MAX_WAITING_TIME_IN_TRANSMIT_MS;
-	}
+    private function isDeliveryTakingTooLong(currentTimer) {
+        return (currentTimer - self.ctx.state.lastDeliveryTs).abs() > MAX_WAITING_TIME_IN_TRANSMIT_MS;
+    }
 
-	function pollWebserver(req) {
-		if (req == null || WEB_URL == null || method(:onWebMsgReceive) == null) {
-			return;
-		}
-		Communications.makeWebRequest(
-			WEB_URL, 
-			req,
-			{:method => Communications.HTTP_REQUEST_METHOD_GET}, 
-			method(:onWebMsgReceive)
-		);
-	}
+    private function pollWebserver(req) {
+        if (req == null) { return; }
 
-	function onPhoneMsgReceive(phoneAppMessage as Communications.Message) as Void {
-		if (phoneAppMessage instanceof Communications.PhoneAppMessage) {
-			try {
-				handleMessageReceived(phoneAppMessage.data);
-			} catch (ex) {
-				DebugManager.log("Error in handleMessageReceived: " + ex);
-			}
-		} else {
-			DebugManager.log("Invalid phoneAppMessage: " + phoneAppMessage);
-		}
-	}
+        Communications.makeWebRequest(
+            WEB_URL,
+            req,
+            {:method => Communications.HTTP_REQUEST_METHOD_GET},
+            self.webMsgCallback // Using cached method pointer safely
+        );
+    }
 
-	function onWebMsgReceive(responseCode as Lang.Number, data as Lang.Dictionary<Lang.String, Lang.Object?> or Lang.String or Null) as Void {
+    public function onPhoneMsgReceive(phoneAppMessage as Communications.Message) as Void {
+        if (phoneAppMessage instanceof Communications.PhoneAppMessage) {
+            handleMessageReceived(phoneAppMessage.data);
+        }
+    }
+
+    public function onWebMsgReceive(responseCode as Lang.Number, data as Lang.Dictionary<Lang.String, Lang.Object?> or Lang.String or Null) as Void {
        if (responseCode == 200) {
-        	DebugManager.log("onWebMsgReceive Request Successful: " + data);
-			self.commListener.onComplete();
+            self.commListener.onComplete();
+            if (data == null) { return; }
 
-			try {
-				// Expecting to receive a JSON string
-				var msgArray = parseJsonDataToArray(data);
-
-				for ( var i = 0; i < msgArray.size(); i += 1 ) {
-					handleMessageReceived(msgArray[i]);
-				}
-			} catch (e instanceof Toybox.Lang.UnexpectedTypeException) {
-				enqueueAsFirst([CommManager.MSG_ERROR, "UnexpectedTypeException"]);
-			}
-
-       }
-       else {
-           DebugManager.log("onWebMsgReceive Response: " + responseCode);
-		   self.commListener.onError();
+            if (data instanceof Lang.Array) {
+                var totalElements = data.size();
+                for (var i = 0; i < totalElements; i++) {
+                    var entry = data[i];
+                    if (entry instanceof Lang.Dictionary) {
+                        var command = entry["c"];
+                        var param = entry["d"];
+                        var compositeMsg = (param == null) ? command : (command + ";" + param);
+                        handleMessageReceived(compositeMsg);
+                    }
+                }
+            }
+       } else {
+           self.commListener.onError();
        }
     }
 
-	function parseJsonDataToArray(json) {
-		DebugManager.log("parseJsonDataToArray" + json);
-		// contract is be c:command, d:data (d is optional)
-		var ar = [];
-		if (json == null) {
-			return ar;
-		}
+    private function handleMessageReceived(msg) {
+        if (msg == null || !(msg instanceof Lang.String)) { return; }
 
-		if (json instanceof Lang.Array) {
-			for (var i = 0; i < json.size(); ++i) {
-				var entry = json[i];
-				var command = entry["c"];
-				var param = entry["d"];
+        self.ctx.businessManager.logTransmit("CommManager: " + msg);
+        self.ctx.businessManager.startTracking();
 
-				if (param == null) {
-					ar.add(command);
-				} else {
-					ar.add(command + ";" + param);
-				}
-			}
-		}
-
-		return ar;
-	}
-
-    function handleMessageReceived(msg) {
-        DebugManager.log("handleMessageReceived: " + msg);
-		self.ctx.businessManager.logTransmit("CommManager#handleMessageReceived: " + msg);
-
-		self.ctx.businessManager.startTracking();
-
-		if (msg.equals(CommManager.MSG_START)) {
-			return;
-		}
+        // Optimized String Parsing sequence using fast early evaluations
+        if (msg.equals(CommManager.MSG_START)) { return; }
+        if (msg.equals(CommManager.MSG_START_HR)) { self.ctx.sensorManager.startHr(); return; }
+        if (msg.equals(CommManager.MSG_START_OXI)) { self.ctx.sensorManager.startOxi(); return; }
+        if (msg.equals(CommManager.MSG_STOP)) { self.ctx.businessManager.exit(); return; }
+        if (msg.equals(CommManager.MSG_CHECK)) { self.ctx.businessManager.confirmConnection(); return; }
         
-		if (msg.equals(CommManager.MSG_START_HR)) {
-			self.ctx.sensorManager.startHr();
-			return;
-		}
+        // Parameterized commands block
+        var semiColonIndex = msg.find(";");
+        if (semiColonIndex != null) {
+            var cmdPrefix = msg.substring(0, semiColonIndex + 1);
+            var payloadData = msg.substring(semiColonIndex + 1, msg.length());
 
-		if (msg.equals(CommManager.MSG_START_OXI)) {
-			self.ctx.sensorManager.startOxi();
-			return;
-		}
-        
+            if (cmdPrefix.equals(CommManager.MSG_BATCH_SIZE)) {
+                var size = payloadData.toNumber();
+                if (size > 0 && size < 20) { self.ctx.businessManager.setBatchSize(size); }
+            } else if (cmdPrefix.equals(CommManager.MSG_SET_ALARM)) {
+                var alarmTime = payloadData.toLong();
+                if (alarmTime != 1) { self.ctx.businessManager.setAlarmTime(alarmTime, true); }
+            } else if (cmdPrefix.equals(CommManager.MSG_START_ALARM)) {
+                self.ctx.businessManager.startAlarm(payloadData.toNumber());
+            } else if (cmdPrefix.equals(CommManager.MSG_HINT)) {
+                var hintRepeat = payloadData.toNumber();
+                if (hintRepeat != -1) { self.ctx.businessManager.doHint(hintRepeat); }
+            }
+            return;
+        }
 
-		if (msg.equals(CommManager.MSG_STOP)) {
-			self.ctx.businessManager.exit();
-			return;
-		}
-		
-		if (msg.equals(CommManager.MSG_CHECK)) {
-			self.ctx.businessManager.confirmConnection();
-			return;
-		}
-		
-		if (msg.find(CommManager.MSG_BATCH_SIZE) == 0) {
-			var size = extractDataFromIncomingMessage(msg).toNumber();
-			if (size > 0 && size < 20) {
-				self.ctx.businessManager.setBatchSize(size);
-			}
-			return;
-		}
-		
-		if (msg.find(CommManager.MSG_HINT) == 0) {
-			var hintRepeat = extractDataFromIncomingMessage(msg).toNumber();
-			if (hintRepeat != -1) {
-				self.ctx.businessManager.doHint(hintRepeat);				
-			}
-			return;
-		}
-		
-		if (msg.find(CommManager.MSG_SET_ALARM) == 0) {
-			var alarmTime = extractDataFromIncomingMessage(msg).toLong();
-			if (alarmTime != 1) {	
-				self.ctx.businessManager.setAlarmTime(alarmTime, true);
-			}
-			return;
-		}
-		
-		if (msg.find(CommManager.MSG_START_ALARM) == 0) {
-			var delay = extractDataFromIncomingMessage(msg).toNumber();
-			self.ctx.businessManager.startAlarm(delay);
-			return;
-		}
-		
-		if (msg.find(CommManager.MSG_STOP_ALARM) == 0) {
-			self.ctx.businessManager.logTransmit("CommManager#received MSG_STOP_ALARM");
-
-			self.ctx.businessManager.stopAlarm();
-			return;
-		}
-		
+        if (msg.equals(CommManager.MSG_STOP_ALARM)) {
+            self.ctx.businessManager.stopAlarm();
+        }
     }
-    
-    function extractDataFromIncomingMessage(msg) {
-		var index = msg.find(";");
-		if (index == null || index >= msg.length() - 1) { 
-        	return "-1"; 
-		}
-    	return msg.substring(index + 1, msg.length());
-	}
 }

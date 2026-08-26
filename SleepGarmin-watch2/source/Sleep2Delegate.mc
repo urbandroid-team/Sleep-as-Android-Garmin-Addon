@@ -1,4 +1,5 @@
 using Toybox.WatchUi;
+using Toybox.Timer;
 
 class Sleep2Delegate extends WatchUi.BehaviorDelegate {
 

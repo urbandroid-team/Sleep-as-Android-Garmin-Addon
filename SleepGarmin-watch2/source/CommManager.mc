@@ -79,6 +79,7 @@ class CommManager {
     	DebugManager.log("CommManager enqueueAsFirst " + msg);
     	self.queue.enqueueAsFirst(msg);
     	DebugManager.log("CommManager enqueueAsFirst, current queue: " + self.queue.showCurrentQueue());
+		triggerSend();
     }
 
     public function triggerSend() {

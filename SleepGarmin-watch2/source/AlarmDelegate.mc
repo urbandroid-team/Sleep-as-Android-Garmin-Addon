@@ -1,4 +1,5 @@
 using Toybox.WatchUi;
+using Toybox.Timer;
 
 class AlarmDelegate extends WatchUi.BehaviorDelegate {
 

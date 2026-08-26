@@ -9,23 +9,49 @@ class AlarmDelegate extends WatchUi.BehaviorDelegate {
         self.ctx = ctx;
     }
 
-    function showMenu() {
-        WatchUi.pushView(new Rez.Menus.AlarmMenu(), new AlarmMenuDelegate(self.ctx), WatchUi.SLIDE_UP);
+
+    function safePushMenu() {
+        isTransitionPending = false;
+
+        var menu = new Rez.Menus.AlarmMenu();
+        WatchUi.pushView(menu, new AlarmMenuDelegate(self.ctx), WatchUi.SLIDE_UP);
+
         return true;
     }
 
+    function showMenu() {
+        if (!isTransitionPending) {
+            isTransitionPending = true;
+            viewTransitionTimer.start(method(:safePushMenu), 1, false);
+        }
+        return true;
+    }
+
+
     function onMenu() {
-        return showMenu();
+        showMenu();
+        return true;
     }
-    
+
+    function onHold(clickEvent) {
+        showMenu();
+        return true;
+    }
+
+    function onSelect() {
+        showMenu();
+        return true;
+    }
+
     function onBack() {
-    	return showMenu();
-	}
-	
-    function onKey(keyEvent){
-    
-        return showMenu();
+        showMenu();
+        return true;
     }
-	
+
+    function onKey(keyEvent){
+        showMenu();
+        return true;
+    }
+
 
 }

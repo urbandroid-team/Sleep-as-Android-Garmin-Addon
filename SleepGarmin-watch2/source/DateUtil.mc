@@ -4,9 +4,8 @@ using Toybox.Lang;
 
 class DateUtil {
 	static function convertMsTsToMoment(timestampMs) {
-//		DebugManager.log("convertMsTsToMoment: " + timestampMs);
-			var mom = new Time.Moment(Math.floor(timestampMs/1000));
-			return mom;
+		var sec = (timestampMs / 1000).toLong();
+		return new Time.Moment(sec);
 	}
 	
 	static function momentToHHMM(moment) {

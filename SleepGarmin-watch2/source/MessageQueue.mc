@@ -14,25 +14,28 @@ class MessageQueue {
     }
 
     public function enqueueAsFirst(msg) {
+        pruneIfNeeded();
 		var newQ = [msg];
 		newQ.addAll(queue);
 		queue = newQ;
-		newQ = null;
     }
 
     public function enqueue(msg) {
         if (contains(msg)) { return; }
+        pruneIfNeeded();
+        queue.add(msg);
+    }
 
-        var freeMemRatio = Sys.getSystemStats().freeMemory*100/Sys.getSystemStats().totalMemory;
+    private function pruneIfNeeded() {
+        var stats = Sys.getSystemStats();
+        var freeMemRatio = (stats.totalMemory > 0) ? (stats.freeMemory * 100 / stats.totalMemory) : 100;
 
-        DebugManager.log("free: " + Sys.getSystemStats().freeMemory + " ratio:" + freeMemRatio + " q size:" + queue.size());
+        DebugManager.log("free: " + stats.freeMemory + " ratio:" + freeMemRatio + " q size:" + queue.size());
 
-        if (((freeMemRatio <= 65) && (queue.size() > 0)) || (queue.size() > 30)) {
-            DebugManager.log("Rem from q, freeRatio:" + freeMemRatio + ",q:" + queue.size());
+        while (queue.size() > 0 && ((freeMemRatio <= 50) || (queue.size() >= 15))) {
+            DebugManager.log("Rem from q, freeRatio:" + freeMemRatio + ", q:" + queue.size());
             queue.remove(queue[0]);
         }
-
-        queue.add(msg);
     }
     
     public function contains(msg) {

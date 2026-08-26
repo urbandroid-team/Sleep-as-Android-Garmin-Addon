@@ -49,13 +49,17 @@ class AlarmView extends WatchUi.View {
     }
     
     private function updateMainText() {
-	    var textArea = View.findDrawableById("mainText")  as Toybox.WatchUi.TextArea;
-        textArea.setText(Rez.Strings.messageAlarm);					
+	    var textArea = View.findDrawableById("mainText");
+        if (textArea != null) {
+            textArea.setText(Rez.Strings.messageAlarm);
+        }
     }
     
     private function updateTimeText() {
-    	var timeArea = View.findDrawableById("time") as Toybox.WatchUi.TextArea;
-    	timeArea.setText(self.ctx.state.currentTime);
+    	var timeArea = View.findDrawableById("time");
+        if (timeArea != null && self.ctx.state.currentTime != null) {
+    	    timeArea.setText(self.ctx.state.currentTime);
+        }
     }
        
 }

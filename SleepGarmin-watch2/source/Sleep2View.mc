@@ -47,28 +47,34 @@ class Sleep2View extends WatchUi.View {
     }
     
     private function updateMainText(isScreenLocked) {
-	    var textArea = View.findDrawableById("message") as Toybox.WatchUi.TextArea;
-    
-        textArea.setText(Rez.Strings.tracking);		
+	    var textArea = View.findDrawableById("message");
+        if (textArea != null) {
+            textArea.setText(Rez.Strings.tracking);
+        }
     }
     
     private function updateTimeText() {
-    	var timeArea = View.findDrawableById("time") as Toybox.WatchUi.TextArea;
-    	timeArea.setText(self.ctx.state.currentTime);
+    	var timeArea = View.findDrawableById("time");
+        if (timeArea != null && self.ctx.state.currentTime != null) {
+    	    timeArea.setText(self.ctx.state.currentTime);
+        }
     }
 
     private function updateAlarmTimeText() {
-    	var alarmTimeArea = View.findDrawableById("alarmTime") as Toybox.WatchUi.TextArea;
+    	var alarmTimeArea = View.findDrawableById("alarmTime");
+        if (alarmTimeArea == null) {
+            return;
+        }
         
         var alarmTime = self.ctx.state.alarmTime;
         if (alarmTime > -1) {
-            if ((alarmTime/ 1000) - (Time.now().value().toLong()) > 86400) {
+            if ((alarmTime / 1000) - (Time.now().value().toLong()) > 86400) {
                 alarmTimeArea.setText(DateUtil.msTimestampToDDDHHMM(self.ctx.state.alarmTime));
             } else {
                 alarmTimeArea.setText(DateUtil.msTimestampToHHMM(self.ctx.state.alarmTime));
             }
         } else {
-                alarmTimeArea.setText("---");            
+            alarmTimeArea.setText("---");
         }
     }
 

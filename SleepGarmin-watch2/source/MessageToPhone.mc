@@ -6,16 +6,17 @@ class MessageToPhone {
     function initialize(message) {
         // Parse string message to command and data
         if (message instanceof Toybox.Lang.String) {
-            if (message.find(";") == null) { 
+            var index = message.find(";");
+            if (index == null) {
                 self.command = message;
-                self.data = null; 
+                self.data = "";
             } else {
-                self.command = message.substring(0, (message.find(";"))-1);
-                self.data = message.substring((message.find(";"))+1, message.length());
+                self.command = message.substring(0, index);
+                self.data = message.substring(index + 1, message.length());
             }
         } else if (message instanceof Toybox.Lang.Array) {
             self.command = message[0];
-            self.data = message[1]; 
+            self.data = (message.size() > 1 && message[1] != null) ? message[1] : "";
         }
 
         if (self.data == null) {

@@ -3,7 +3,11 @@ using Toybox.WatchUi;
 class AlarmDelegate extends WatchUi.BehaviorDelegate {
 
 	var ctx;
-	
+
+    var viewTransitionTimer = new Timer.Timer();
+
+    var isTransitionPending = false;
+
     function initialize(ctx) {
         BehaviorDelegate.initialize();
         self.ctx = ctx;

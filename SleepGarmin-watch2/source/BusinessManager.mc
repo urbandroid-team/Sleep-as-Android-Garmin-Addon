@@ -124,12 +124,8 @@ class BusinessManager {
  	
  	function stopAlarm() {
 		logTransmit("BusinessManager#stopAlarm isAlarmRunning: " + self.ctx.state.isAlarmRunning());
- 		if (self.ctx.state.isAlarmRunning()) {
- 			self.ctx.alarmManager.stopAlarm();
-			self.ctx.state.setAlarmRunning(false);	
- 		} else {
-			self.ctx.alarmManager.cancelAlarms();
-		}
+		self.ctx.alarmManager.stopAlarm();
+		self.ctx.state.setAlarmRunning(false);
  	}
  	
  	function setBatchSize(size) {

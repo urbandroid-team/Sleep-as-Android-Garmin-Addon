@@ -76,6 +76,7 @@ class AlarmManager {
 			alarmDelayTimer.stop();
 			alarmDelayTimerRunning = false;
 		}
+		stopAlarmVibration();
 	}
 
 	function hintVibrCallback() {

@@ -16,7 +16,12 @@ class MessageToPhone {
             }
         } else if (message instanceof Toybox.Lang.Array) {
             self.command = message[0];
-            self.data = (message.size() > 1 && message[1] != null) ? message[1] : "";
+            var val = (message.size() > 1 && message[1] != null) ? message[1] : "";
+            if (val instanceof Toybox.Lang.Array) {
+                self.data = val.toString();
+            } else {
+                self.data = val;
+            }
         }
 
         if (self.data == null) {

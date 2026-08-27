@@ -16,14 +16,39 @@ class BusinessManager {
 
 	var isOnAlarmScreen = false;
 
+	var heartbeatTimer;
+
  	function initialize(ctx) {
  		self.ctx = ctx;
  	}
- 	
- 	// Hook that is called on every data received callback - we use this so that we do not have to have our own Timer, which is presumably battery intensive.
- 	function onDataHook() {
 
-		// DebugManager.log("BusinessManager onDataHook");
+	function startHeartbeat() {
+		if (heartbeatTimer == null) {
+			heartbeatTimer = new Timer.Timer();
+			heartbeatTimer.start(method(:heartbeatCallback), 4000, true);
+		}
+	}
+
+	function stopHeartbeat() {
+		if (heartbeatTimer != null) {
+			heartbeatTimer.stop();
+			heartbeatTimer = null;
+		}
+	}
+
+	function heartbeatCallback() {
+		var now = System.getTimer();
+		if (lastUpdate == -1 || (DataUtil.abs(now - lastUpdate) > 3500)) {
+			self.ctx.commManager.triggerSend();
+		}
+		if (lastUpdateUi == -1 || (DataUtil.abs(now - lastUpdateUi) > 5000)) {
+			updateTime(true);
+			lastUpdateUi = now;
+		}
+	}
+
+ 	// Hook that is called on every data received callback
+ 	function onDataHook() {
 		var now = System.getTimer();
 
 		if (lastUpdate == -1 || (DataUtil.abs(now - lastUpdate) > 1900)) {
@@ -31,7 +56,7 @@ class BusinessManager {
 			lastUpdate = now;
 		}
 
-		if ((lastUpdateUi == -1) || (now - lastUpdateUi > 5000)) {
+		if ((lastUpdateUi == -1) || (DataUtil.abs(now - lastUpdateUi) > 5000)) {
 			updateTime(true);
 			lockScreen();
 			lastUpdateUi = now;
@@ -41,6 +66,7 @@ class BusinessManager {
  	
  	function startComms() {
  		self.ctx.commManager.start();
+		startHeartbeat();
  	}
  	
  	function startSensors() {
@@ -67,8 +93,7 @@ class BusinessManager {
  	}
  	
  	function sendAccData(dataArray) {
-		// TODO do not pass in string
- 		self.ctx.commManager.enqueue([CommManager.MSG_DATA, dataArray.toString()]);
+ 		self.ctx.commManager.enqueue([CommManager.MSG_DATA, dataArray]);
  	}
  	
  	function sendHrData(hr) {
@@ -78,11 +103,11 @@ class BusinessManager {
 
  	function sendRrIntervalsData(rr) {
  		DebugManager.log("sendRrData " + rr);
- 		self.ctx.commManager.enqueue([CommManager.MSG_RR, rr.toString()]); 	
+ 		self.ctx.commManager.enqueue([CommManager.MSG_RR, rr]);
  	}
 
  	function sendOxyData(oxygenSaturation) {
- 		self.ctx.commManager.enqueue([CommManager.MSG_OXY, oxygenSaturation.toString()]);
+ 		self.ctx.commManager.enqueue([CommManager.MSG_OXY, oxygenSaturation]);
  	}
  	
  	function sendPause() {
@@ -107,6 +132,7 @@ class BusinessManager {
  	}
 
  	function forceStop() {
+		stopHeartbeat();
 		self.ctx.sensorManager.stop();
 		self.ctx.commManager.stop();
 		self.ctx.alarmManager.stopAlarm();
@@ -161,6 +187,7 @@ class BusinessManager {
  	}
  	
  	function exit() {
+		stopHeartbeat();
 		self.ctx.sensorManager.stop();
 		self.ctx.commManager.stop();
 		self.ctx.alarmManager.stopAlarm();

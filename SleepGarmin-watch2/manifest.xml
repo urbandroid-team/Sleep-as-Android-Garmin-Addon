@@ -3,7 +3,7 @@
 <!--NEW  1fc99d3f06fe4b02bbabd497cb05874b -->
 <!--OLD  21CAD9617B914811B0B27EA6240DE29B -->
 <iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
-    <iq:application entry="Sleep2App" id="21CAD9617B914811B0B27EA6240DE29B" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="3.1.0" name="@Strings.AppName" type="watch-app">
+    <iq:application entry="Sleep2App" id="1fc99d3f06fe4b02bbabd497cb05874b" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="3.1.0" name="@Strings.AppName" type="watch-app">
         <iq:products>
             <iq:product id="approachs50"/>
             <iq:product id="approachs7042mm"/>
@@ -158,8 +158,8 @@
         <iq:permissions>
             <iq:uses-permission id="Communications"/>
             <iq:uses-permission id="Sensor"/>
-            <iq:uses-permission id="Positioning"/>
-            <iq:uses-permission id="Fit"/>
+<!--            <iq:uses-permission id="Positioning"/>-->
+<!--            <iq:uses-permission id="Fit"/>-->
         </iq:permissions>
         <iq:languages>
             <iq:language>eng</iq:language>

@@ -2,8 +2,8 @@ using Toybox.Sensor;
 using Toybox.System;
 using Toybox.Math;
 using Toybox.Lang;
-using Toybox.ActivityRecording;
-using Toybox.Position;
+// using Toybox.ActivityRecording;
+// using Toybox.Position;
 
 class SensorManager {
 
@@ -44,32 +44,32 @@ class SensorManager {
 		Sensor.setEnabledSensors([Sensor.SENSOR_PULSE_OXIMETRY]);
 	}
 
-	var session = null;
+//	var session = null;
 
     function start() {
         DebugManager.log("SensorManager startAccelerometer");
 
-		if (Toybox has :Position) {
-			try {
-				Position.enableLocationEvents(Position.LOCATION_DISABLE, null);
-			} catch (e) {}
-		}
-
-		if (Toybox has :ActivityRecording) {
-			if (session == null) {
-				try {
-					session = ActivityRecording.createSession({
-						:name => "Sleep",
-						:sport => ActivityRecording.SPORT_GENERIC,
-						:subSport => ActivityRecording.SUB_SPORT_GENERIC,
-						:autoPause => false
-					});
-					session.start();
-				} catch (e) {
-					DebugManager.log("Failed to start session: " + e.getErrorMessage());
-				}
-			}
-		}
+	//	if (Toybox has :Position) {
+	//		try {
+	//			Position.enableLocationEvents(Position.LOCATION_DISABLE, null);
+	//		} catch (e) {}
+	//	}
+//
+//		if (Toybox has :ActivityRecording) {
+//			if (session == null) {
+//				try {
+//					session = ActivityRecording.createSession({
+//						:name => "Sleep",
+//						:sport => ActivityRecording.SPORT_GENERIC,
+//						:subSport => ActivityRecording.SUB_SPORT_GENERIC,
+//						:autoPause => false
+//					});
+//					session.start();
+//				} catch (e) {
+//					DebugManager.log("Failed to start session: " + e.getErrorMessage());
+//				}
+//			}
+//		}
 
 		var options = {
 			:period => SENSOR_PERIOD_SEC,
@@ -103,17 +103,17 @@ class SensorManager {
 	function stop() {
 		Sensor.unregisterSensorDataListener();
 
-		if (session != null) {
-			try {
-				if (session.isRecording()) {
-					session.stop();
-				}
-				session.discard();
-			} catch (e) {
-				DebugManager.log("Failed to discard session: " + e.getErrorMessage());
-			}
-			session = null;
-		}
+//		if (session != null) {
+//			try {
+//				if (session.isRecording()) {
+//					session.stop();
+//				}
+//				session.discard();
+//			} catch (e) {
+//				DebugManager.log("Failed to discard session: " + e.getErrorMessage());
+//			}
+//			session = null;
+//		}
 	}
 
     // argument is of type SensorData
